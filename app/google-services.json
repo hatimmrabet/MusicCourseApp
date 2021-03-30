@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "621803098305",
+    "project_id": "music-course-app-78f79",
+    "storage_bucket": "music-course-app-78f79.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621803098305:android:c06ec0cbe760123b33c440",
+        "android_client_info": {
+          "package_name": "fi.oamk.musiccourseapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621803098305-psnm1aipcquqqvd5klei2tbjl0oc7iaj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA01j7I7MRNBDlkSBmyi6YTYRuFDnYLUbk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621803098305-psnm1aipcquqqvd5klei2tbjl0oc7iaj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
