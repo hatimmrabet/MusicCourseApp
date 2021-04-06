@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@id/postsFragment"
+        android:icon="@drawable/ic_baseline_person_search_24"
+        android:title="Find People"/>
+    <item
+        android:id="@id/userProfileFragment"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="User Profile"/>
+    <item
+        android:id="@id/scheduleFragment"
+        android:icon="@drawable/ic_baseline_calendar_today_24"
+        android:title="Schedule"/>
+    <item
+        android:id="@id/messagesFragment"
+        android:icon="@drawable/ic_baseline_message_24"
+        android:title="Messages"/>
+</menu>
