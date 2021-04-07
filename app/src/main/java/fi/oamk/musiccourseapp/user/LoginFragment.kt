@@ -16,13 +16,7 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var tabLayout : TabLayout
-    lateinit var viewPager : ViewPager
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
@@ -31,17 +25,17 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tabLayout.addTab(tabLayout.newTab().setText("Login"))
-        tabLayout.addTab(tabLayout.newTab().setText("Signup"))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Login"))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Signup"))
 
-        var adapter = Adapter(supportFragmentManager, tabLayout.tabCount)
-        viewPager.adapter = adapter
-        viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+        var adapter = Adapter(childFragmentManager, binding.tabLayout.tabCount)
+        binding.viewPager.adapter = adapter
+        binding.viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout))
 
-        tabLayout.addOnTabSelectedListener(object :
+        binding.tabLayout.addOnTabSelectedListener(object :
                 TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                viewPager.currentItem = tab.position
+                binding.viewPager.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -51,13 +45,11 @@ class LoginFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab) {
 
             }
-
         })
 
-        tabLayout.translationY
-        tabLayout.alpha
-        tabLayout.animate().translationY(0F).alpha(1F).setDuration(1000).setStartDelay(100).start()
-
+        binding.tabLayout.translationY
+        binding.tabLayout.alpha
+        binding.tabLayout.animate().translationY(0F).alpha(1F).setDuration(1000).setStartDelay(100).start()
     }
 
     override fun onDestroyView() {
