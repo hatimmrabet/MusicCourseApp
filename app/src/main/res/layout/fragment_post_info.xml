@@ -19,7 +19,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         tools:srcCompat="@tools:sample/avatars"
-        android:elevation="1dp"/>
+        android:elevation="1dp"
+        android:contentDescription="@string/profile_picture_of_iser"/>
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
@@ -73,7 +74,7 @@
                 android:text="@string/description"
                 android:layout_marginVertical="10dp"
                 android:textColor="@color/black"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -87,7 +88,7 @@
                 android:id="@+id/reserve_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reserve"
+                android:text="@string/reserve"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"/>
 

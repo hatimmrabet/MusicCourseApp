@@ -11,4 +11,6 @@
     <string name="instrument">Instrument</string>
     <string name="description">description</string>
     <string name="monday">Monday</string>
+    <string name="reserve">Reserve</string>
+    <string name="profile_picture_of_iser">profile picture of iser</string>
 </resources>
