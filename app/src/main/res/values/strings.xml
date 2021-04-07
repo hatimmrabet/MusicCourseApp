@@ -2,4 +2,13 @@
     <string name="app_name">Music Course App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="post_price">Price</string>
+    <string name="post_description">description</string>
+    <string name="post_instument">instrument</string>
+    <string name="post_title">title</string>
+    <string name="profile_image_desc">image_desc</string>
+    <string name="full_name">Full name</string>
+    <string name="instrument">Instrument</string>
+    <string name="description">description</string>
+    <string name="monday">Monday</string>
 </resources>
