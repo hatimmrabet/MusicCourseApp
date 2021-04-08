@@ -126,6 +126,20 @@
         app:layout_constraintTop_toBottomOf="@id/student_switch">
     </TextView>
 
+    <TextView
+        android:id="@+id/textError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent=".8"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintHorizontal_bias=".5"
+        android:paddingBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upload">
+    </TextView>
+
     <Button
         android:id="@+id/signupButton"
         android:layout_width="0dp"
@@ -139,7 +153,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/upload">
+        app:layout_constraintTop_toBottomOf="@id/textError">
     </Button>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
