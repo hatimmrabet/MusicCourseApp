@@ -3,7 +3,7 @@ package fi.oamk.musiccourseapp.posts
 import kotlin.collections.HashMap
 
 data class Post(val id: String,
-                val title: String,
+                var title: String,
                 val instrument: String,
                 val description: String,
                 val price: String,
