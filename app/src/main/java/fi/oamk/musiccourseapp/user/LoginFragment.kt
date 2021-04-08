@@ -11,6 +11,9 @@ import fi.oamk.musiccourseapp.R
 import fi.oamk.musiccourseapp.databinding.FragmentLoginBinding
 import fi.oamk.musiccourseapp.databinding.FragmentPostsBinding
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null

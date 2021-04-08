@@ -14,7 +14,7 @@
         app:layout_constraintWidth_percent=".8"
         app:layout_constraintVertical_bias="0.06"
         app:layout_constraintHorizontal_bias=".5"
-        android:hint="Full name"
+        android:text="Loïc Catrou"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
@@ -31,7 +31,7 @@
         app:layout_constraintWidth_percent=".8"
         app:layout_constraintVertical_bias="0.05"
         app:layout_constraintHorizontal_bias=".5"
-        android:hint="Email"
+        android:text="loic.catrou@hotmail.com"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
@@ -48,7 +48,7 @@
         app:layout_constraintWidth_percent=".8"
         app:layout_constraintVertical_bias="0.05"
         app:layout_constraintHorizontal_bias=".5"
-        android:hint="Password"
+        android:text="123456"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
@@ -65,7 +65,7 @@
         app:layout_constraintWidth_percent=".8"
         app:layout_constraintVertical_bias="0.05"
         app:layout_constraintHorizontal_bias=".5"
-        android:hint="Confirm password"
+        android:text="123456"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
@@ -127,6 +127,7 @@
     </TextView>
 
     <Button
+        android:id="@+id/signupButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintWidth_percent=".8"
