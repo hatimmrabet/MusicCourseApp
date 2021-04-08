@@ -11,13 +11,13 @@
     <ImageView
         android:id="@+id/post_img"
         android:layout_width="153dp"
-        android:layout_height="137dp"
+        android:layout_height="match_parent"
         android:contentDescription="@string/profile_image_desc"
         android:src="@drawable/ic_baseline_person_24"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="start"
         android:padding="15dp">
@@ -26,7 +26,6 @@
             android:id="@+id/post_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/post_title"
             android:textStyle="bold"
             android:textSize="20sp"
@@ -36,14 +35,12 @@
             android:id="@+id/post_instrument"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/post_instument" />
 
         <TextView
             android:id="@+id/post_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/post_description"
             android:textColor="@color/black"
             android:textSize="15sp"/>
@@ -52,11 +49,26 @@
             android:id="@+id/post_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/post_price"
             android:textStyle="bold"
             android:textColor="@android:color/holo_green_light"
             android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/post_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/author"
+            android:gravity="end"/>
+
+        <TextView
+            android:id="@+id/post_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2021/6/30"
+            android:textSize="12sp"
+            android:gravity="end"
+            />
 
     </LinearLayout>
 
