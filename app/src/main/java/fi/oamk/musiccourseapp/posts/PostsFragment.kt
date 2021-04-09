@@ -3,6 +3,7 @@ package fi.oamk.musiccourseapp.posts
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,11 +15,9 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import fi.oamk.musiccourseapp.R
-import fi.oamk.musiccourseapp.databinding.FragmentBookingBinding
-import fi.oamk.musiccourseapp.databinding.FragmentMessagesBinding
 import fi.oamk.musiccourseapp.databinding.FragmentPostsBinding
 
-class PostsFragment : Fragment() {
+class PostsFragment : Fragment(), MyAdapter.OnPostListener {
 
     private var _binding: FragmentPostsBinding? = null
     private val binding get() = _binding!!
@@ -69,13 +68,19 @@ class PostsFragment : Fragment() {
 
         database.addValueEventListener(postListener)
         postsList.setLayoutManager(LinearLayoutManager(view.getContext()));
-        postsList.adapter = MyAdapter(posts)
+        postsList.adapter = MyAdapter(posts, this)
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onPostClick(position: Int) {
+        Toast.makeText(this.context, "Item $position clicked", Toast.LENGTH_SHORT).show()
+        val clickedItem : Post = posts[position]
+        clickedItem.title = "clicked"
+        postsList.adapter?.notifyItemChanged(position)
+        findNavController().navigate(R.id.action_postsFragment_to_postInfoFragment)
     }
 }

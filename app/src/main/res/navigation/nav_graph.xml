@@ -49,6 +49,10 @@
         <action
             android:id="@+id/action_postInfoFragment_to_bookingFragment"
             app:destination="@id/bookingFragment" />
+        <argument
+            android:name="postID"
+            app:argType="integer"
+            android:defaultValue="1"/>
     </fragment>
     <fragment
         android:id="@+id/bookingFragment"
