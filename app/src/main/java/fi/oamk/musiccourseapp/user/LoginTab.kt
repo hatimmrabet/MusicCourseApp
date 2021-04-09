@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Toast
 import androidx.core.graphics.red
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -22,6 +25,9 @@ class LoginTab : Fragment(){
     private val binding get() = _binding!!
 
     private lateinit var database : DatabaseReference
+    private val TAG : String = fi.oamk.musiccourseapp.MainActivity::class.java.name
+    private lateinit var auth : FirebaseAuth
+    private var currentUser : FirebaseUser? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = LoginTabBinding.inflate(inflater, container, false)
@@ -31,6 +37,7 @@ class LoginTab : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         database = Firebase.database.reference
+        auth = Firebase.auth
 
         binding.loginButton.setOnClickListener{
             database.child("users").get().addOnSuccessListener {
@@ -45,7 +52,16 @@ class LoginTab : Fragment(){
                     var password = user.get("password").toString()
 
                     if(enteredEmail == email && enteredPassword == password){
-                        //Session lacking
+                        auth.signInWithEmailAndPassword(enteredEmail, enteredPassword).addOnCompleteListener { task ->
+                            if(task.isSuccessful){
+                                Log.d(TAG, "signInWithEmail : success")
+                                currentUser = auth.currentUser
+                            }
+                            else{
+                                Log.w(TAG, "signInWithEmail : failure", task.exception)
+                            }
+                        }
+                        currentUser = auth.currentUser
                         findNavController().navigate(R.id.action_loginFragment_to_postsFragment)
                     }
                 }

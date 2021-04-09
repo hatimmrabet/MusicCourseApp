@@ -8,6 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -20,6 +24,8 @@ class SignupTab : Fragment(){
     private val binding get() = _binding!!
 
     private lateinit var database : DatabaseReference
+    private lateinit var auth : FirebaseAuth
+    private val TAG : String = fi.oamk.musiccourseapp.MainActivity::class.java.name
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = SignupTabBinding.inflate(inflater, container, false)
@@ -30,6 +36,7 @@ class SignupTab : Fragment(){
         super.onViewCreated(view, savedInstanceState)
 
         database = Firebase.database.reference
+        auth = Firebase.auth
 
         binding.signupButton.setOnClickListener{
             database.child("users").get().addOnSuccessListener {
@@ -38,7 +45,7 @@ class SignupTab : Fragment(){
                     binding.textError.text = "Missing one or more informations"
                     binding.textError.setTextColor(Color.RED)
                 }
-                else if(binding.email.text.toString() != binding.password.text.toString()){
+                else if(binding.confPassword.text.toString() != binding.password.text.toString()){
                     binding.textError.text = "Passwords are not matching"
                     binding.textError.setTextColor(Color.RED)
                 }
@@ -50,6 +57,14 @@ class SignupTab : Fragment(){
                     }
                     var user: User = User(0, binding.email.text.toString(), binding.name.text.toString(), binding.password.text.toString(), "empty", switch)
                     database.child("users").child("1").setValue(user)
+                    auth.createUserWithEmailAndPassword(binding.email.text.toString(), binding.password.text.toString()).addOnCompleteListener { task : Task<AuthResult> ->
+                        if(task.isSuccessful){
+                            Log.d(TAG, "Create user : success")
+                        }
+                        else{
+                            Log.w(TAG, "Create user : failure", task.exception)
+                        }
+                    }
                     findNavController().navigate(R.id.action_loginFragment_self)
                 }
             }.addOnFailureListener{
