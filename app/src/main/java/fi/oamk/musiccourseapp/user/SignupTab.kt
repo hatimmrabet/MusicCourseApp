@@ -56,16 +56,26 @@ class SignupTab : Fragment(){
                         switch = 1
                     }
                     var user: User = User(0, binding.email.text.toString(), binding.name.text.toString(), binding.password.text.toString(), "empty", switch)
-                    database.child("users").child("1").setValue(user)
                     auth.createUserWithEmailAndPassword(binding.email.text.toString(), binding.password.text.toString()).addOnCompleteListener { task : Task<AuthResult> ->
                         if(task.isSuccessful){
                             Log.d(TAG, "Create user : success")
+                            database.child("users").child(auth.currentUser.uid).setValue(user)
+                            if(switch == 2){
+                                database.child("roles").child("teacher").child(auth.currentUser.uid).setValue(true)
+                                database.child("roles").child("student").child(auth.currentUser.uid).setValue(true)
+                            }
+                            else if (switch == 1){
+                                database.child("roles").child("student").child(auth.currentUser.uid).setValue(true)
+                            }
+                            else{
+                                database.child("roles").child("teacher").child(auth.currentUser.uid).setValue(true)
+                            }
                         }
                         else{
                             Log.w(TAG, "Create user : failure", task.exception)
                         }
                     }
-                    findNavController().navigate(R.id.action_loginFragment_self)
+                    findNavController().navigate(R.id.action_loginFragment_to_postsFragment)
                 }
             }.addOnFailureListener{
                 Log.e("firebase","Error getting data", it)

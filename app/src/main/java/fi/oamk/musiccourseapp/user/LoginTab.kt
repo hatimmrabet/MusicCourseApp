@@ -41,37 +41,23 @@ class LoginTab : Fragment(){
 
         binding.loginButton.setOnClickListener{
             database.child("users").get().addOnSuccessListener {
-                val usersFromDatabase : ArrayList<Any> = it.value as ArrayList<Any>
 
                 var enteredEmail = binding.email.text.toString()
                 var enteredPassword = binding.password.text.toString()
 
-                for(i in 0 until usersFromDatabase.size){
-                    val user = usersFromDatabase[i] as HashMap<String, String>
-                    var email = user.get("email").toString()
-                    var password = user.get("password").toString()
-
-                    if(enteredEmail == email && enteredPassword == password){
-                        auth.signInWithEmailAndPassword(enteredEmail, enteredPassword).addOnCompleteListener { task ->
-                            if(task.isSuccessful){
-                                Log.d(TAG, "signInWithEmail : success")
-                                currentUser = auth.currentUser
-                            }
-                            else{
-                                Log.w(TAG, "signInWithEmail : failure", task.exception)
-                            }
-                        }
+                auth.signInWithEmailAndPassword(enteredEmail, enteredPassword).addOnCompleteListener { task ->
+                    if(task.isSuccessful){
+                        Log.d(TAG, "signInWithEmail : success")
                         currentUser = auth.currentUser
                         findNavController().navigate(R.id.action_loginFragment_to_postsFragment)
                     }
+                    else{
+                        Log.w(TAG, "signInWithEmail : failure", task.exception)
+                        binding.textError.text = "Email or password incorrect"
+                        binding.textError.setTextColor(Color.RED)
+                    }
                 }
-            }.addOnFailureListener{
-                Log.e("firebase","Error getting data", it)
             }
-            binding.textError.text = "Email or password incorrect"
-            binding.textError.setTextColor(Color.RED)
         }
-
-
     }
 }
