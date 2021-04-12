@@ -5,9 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewParent
+import android.widget.AdapterView
+import android.widget.Spinner
 import fi.oamk.musiccourseapp.R
 import fi.oamk.musiccourseapp.databinding.FragmentCreatePostBinding
 import fi.oamk.musiccourseapp.databinding.FragmentPostsBinding
+import android.widget.ArrayAdapter as ArrayAdapter
 
 class CreatePostFragment : Fragment() {
     private var _binding: FragmentCreatePostBinding? = null
@@ -21,6 +25,7 @@ class CreatePostFragment : Fragment() {
         _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
         return binding.root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
