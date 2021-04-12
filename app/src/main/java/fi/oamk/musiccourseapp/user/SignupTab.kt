@@ -55,7 +55,7 @@ class SignupTab : Fragment(){
                     } else if (binding.studentSwitch.isChecked) {
                         switch = 1
                     }
-                    var user: User = User(0, binding.email.text.toString(), binding.name.text.toString(), binding.password.text.toString(), "empty", switch)
+                    var user: User = User(0, binding.email.text.toString(), binding.name.text.toString(), "empty", switch)
                     auth.createUserWithEmailAndPassword(binding.email.text.toString(), binding.password.text.toString()).addOnCompleteListener { task : Task<AuthResult> ->
                         if(task.isSuccessful){
                             Log.d(TAG, "Create user : success")
