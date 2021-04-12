@@ -67,16 +67,18 @@
         <action
             android:id="@+id/action_accountInfoFragment_to_editAccountFragment"
             app:destination="@id/editAccountFragment" />
+        <action
+            android:id="@+id/action_accountInfoFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+        <action
+            android:id="@+id/action_accountInfoFragment_to_scheduleFragment"
+            app:destination="@id/scheduleFragment" />
     </fragment>
     <fragment
         android:id="@+id/editAccountFragment"
         android:name="fi.oamk.musiccourseapp.user.EditAccountFragment"
         android:label="fragment_edit_account"
-        tools:layout="@layout/fragment_edit_account" >
-        <action
-            android:id="@+id/action_editAccountFragment_to_createPostFragment"
-            app:destination="@id/createPostFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_edit_account" />
     <fragment
         android:id="@+id/createPostFragment"
         android:name="fi.oamk.musiccourseapp.user.CreatePostFragment"
