@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +16,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import fi.oamk.musiccourseapp.R
+import fi.oamk.musiccourseapp.databinding.FragmentBookingBinding
+import fi.oamk.musiccourseapp.databinding.FragmentMessagesBinding
 import fi.oamk.musiccourseapp.databinding.FragmentPostsBinding
 
 class PostsFragment : Fragment(), MyAdapter.OnPostListener {
@@ -45,9 +48,21 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.value != null)
                 {
-                    val postsFromDatabase = (snapshot.value as HashMap<Int,ArrayList<Post>>).get("posts")
+                    val postsFromDatabase = (snapshot.value as HashMap<String,HashMap<String,Any>>).get("posts")
                     posts.clear()
 
+                    postsFromDatabase?.map { (key, value) ->
+                        val postFromDb = value as HashMap<String, Any>
+                        val user = postFromDb.get("userkey").toString()
+                        val price = postFromDb.get("price").toString().toDouble()
+                        val desc = postFromDb.get("description").toString()
+                        val title = postFromDb.get("title").toString()
+                        val instrument = postFromDb.get("instrument").toString()
+                        val date = postFromDb.get("date").toString()
+                        val post = Post(user,title,instrument,desc,price, date)
+                        posts.add(post)
+                    }
+                    /*
                     if(postsFromDatabase != null)
                     {
                         for(i in 0..postsFromDatabase.size-1) {
@@ -57,6 +72,8 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
                             }
                         }
                     }
+
+                     */
                     postsList.adapter?.notifyDataSetChanged()
                 }
             }
@@ -77,10 +94,11 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
     }
 
     override fun onPostClick(position: Int) {
-        Toast.makeText(this.context, "Item $position clicked", Toast.LENGTH_SHORT).show()
         val clickedItem : Post = posts[position]
-        clickedItem.title = "clicked"
         postsList.adapter?.notifyItemChanged(position)
-        findNavController().navigate(R.id.action_postsFragment_to_postInfoFragment)
+        var bundle = bundleOf("postID" to "1")
+        findNavController().navigate(R.id.action_postsFragment_to_postInfoFragment,bundle )
+        //Toast.makeText(this.context, "Item $position clicked", Toast.LENGTH_SHORT).show()
+        //clickedItem.title = "clicked"
     }
 }

@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/postsFragment">
 
     <fragment
         android:id="@+id/postsFragment"
         android:name="fi.oamk.musiccourseapp.posts.PostsFragment"
-        android:label="Posts"
+        android:label="All Posts"
         tools:layout="@layout/fragment_posts">
         <action
             android:id="@+id/action_postsFragment_to_postInfoFragment"
@@ -51,8 +51,7 @@
             app:destination="@id/bookingFragment" />
         <argument
             android:name="postID"
-            app:argType="integer"
-            android:defaultValue="1"/>
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/bookingFragment"

@@ -30,6 +30,7 @@ class AccountInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.floatingActionButton.setOnClickListener{
+
             findNavController().navigate(R.id.action_accountInfoFragment_to_editAccountFragment)
         }
         binding.floatingActionButton2.setOnClickListener{

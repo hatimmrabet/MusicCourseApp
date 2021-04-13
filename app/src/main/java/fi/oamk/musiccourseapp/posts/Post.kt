@@ -1,15 +1,15 @@
 package fi.oamk.musiccourseapp.posts
 
-import kotlin.collections.HashMap
 
-data class Post(val id: String,
+data class Post(val userkey: String,
                 var title: String,
                 val instrument: String,
                 val description: String,
-                val price: String,
-                val time: String,
-                val author: String
-                ) {
+                val price: Double,
+                val date: String
+                )
+/*
+{
     companion object {
         fun from(map: HashMap<String, String>) = object {
             val id by map
@@ -23,3 +23,4 @@ data class Post(val id: String,
         }.data
     }
 }
+*/
