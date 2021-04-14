@@ -53,13 +53,14 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
 
                     postsFromDatabase?.map { (key, value) ->
                         val postFromDb = value as HashMap<String, Any>
+                        val postkey = postFromDb.get("postkey").toString()
                         val user = postFromDb.get("userkey").toString()
                         val price = postFromDb.get("price").toString().toDouble()
                         val desc = postFromDb.get("description").toString()
                         val title = postFromDb.get("title").toString()
                         val instrument = postFromDb.get("instrument").toString()
                         val date = postFromDb.get("date").toString()
-                        val post = Post(user,title,instrument,desc,price, date)
+                        val post = Post(postkey,user,title,instrument,desc,price, date)
                         posts.add(post)
                     }
                     /*
@@ -72,7 +73,6 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
                             }
                         }
                     }
-
                      */
                     postsList.adapter?.notifyDataSetChanged()
                 }
@@ -82,7 +82,6 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
                 Log.d("Post",error.toString())
             }
         }
-
         database.addValueEventListener(postListener)
         postsList.setLayoutManager(LinearLayoutManager(view.getContext()));
         postsList.adapter = MyAdapter(posts, this)
@@ -96,9 +95,8 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
     override fun onPostClick(position: Int) {
         val clickedItem : Post = posts[position]
         postsList.adapter?.notifyItemChanged(position)
-        var bundle = bundleOf("postID" to "1")
+        var bundle = bundleOf("postkey" to clickedItem.postkey )
         findNavController().navigate(R.id.action_postsFragment_to_postInfoFragment,bundle )
-        //Toast.makeText(this.context, "Item $position clicked", Toast.LENGTH_SHORT).show()
-        //clickedItem.title = "clicked"
+        Toast.makeText(this.context, "${clickedItem.postkey} clicked", Toast.LENGTH_SHORT).show()
     }
 }

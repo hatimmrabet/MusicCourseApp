@@ -26,7 +26,9 @@ class PostInfoFragment : Fragment() {
     private var _binding: FragmentPostInfoBinding? = null
     private val binding get() = _binding!!
     private lateinit var database: DatabaseReference
-    private lateinit var postSelected: Post
+    private var post: HashMap<String, Any> = HashMap<String, Any>()
+    private var userkey: String = ""
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,41 +43,28 @@ class PostInfoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         database = Firebase.database.reference
 
+        val postkey = arguments?.getString("postkey")
 
-        val postID = arguments?.getString("postID")
+        database.child("posts").child(postkey!!).get().addOnSuccessListener {
+            if(it.value != null) {
+                post = it.value as HashMap<String, Any>
+                binding.postInfoInstrument.text = post.get("instrument").toString()
+                binding.postInfoDesc.text = post.get("description").toString()
 
-        val postListener = object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.value != null)
-                {
-                    val postsFromDatabase = (snapshot.value as HashMap<String,ArrayList<Post>>).get("posts")
-
-                    if(postsFromDatabase != null)
+                database.child("users").child(post.get("userkey").toString()).get().addOnSuccessListener {
+                    if(it.value != null)
                     {
-                        /*
-                        for(i in 0..postsFromDatabase.size-1) {
-                            val post: Post = Post.from(postsFromDatabase.get(i) as HashMap<String,String>)
-                            if(post.id == postID)
-                            {
-                                binding.postInfoFullname.text = post.author
-                                binding.postInfoInstrument.text = post.instrument
-                                binding.postInfoDesc.text = post.description
-                                Picasso.get().load(post.image).into(binding.postInfoImg)
-                                break
-                            }
-                        }
-
-                         */
+                        val user = it.value as HashMap<String,Any>
+                        binding.postInfoFullname.text = user.get("fullname").toString()
+                        Picasso.get().load(user.get("picture").toString()).into(binding.postInfoImg)
                     }
+                }.addOnFailureListener{
+                    Log.e("firebase", "Error getting data", it)
                 }
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("Post",error.toString())
-            }
+        }.addOnFailureListener{
+            Log.e("firebase", "Error getting data", it)
         }
-        database.addValueEventListener(postListener)
-        //Toast.makeText(this.context, database.child("posts")., Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

@@ -1,7 +1,8 @@
 package fi.oamk.musiccourseapp.posts
 
 
-data class Post(val userkey: String,
+data class Post(val postkey: String,
+                val userkey: String,
                 var title: String,
                 val instrument: String,
                 val description: String,
