@@ -44,8 +44,8 @@
     <fragment
         android:id="@+id/postInfoFragment"
         android:name="fi.oamk.musiccourseapp.posts.PostInfoFragment"
-        android:label="fragment_post_info"
-        tools:layout="@layout/fragment_post_info" >
+        android:label="Post Details"
+        tools:layout="@layout/fragment_post_info">
         <action
             android:id="@+id/action_postInfoFragment_to_bookingFragment"
             app:destination="@id/bookingFragment" />
