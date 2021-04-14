@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/post_info_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginTop="71dp"
         android:layout_marginBottom="500dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias="1.0"
         tools:srcCompat="@tools:sample/avatars"
         android:elevation="1dp"
-        android:contentDescription="@string/profile_picture_of_iser"/>
+        android:contentDescription="@string/profile_picture_of_user"/>
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
