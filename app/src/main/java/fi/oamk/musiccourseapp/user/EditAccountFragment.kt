@@ -37,14 +37,14 @@ class EditAccountFragment : Fragment() {
 
         binding.updateButton.setOnClickListener{
             ref = FirebaseDatabase.getInstance().reference.child("users").child(auth.currentUser.uid)
-            if(binding.name.text.toString() != ""){
+            if(binding.name.getText().toString() != ""){
                 ref.child("fullname").setValue(binding.name.text.toString())
             }
-            if(binding.email.text.toString() != ""){
+            if(binding.email.getText().toString() != ""){
                 auth.currentUser.updateEmail(binding.email.text.toString())
                 ref.child("email").setValue(binding.email.text.toString())
             }
-            if(binding.password.text.toString() != ""){
+            if(binding.password.getText().toString() != ""){
                 auth.currentUser.updatePassword(binding.password.text.toString())
             }
         }

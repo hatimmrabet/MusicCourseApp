@@ -55,7 +55,7 @@ class SignupTab : Fragment(){
                     } else if (binding.studentSwitch.isChecked) {
                         switch = 1
                     }
-                    var user: User = User(0, binding.email.text.toString(), binding.name.text.toString(), "empty", switch)
+                    var user: User = User(0, binding.email.text.toString(), binding.name.text.toString(), "https://firebasestorage.googleapis.com/v0/b/music-course-app-78f79.appspot.com/o/unknown-person-icon-27.jpg?alt=media&token=e83ec35f-2cb6-4347-af85-2c8ae32814db", switch)
                     auth.createUserWithEmailAndPassword(binding.email.text.toString(), binding.password.text.toString()).addOnCompleteListener { task : Task<AuthResult> ->
                         if(task.isSuccessful){
                             Log.d(TAG, "Create user : success")
