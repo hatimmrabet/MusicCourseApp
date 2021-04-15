@@ -32,7 +32,6 @@ class PostInfoFragment : Fragment() {
     private lateinit var recycler_view : RecyclerView
     private lateinit var hours: ArrayList<Hour>
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
