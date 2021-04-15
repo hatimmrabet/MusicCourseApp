@@ -1,5 +1,6 @@
 package fi.oamk.musiccourseapp.user
 
+import android.content.Context
 import android.graphics.Color
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
@@ -7,7 +8,9 @@ import android.util.Log
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.graphics.red
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -60,4 +63,5 @@ class LoginTab : Fragment(){
             }
         }
     }
+
 }

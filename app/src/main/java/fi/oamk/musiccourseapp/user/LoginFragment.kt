@@ -1,16 +1,19 @@
 package fi.oamk.musiccourseapp.user
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import fi.oamk.musiccourseapp.R
 import fi.oamk.musiccourseapp.databinding.FragmentLoginBinding
 import fi.oamk.musiccourseapp.databinding.FragmentPostsBinding
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
