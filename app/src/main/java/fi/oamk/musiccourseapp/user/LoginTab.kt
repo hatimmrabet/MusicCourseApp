@@ -48,16 +48,22 @@ class LoginTab : Fragment(){
                 var enteredEmail = binding.email.text.toString()
                 var enteredPassword = binding.password.text.toString()
 
-                auth.signInWithEmailAndPassword(enteredEmail, enteredPassword).addOnCompleteListener { task ->
-                    if(task.isSuccessful){
-                        Log.d(TAG, "signInWithEmail : success")
-                        currentUser = auth.currentUser
-                        findNavController().navigate(R.id.action_loginFragment_to_postsFragment)
-                    }
-                    else{
-                        Log.w(TAG, "signInWithEmail : failure", task.exception)
-                        binding.textError.text = "Email or password incorrect"
-                        binding.textError.setTextColor(Color.RED)
+                if(enteredPassword == null || enteredEmail == null){
+                    binding.textError.text = "Give email and password"
+                    binding.textError.setTextColor(Color.RED)
+                }
+                else{
+                    auth.signInWithEmailAndPassword(enteredEmail, enteredPassword).addOnCompleteListener { task ->
+                        if(task.isSuccessful){
+                            Log.d(TAG, "signInWithEmail : success")
+                            currentUser = auth.currentUser
+                            findNavController().navigate(R.id.action_loginFragment_to_postsFragment)
+                        }
+                        else{
+                            Log.w(TAG, "signInWithEmail : failure", task.exception)
+                            binding.textError.text = "Email or password incorrect"
+                            binding.textError.setTextColor(Color.RED)
+                        }
                     }
                 }
             }
