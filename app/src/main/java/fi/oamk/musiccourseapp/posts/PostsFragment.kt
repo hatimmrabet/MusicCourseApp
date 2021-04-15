@@ -52,32 +52,12 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
                     posts.clear()
 
                     postsFromDatabase?.map { (key, value) ->
-                        val postFromDb = value as HashMap<String, Any>
-                        val postkey = postFromDb.get("postkey").toString()
-                        val user = postFromDb.get("userkey").toString()
-                        val price = postFromDb.get("price").toString().toDouble()
-                        val desc = postFromDb.get("description").toString()
-                        val title = postFromDb.get("title").toString()
-                        val instrument = postFromDb.get("instrument").toString()
-                        val date = postFromDb.get("date").toString()
-                        val post = Post(postkey,user,title,instrument,desc,price, date)
+                        val post = Post.from(value as HashMap<String, Any>)
                         posts.add(post)
                     }
-                    /*
-                    if(postsFromDatabase != null)
-                    {
-                        for(i in 0..postsFromDatabase.size-1) {
-                            if(postsFromDatabase.get(i) != null) {
-                                val post: Post = Post.from(postsFromDatabase.get(i) as HashMap<String,String>)
-                                posts.add(post)
-                            }
-                        }
-                    }
-                     */
                     postsList.adapter?.notifyDataSetChanged()
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 Log.d("Post",error.toString())
             }

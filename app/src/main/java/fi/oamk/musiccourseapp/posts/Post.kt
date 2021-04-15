@@ -9,19 +9,18 @@ data class Post(val postkey: String,
                 val price: Double,
                 val date: String
                 )
-/*
 {
     companion object {
-        fun from(map: HashMap<String, String>) = object {
-            val id by map
+        fun from(map: HashMap<String, Any>) = object {
+            val postkey by map
+            val userkey by map
             val title by map
             val instrument by map
             val description by map
             val price by map
-            val time by map
-            val author by map
-            val data = Post(id,title,instrument,description,price,time,author)
+            val date by map
+            val data = Post(postkey.toString(), userkey.toString(), title.toString(), instrument.toString(),
+                            description.toString(), price.toString().toDouble(), date.toString())
         }.data
     }
 }
-*/

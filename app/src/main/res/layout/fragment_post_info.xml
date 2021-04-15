@@ -77,12 +77,40 @@
                 android:textSize="16sp"
                 />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginVertical="10dp"
+                >
+
+                <TextView
+                    android:id="@+id/post_date_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/date"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:id="@+id/post_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="30/06/2020" />
+
+            </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/disponibility_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/post_info_disponibility"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center_horizontal"
+                tools:listitem="@layout/post_info_disponibility" />
 
             <Button
                 android:id="@+id/reserve_btn"
@@ -91,7 +119,6 @@
                 android:text="@string/reserve"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"/>
-
 
         </LinearLayout>
     </ScrollView>
