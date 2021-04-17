@@ -77,19 +77,21 @@ class SignupTab : Fragment() {
                     uploadTask.addOnCompleteListener { task ->
                         if(task.isSuccessful) {
                             storageRef.downloadUrl.addOnCompleteListener { task ->
-                                var user: User = User(
-                                    0,
-                                    binding.email.text.toString(),
-                                    binding.name.text.toString(),
-                                    task.result.toString(),
-                                    switch
-                                )
+                                val url = task.result.toString()
                                 auth.createUserWithEmailAndPassword(
                                     binding.email.text.toString(),
                                     binding.password.text.toString()
                                 ).addOnCompleteListener { task: Task<AuthResult> ->
                                     if (task.isSuccessful) {
                                         Log.d(TAG, "Create user : success")
+                                        var user: User = User(
+                                            auth.currentUser.uid,
+                                            0.toString(),
+                                            binding.email.text.toString(),
+                                            binding.name.text.toString(),
+                                            url,
+                                            switch.toString()
+                                        )
                                         database.child("users").child(auth.currentUser.uid)
                                             .setValue(user)
                                         if (switch == 2) {

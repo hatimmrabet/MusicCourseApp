@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/findTeacherFragment">
 
     <fragment
         android:id="@+id/postsFragment"
@@ -115,4 +115,9 @@
             android:id="@+id/action_chatsFragment_to_messagesFragment"
             app:destination="@id/messagesFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/findTeacherFragment"
+        android:name="fi.oamk.musiccourseapp.findteacher.FindTeacherFragment"
+        android:label="fragment_find_teacher"
+        tools:layout="@layout/fragment_find_teacher" />
 </navigation>
