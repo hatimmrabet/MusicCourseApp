@@ -17,37 +17,23 @@ class ChatViewModel: ViewModel() {
     private var temp_uid = "user1"
     val auth = Firebase.auth.currentUser
 
-//    val chatsDB = Firebase.database.getReference("chats")
-    val membersDB = Firebase.database.getReference("members")
-
     val chatUsersDB = Firebase.database.getReference("chatUsers/${auth.uid}")
 
     private var _chats = MutableLiveData<ArrayList<Chat>>()
     val chats: LiveData<ArrayList<Chat>> get() = _chats
 
-
     fun getChats() {
-//        var newChats = arrayListOf<Chat>()
-//        _chats.value?.clear()
-//        chatsDB.child(auth.uid!!).get().addOnSuccessListener {
-//            it.children.forEach{child ->
-//                newChats.add(Chat.from(child.value as HashMap<String, String>))
-//            }
-//            _chats.value = newChats
-//            Log.d(TAG, _chats.value.toString())
-//        }
+        var newChats = arrayListOf<Chat>()
+        _chats.value?.clear()
         chatUsersDB.get().addOnSuccessListener {
-            it.children.forEach{chat ->
-                Log.d(TAG, chat.key.toString())
-                getChatInfo(chat.key.toString())
+            it.children.forEach{chatUID ->
+                val chatsDB = Firebase.database.getReference("chats/${chatUID.key.toString()}")
+                chatsDB.get().addOnSuccessListener { chat ->
+                    newChats.add(Chat.from(chat.value as HashMap<String, Any?>))
+                    _chats.value = newChats
+                }
+                Log.d(TAG+"outside", newChats.toString())
             }
-        }
-    }
-
-    private fun getChatInfo(chatUID: String) {
-        val chatsDB = Firebase.database.getReference("chats/${chatUID}")
-        chatsDB.get().addOnSuccessListener {
-            Log.d(TAG, Chat.from(it.value as HashMap<String, Any?>).toString())
         }
     }
 }

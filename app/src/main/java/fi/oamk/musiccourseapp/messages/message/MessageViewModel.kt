@@ -42,7 +42,7 @@ class MessageViewModel: ViewModel() {
             return
         }
         messagesRef.child(key).setValue(Message(message, userEmail, formatted))
-        chatsRef.child("lastMessage").setValue(key)
+        chatsRef.child("lastMessage").setValue(userEmail + ": "+message)
         Log.i("ChatViewModel", "add message function")
     }
 }
