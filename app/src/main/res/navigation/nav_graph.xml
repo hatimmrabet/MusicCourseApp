@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/postsFragment">
+    app:startDestination="@id/chatsFragment">
 
     <fragment
         android:id="@+id/postsFragment"
@@ -34,12 +34,18 @@
         tools:layout="@layout/fragment_schedule" />
     <fragment
         android:id="@+id/messagesFragment"
-        android:name="fi.oamk.musiccourseapp.messages.MessagesFragment"
-        android:label="Messages"
+        android:name="fi.oamk.musiccourseapp.messages.message.MessagesFragment"
+        android:label="{name}"
         tools:layout="@layout/fragment_messages">
         <action
             android:id="@+id/action_messagesFragment_to_createNoteFragment"
             app:destination="@id/createNoteFragment" />
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/postInfoFragment"
@@ -88,7 +94,7 @@
         tools:layout="@layout/fragment_create_post" />
     <fragment
         android:id="@+id/createNoteFragment"
-        android:name="fi.oamk.musiccourseapp.messages.CreateNoteFragment"
+        android:name="fi.oamk.musiccourseapp.messages.note.CreateNoteFragment"
         android:label="New Note"
         tools:layout="@layout/fragment_create_note" />
     <fragment
@@ -99,5 +105,14 @@
         <action
             android:id="@+id/action_loginFragment_to_postsFragment"
             app:destination="@id/postsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatsFragment"
+        android:name="fi.oamk.musiccourseapp.messages.chat.ChatsFragment"
+        android:label="fragment_chats"
+        tools:layout="@layout/fragment_chats" >
+        <action
+            android:id="@+id/action_chatsFragment_to_messagesFragment"
+            app:destination="@id/messagesFragment" />
     </fragment>
 </navigation>

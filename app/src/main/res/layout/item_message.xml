@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="5dp">
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
+        <TextView
+            android:id="@+id/content_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hey there">
+        </TextView>
+        <TextView
+            android:id="@+id/author_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="by author@student.com at 01.01.2021 00:01">
+        </TextView>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
