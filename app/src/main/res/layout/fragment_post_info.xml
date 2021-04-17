@@ -81,8 +81,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginVertical="10dp"
-                >
+                android:layout_marginVertical="10dp">
+
+                <TextView
+                    android:id="@+id/post_price_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/post_price"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginRight="10dp"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/post_info_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="15 €"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/holo_green_light"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginVertical="10dp">
 
                 <TextView
                     android:id="@+id/post_date_text"
@@ -90,20 +115,27 @@
                     android:layout_height="wrap_content"
                     android:text="@string/date"
                     android:textColor="@color/black"
-                    android:layout_weight="1"
                     android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:gravity="center"/>
+                    android:layout_marginRight="12dp"
+                    android:textSize="16sp"/>
 
                 <TextView
-                    android:id="@+id/post_date"
+                    android:id="@+id/post_info_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
                     android:text="30/06/2020" />
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/no_dispo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="** No disponibility for this post **"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@android:color/holo_red_dark"
+                android:visibility="invisible"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/disponibility_list"

@@ -6,6 +6,8 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,7 +56,8 @@ class PostInfoFragment : Fragment() {
                 post = it.value as HashMap<String, Any>
                 binding.postInfoInstrument.text = post.get("instrument").toString()
                 binding.postInfoDesc.text = post.get("description").toString()
-                binding.postDate.text = post.get("date").toString()
+                binding.postInfoDate.text = post.get("date").toString()
+                binding.postInfoPrice.text = post.get("price").toString() + " €"
 
                 // GET user info
                 database.child("users").child(post.get("userkey").toString()).get().addOnSuccessListener {
@@ -84,6 +87,10 @@ class PostInfoFragment : Fragment() {
                         hours.add(hour)
                     }
                 }
+                if(hours.size == 0)
+                {
+                    binding.noDispo.visibility = VISIBLE
+                }
                 recycler_view.adapter = HoursAdapter(hours)
                 recycler_view.setLayoutManager(LinearLayoutManager(view.getContext()));
             }
@@ -98,3 +105,4 @@ class PostInfoFragment : Fragment() {
     }
 
 }
+
