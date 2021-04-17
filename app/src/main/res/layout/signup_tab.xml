@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+<androidx.constraintlayout.widget.ConstraintLayout
+android:layout_width="match_parent"
+android:layout_height="match_parent">
 
     <EditText
         android:id="@+id/name"
@@ -112,14 +115,14 @@
         app:layout_constraintTop_toBottomOf="@id/teacher_switch">
     </Switch>
 
-    <TextView
+    <ImageView
         android:id="@+id/upload"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         app:layout_constraintWidth_percent=".8"
         app:layout_constraintVertical_bias="0.05"
         app:layout_constraintHorizontal_bias=".5"
-        android:hint="Upload"
+        android:src="@drawable/ic_launcher_foreground"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
@@ -127,7 +130,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/student_switch">
-    </TextView>
+    </ImageView>
+    <LinearLayout
+        android:id="@+id/picture_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upload">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/take_picture_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Take Picture"
+            android:layout_marginEnd="16dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/choose_picture_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose Picture"
+            android:layout_marginStart="16dp"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textError"
@@ -140,7 +166,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upload">
+        app:layout_constraintTop_toBottomOf="@+id/picture_options">
     </TextView>
 
     <Button
@@ -160,3 +186,4 @@
     </Button>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
