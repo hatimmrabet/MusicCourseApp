@@ -28,9 +28,9 @@ class ChatsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getChats()
-        viewModel.chats.observe(viewLifecycleOwner){
-            binding.recyclerView.adapter = ItemAdapter(it, findNavController())
-        }
+//        viewModel.chats.observe(viewLifecycleOwner){
+//            binding.recyclerView.adapter = ItemAdapter(it, findNavController())
+//        }
     }
 
     override fun onDestroyView() {

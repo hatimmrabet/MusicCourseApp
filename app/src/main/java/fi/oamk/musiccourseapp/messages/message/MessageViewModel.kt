@@ -18,12 +18,14 @@ class MessageViewModel: ViewModel() {
     private val auth = Firebase.auth
 
     // ChatFragment
-    private var messagesRef = database.getReference("messages")
+    private var chatsRef = database.getReference("chats")
+    private var messagesRef = database.getReference("chatMessages")
     private var _messages = MutableLiveData<ArrayList<Message>>()
     val messages: LiveData<ArrayList<Message>> get() = _messages
-    fun setMessagesRef(id: String){
+    fun setMessagesRef(chatUID: String){
         Log.d(TAG, "Will set message reference")
-        messagesRef = database.getReference("messages").child(id)
+        messagesRef = database.getReference("chatMessages").child(chatUID)
+        chatsRef = database.getReference("chats").child(chatUID)
         _messages =
             MessagesLiveData(messagesRef)
     }
@@ -34,7 +36,13 @@ class MessageViewModel: ViewModel() {
 
         // Get user if any
         val userEmail = if (auth.currentUser != null) auth.currentUser.email else "Unknown"
-        messagesRef.push().setValue(Message(message, userEmail, formatted))
+        val key = messagesRef.push().key
+        if (key == null) {
+            Log.w(TAG, "Couldn't get push key for messages")
+            return
+        }
+        messagesRef.child(key).setValue(Message(message, userEmail, formatted))
+        chatsRef.child("lastMessage").setValue(key)
         Log.i("ChatViewModel", "add message function")
     }
 }

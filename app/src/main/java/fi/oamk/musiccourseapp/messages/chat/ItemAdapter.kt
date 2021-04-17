@@ -29,15 +29,15 @@ class ItemAdapter(private val dataset: ArrayList<Chat>, private val navControlle
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val chat = dataset[position]
-        holder.binding.let{
-            it.titleTextView.text = chat.lastMessage
-            if(chat.sender == "user1") {
-                it.lastMessageTextView.text = "You"
-            } else {it.lastMessageTextView.text = chat.sender}
-            it.cardView.setOnClickListener {
-                val action = ChatsFragmentDirections.actionChatsFragmentToMessagesFragment(chat.id, chat.id)
-                navController.navigate(action)
-            }
-        }
+//        holder.binding.let{
+//            it.titleTextView.text = chat.lastMessage
+//            if(chat.sender == "user1") {
+//                it.lastMessageTextView.text = "You"
+//            } else {it.lastMessageTextView.text = chat.sender}
+//            it.cardView.setOnClickListener {
+//                val action = ChatsFragmentDirections.actionChatsFragmentToMessagesFragment(chat.id, chat.id)
+//                navController.navigate(action)
+//            }
+//        }
     }
 }
