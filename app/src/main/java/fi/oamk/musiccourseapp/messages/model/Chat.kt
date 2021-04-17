@@ -1,13 +1,12 @@
 package fi.oamk.musiccourseapp.messages.model
 
-data class Chat (val id: String, val lastMessage: String, val sender: String){
+data class Chat (val members: ArrayList<String>, val lastMessage: String){
     companion object {
-        fun from(map: HashMap<String, String>) = object {
-            val id by map
+        fun from(map: HashMap<String, Any?>) = object{
+            val members by map
             val lastMessage by map
-            val sender by map
 
-            val data = Chat(id, lastMessage, sender)
+            val data = Chat(members as ArrayList<String>, lastMessage as String)
         }.data
     }
 }
