@@ -6,8 +6,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -90,6 +89,7 @@ class PostInfoFragment : Fragment() {
                 if(hours.size == 0)
                 {
                     binding.noDispo.visibility = VISIBLE
+                    binding.reserveBtn.visibility = INVISIBLE
                 }
                 recycler_view.adapter = HoursAdapter(hours)
                 recycler_view.setLayoutManager(LinearLayoutManager(view.getContext()));
