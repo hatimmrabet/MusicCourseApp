@@ -57,9 +57,10 @@ class ReservationFragment : Fragment() {
         val start = binding.start.text.toString()
         val end = binding.end.text.toString()
         val studentId = auth.uid
-        val reservation = Reservation(date, start, end, studentId)
+
 
         val key = reservationsDB.push().key
+        val reservation = Reservation(key!! ,date, start, end, studentId)
         reservationUsersDB.child(auth.uid).child(key!!).setValue(true)
         reservationUsersDB.child(args.uid).child(key!!).setValue(true)
         reservationsDB.child(key!!).setValue(reservation)
