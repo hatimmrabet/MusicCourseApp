@@ -30,8 +30,8 @@ class ChatViewModel: ViewModel() {
                 chatsDB.get().addOnSuccessListener { chat ->
                     newChats.add(Chat.from(chat.value as HashMap<String, Any?>))
                     _chats.value = newChats
+                    Log.d(TAG, newChats.toString())
                 }
-                Log.d(TAG+"outside", newChats.toString())
             }
         }
     }

@@ -71,6 +71,7 @@ class ItemAdapter(private val dataset: ArrayList<User>, private val navControlle
         chatUsersDatabase.child(uid).child(chatUID).setValue(true)
 
         chatsDatabase.child(chatUID).child("members").setValue(arrayListOf(auth.uid, uid))
+        chatsDatabase.child(chatUID).child("lastMessage").setValue(" ")
 
         // Navigate to messages
         val action = FindTeacherFragmentDirections.actionFindTeacherFragmentToMessagesFragment(chatUID, name)
