@@ -48,9 +48,11 @@ class ItemAdapter (private val dataset: ArrayList<Reservation>, private val navC
     fun acceptReservation(reservation: Reservation) {
         // Add Date
         val dateKey = reservation.date
+        val key = dateUsersDB.child(reservation.studentId).child(dateKey).push().key
         dateUsersDB.child(reservation.studentId).child(dateKey).setValue(true)
         dateUsersDB.child(auth.uid).child(dateKey).setValue(true)
-        datesDB.child(dateKey).setValue(Date(reservation.start, reservation.end, reservation.studentId, auth.uid))
+        datesDB.child(auth.uid).child(dateKey).child(key!!).setValue(Date(reservation.start, reservation.end, reservation.studentId, auth.uid))
+        datesDB.child(reservation.studentId).child(dateKey).child(key!!).setValue(Date(reservation.start, reservation.end, reservation.studentId, auth.uid))
 
         // Remove Reservation
         val resKey = reservation.uid
@@ -58,5 +60,4 @@ class ItemAdapter (private val dataset: ArrayList<Reservation>, private val navC
         reservationUsersDB.child(auth.uid).child(resKey).setValue(null)
         reservationsDB.child(resKey).setValue(null)
     }
-
 }

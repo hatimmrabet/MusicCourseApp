@@ -70,6 +70,7 @@ dependencies {
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    //GSON
-    implementation 'com.google.code.gson:gson:2.8.6'
+    //3rd party calendar
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
+
 }

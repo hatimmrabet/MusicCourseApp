@@ -8,7 +8,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.util.JsonMapper
 import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
 import fi.oamk.musiccourseapp.messages.model.Chat
 import fi.oamk.musiccourseapp.messages.model.Message
 
