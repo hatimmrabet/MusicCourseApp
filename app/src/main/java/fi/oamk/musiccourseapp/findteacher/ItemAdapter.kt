@@ -38,7 +38,7 @@ class ItemAdapter(private val dataset: ArrayList<User>, private val navControlle
             it.nameTextView.text = user.fullname
             it.priceTextView.text = user.email
         }
-
+        holder.binding.cardView.setOnClickListener { goToInfo(user.uid!!, user.fullname!!) }
         holder.binding.messageButton.setOnClickListener { startConversation(user.uid!!, user.fullname!!) }
 
         val storage = Firebase.storage
@@ -46,6 +46,11 @@ class ItemAdapter(private val dataset: ArrayList<User>, private val navControlle
         Glide.with(holder.itemView.context)
             .load(httpsReference)
             .into(holder.binding.imageView)
+    }
+
+    private fun goToInfo(uid: String, fullname: String) {
+        val action = FindTeacherFragmentDirections.actionFindTeacherFragmentToInfoFragment(fullname, uid)
+        navController.navigate(action)
     }
 
     private fun startConversation(uid: String, name: String) {

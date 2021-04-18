@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/chatsFragment">
+    app:startDestination="@id/findTeacherFragment">
 
     <fragment
         android:id="@+id/postsFragment"
@@ -123,5 +123,31 @@
         <action
             android:id="@+id/action_findTeacherFragment_to_messagesFragment"
             app:destination="@id/messagesFragment" />
+        <action
+            android:id="@+id/action_findTeacherFragment_to_infoFragment"
+            app:destination="@id/infoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/infoFragment"
+        android:name="fi.oamk.musiccourseapp.findteacher.info.InfoFragment"
+        android:label="{name} (info)"
+        tools:layout="@layout/fragment_info">
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="uid"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_infoFragment_to_reservationFragment"
+            app:destination="@id/reservationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reservationFragment"
+        android:name="fi.oamk.musiccourseapp.findteacher.reservation.ReservationFragment"
+        android:label="{name} (reservation)"
+        tools:layout="@layout/fragment_reservation" >
+        <argument android:name="name" />
+        <argument android:name="uid" />
     </fragment>
 </navigation>
