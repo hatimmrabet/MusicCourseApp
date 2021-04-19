@@ -73,4 +73,7 @@ dependencies {
     //3rd party calendar
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
 
+    //circular images
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
 }

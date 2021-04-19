@@ -2,9 +2,10 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
+    android:layout_margin="8dp"
     android:focusable="true">
     <LinearLayout
         android:layout_width="match_parent"
@@ -65,7 +66,7 @@
                 android:id="@+id/message_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Message"
+                app:icon="@drawable/ic_baseline_message_24"
                 style="?attr/borderlessButtonStyle"
                 />
         </LinearLayout>
