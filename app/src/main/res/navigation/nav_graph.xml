@@ -84,6 +84,9 @@
         <action
             android:id="@+id/action_accountInfoFragment_to_postsFragment"
             app:destination="@id/postsFragment" />
+        <action
+            android:id="@+id/action_accountInfoFragment_to_postInfoFragment"
+            app:destination="@id/postInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/editAccountFragment"
