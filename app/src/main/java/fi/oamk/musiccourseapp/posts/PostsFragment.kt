@@ -48,7 +48,7 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.value != null)
                 {
-                    val postsFromDatabase = (snapshot.value as HashMap<String,HashMap<String,Any>>).get("posts")
+                    val postsFromDatabase = (snapshot.value as HashMap<String,HashMap<String,Any>>)["posts"]
                     posts.clear()
 
                     postsFromDatabase?.map { (key, value) ->
@@ -77,6 +77,6 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
         postsList.adapter?.notifyItemChanged(position)
         var bundle = bundleOf("postkey" to clickedItem.postkey )
         findNavController().navigate(R.id.action_postsFragment_to_postInfoFragment,bundle )
-        Toast.makeText(this.context, "${clickedItem.postkey} clicked", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this.context, "${clickedItem.postkey} clicked", Toast.LENGTH_SHORT).show()
     }
 }

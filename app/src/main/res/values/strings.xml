@@ -16,4 +16,7 @@
     <string name="author">Author</string>
     <string name="disponibility">Disponibility:</string>
     <string name="date">Date : </string>
+    <string name="reservation_successfully_done">Reservation Successfully Done :)</string>
+    <string name="see_all_posts">See all posts</string>
+    <string name="go_to_your_schedule">Go to your schedule</string>
 </resources>

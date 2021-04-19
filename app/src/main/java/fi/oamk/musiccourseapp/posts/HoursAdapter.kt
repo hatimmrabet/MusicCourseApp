@@ -1,11 +1,11 @@
 package fi.oamk.musiccourseapp.posts
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.database.DatabaseReference
@@ -23,13 +23,19 @@ class HoursAdapter (private val hoursList: ArrayList<Hour>): RecyclerView.Adapte
 
     inner class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
     {
-        val hour: TextView = itemView.findViewById(R.id.post_hour)
+        val hour: CheckBox = itemView.findViewById(R.id.post_hour)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = hoursList[position]
         val end = (currentItem.start.substring(0,2).toInt()+1).toString() + currentItem.start.substring(2,5)
         holder.hour.text = "From "+ currentItem.start + " to " + end
+
+        holder.hour.setOnCheckedChangeListener { buttonView, isChecked ->
+            currentItem.checked = isChecked
+            //println("------ ${buttonView.text} ==> ${currentItem.checked}")
+        }
+
     }
 
     override fun getItemCount() = hoursList.size
