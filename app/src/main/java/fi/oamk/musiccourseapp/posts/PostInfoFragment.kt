@@ -202,7 +202,7 @@ class PostInfoFragment : Fragment() {
                     database.child("allReservations").child("${auth.currentUser.uid}")
                         .child("${reskey}").setValue(reservation)
                 }
-                view.findNavController().navigate(R.id.action_postInfoFragment_to_reservationRecapFragment)
+                //view.findNavController().navigate(R.id.action_postInfoFragment_to_reservationRecapFragment)
             }
         }
     }

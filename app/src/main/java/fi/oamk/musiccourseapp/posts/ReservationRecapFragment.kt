@@ -27,11 +27,11 @@ class ReservationRecapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.schedule.setOnClickListener{
-            view.findNavController().navigate(R.id.action_reservationRecapFragment_to_scheduleFragment)
+           // view.findNavController().navigate(R.id.action_reservationRecapFragment_to_scheduleFragment)
         }
 
         binding.posts.setOnClickListener{
-            view.findNavController().navigate(R.id.action_reservationRecapFragment_to_postsFragment)
+           // view.findNavController().navigate(R.id.action_reservationRecapFragment_to_postsFragment)
         }
 
     }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/postsFragment">
+    app:startDestination="@id/createPostFragment">
 
     <fragment
         android:id="@+id/postsFragment"
@@ -58,9 +58,6 @@
         <argument
             android:name="postID"
             app:argType="string" />
-        <action
-            android:id="@+id/action_postInfoFragment_to_reservationRecapFragment"
-            app:destination="@id/reservationRecapFragment" />
     </fragment>
     <fragment
         android:id="@+id/bookingFragment"
@@ -155,17 +152,5 @@
         tools:layout="@layout/fragment_reservation" >
         <argument android:name="name" />
         <argument android:name="uid" />
-    </fragment>
-    <fragment
-        android:id="@+id/reservationRecapFragment"
-        android:name="fi.oamk.musiccourseapp.posts.ReservationRecapFragment"
-        android:label="fragment_reservation_recap"
-        tools:layout="@layout/fragment_reservation_recap" >
-        <action
-            android:id="@+id/action_reservationRecapFragment_to_postsFragment"
-            app:destination="@id/postsFragment" />
-        <action
-            android:id="@+id/action_reservationRecapFragment_to_scheduleFragment"
-            app:destination="@id/scheduleFragment" />
     </fragment>
 </navigation>
