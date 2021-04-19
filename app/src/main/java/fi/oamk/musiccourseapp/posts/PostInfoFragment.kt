@@ -1,14 +1,13 @@
 package fi.oamk.musiccourseapp.posts
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -19,7 +18,7 @@ import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import fi.oamk.musiccourseapp.R
 import fi.oamk.musiccourseapp.databinding.FragmentPostInfoBinding
-import fi.oamk.musiccourseapp.findteacher.reservation.Reservation
+
 
 class PostInfoFragment : Fragment() {
 
@@ -46,6 +45,7 @@ class PostInfoFragment : Fragment() {
         auth = Firebase.auth
         val postkey = arguments?.getString("postkey")
         rcDispoList = binding.disponibilityList
+        rcDispoList.isNestedScrollingEnabled = false
         hours = ArrayList<Hour>()
 
         val postListner = database.child("posts/${postkey}").get().addOnSuccessListener {
@@ -59,7 +59,7 @@ class PostInfoFragment : Fragment() {
 
                 val profileListner = database.child("users/${post.get("userkey").toString()}").get().addOnSuccessListener {
                     if (it.value != null) {
-                        val user = it.value as HashMap<String,Any>
+                        val user = it.value as HashMap<String, Any>
                         binding.postInfoFullname.text = user.get("fullname").toString()
                         Picasso.get().load(user.get("picture").toString()).into(binding.postInfoImg)
                     }
@@ -105,7 +105,7 @@ class PostInfoFragment : Fragment() {
         database.child("hours").get().addOnSuccessListener {
             if(it.value != null)
             {
-                val hoursdata = (it.value as HashMap<String,HashMap<String,Any>>)
+                val hoursdata = (it.value as HashMap<String, HashMap<String, Any>>)
                 hours.clear()
 
                 hoursdata?.map { (key, value) ->
@@ -130,7 +130,9 @@ class PostInfoFragment : Fragment() {
             }
         }
         rcDispoList.adapter = HoursAdapter(hours)
-        rcDispoList.setLayoutManager(LinearLayoutManager(view.getContext()));
+        //rcDispoList.setLayoutManager(LinearLayoutManager(view.getContext()));
+        rcDispoList.setLayoutManager(GridLayoutManager(view.context, 2))
+
 
         /*
         val hoursListner = object: ValueEventListener {

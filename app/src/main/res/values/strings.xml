@@ -19,4 +19,5 @@
     <string name="reservation_successfully_done">Reservation Successfully Done :)</string>
     <string name="see_all_posts">See all posts</string>
     <string name="go_to_your_schedule">Go to your schedule</string>
+    <string name="no_disponibility_for_this_post">** No disponibility for this post **</string>
 </resources>

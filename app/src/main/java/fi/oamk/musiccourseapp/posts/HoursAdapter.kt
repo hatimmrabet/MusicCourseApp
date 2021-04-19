@@ -28,7 +28,9 @@ class HoursAdapter (private val hoursList: ArrayList<Hour>): RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = hoursList[position]
-        val end = (currentItem.start.substring(0,2).toInt()+1).toString() + currentItem.start.substring(2,5)
+        var endTime = (currentItem.start.substring(0,2).toInt()+1).toString()
+        if (endTime.length == 1) { endTime = "0"+endTime }
+        val end = ( endTime + currentItem.start.substring(2,5))
         holder.hour.text = "From "+ currentItem.start + " to " + end
 
         holder.hour.setOnCheckedChangeListener { buttonView, isChecked ->

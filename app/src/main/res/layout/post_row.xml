@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -16,7 +17,7 @@
         app:cardElevation="1dp"
         app:cardCornerRadius="15dp">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -78,7 +79,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/author"
                     android:textSize="10sp"
-                    android:gravity="end"/>
+                    android:gravity="end"
+                    tools:ignore="SmallSp" />
 
                 <TextView
                     android:id="@+id/post_time"
@@ -87,7 +89,7 @@
                     android:text="2021/6/30"
                     android:textSize="10sp"
                     android:gravity="end"
-                    />
+                    tools:ignore="SmallSp" />
 
             </LinearLayout>
 
