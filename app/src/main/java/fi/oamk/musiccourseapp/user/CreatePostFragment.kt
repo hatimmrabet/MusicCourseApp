@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import fi.oamk.musiccourseapp.databinding.FragmentCreatePostBinding
+import fi.oamk.musiccourseapp.posts.Post
 
 class CreatePostFragment : Fragment() {
     private var _binding: FragmentCreatePostBinding? = null
@@ -100,18 +101,19 @@ class CreatePostFragment : Fragment() {
             val key12 = database.child("hours").push().key.toString()
             val user = Firebase.auth.currentUser
 
-
-                    database.child("posts").child(key).child("title").setValue(title)
-                    database.child("posts").child(key).child("postkey").setValue(key)
-                    database.child("posts").child(key).child("description").setValue(description)
-                    database.child("posts").child(key).child("instrument").setValue(instrument)
-                    database.child("posts").child(key).child("price").setValue(price)
-                    database.child("posts").child(key).child("date").setValue(date)
+                    val post = Post(key,auth.currentUser.uid, title,instrument,description,price.toDouble(),date)
+                    database.child("posts").child(post.postkey).setValue(post)
+                    //database.child("posts").child(key).child("postkey").setValue(key)
+                    //database.child("posts").child(key).child("description").setValue(description)
+                    //database.child("posts").child(key).child("instrument").setValue(instrument)
+                    //database.child("posts").child(key).child("price").setValue(price)
+                    //database.child("posts").child(key).child("date").setValue(date)
                     user?.let {
                         val uid = user.uid
                         database.child("posts").child(key).child("userkey").setValue(uid)
                     }
                     if (hour1.isChecked) {
+
                         database.child("hours").child(key1).child("start")
                             .setValue(hour1.text.toString())
                         database.child("hours").child(key1).child("reserved").setValue("false")
