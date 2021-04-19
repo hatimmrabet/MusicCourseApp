@@ -17,7 +17,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_message"/>
+        tools:listitem="@layout/item_message_left"/>
 
     <LinearLayout
         android:layout_width="match_parent"
