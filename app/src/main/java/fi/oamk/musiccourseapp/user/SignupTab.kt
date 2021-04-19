@@ -64,10 +64,11 @@ class SignupTab : Fragment() {
                 } else if (binding.confPassword.text.toString() != binding.password.text.toString()) {
                     binding.textError.text = "Passwords are not matching"
                     binding.textError.setTextColor(Color.RED)
+                } else if (binding.teacherSwitch.isChecked && binding.studentSwitch.isChecked) {
+                    binding.textError.text = "Select only one role"
+                    binding.textError.setTextColor(Color.RED)
                 } else {
-                    if (binding.teacherSwitch.isChecked && binding.studentSwitch.isChecked) {
-                        switch = 2
-                    } else if (binding.studentSwitch.isChecked) {
+                    if (binding.studentSwitch.isChecked) {
                         switch = 1
                     }
                     val imageData = getImageByteArray()
