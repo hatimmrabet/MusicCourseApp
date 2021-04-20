@@ -8,7 +8,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import fi.oamk.musiccourseapp.findteacher.reservation.Reservation
-import fi.oamk.musiccourseapp.messages.model.Chat
 
 class ReservationViewModel: ViewModel() {
     private val TAG = "ReservationViewModels"
@@ -28,11 +27,11 @@ class ReservationViewModel: ViewModel() {
                 Log.d(TAG, reservationUID.key.toString())
                 val reservationsDB = Firebase.database.getReference("reservations/${reservationUID.key.toString()}")
                 reservationsDB.get().addOnSuccessListener { reservation ->
+                    Log.d(TAG, reservation.value.toString())
                     newReservations.add(Reservation.from(reservation.value as HashMap<String, String>))
                     _reservations.value = newReservations
                     Log.d(TAG, newReservations.toString())
                 }
-
             }
         }
     }

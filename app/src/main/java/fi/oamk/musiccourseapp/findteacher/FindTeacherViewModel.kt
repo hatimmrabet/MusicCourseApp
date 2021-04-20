@@ -11,6 +11,7 @@ import fi.oamk.musiccourseapp.user.User
 class FindTeacherViewModel: ViewModel() {
     private val TAG = "FindTeacherViewModel"
 
+    private val rolesDB = Firebase.database.getReference("roles/teacher")
     private val usersDB = Firebase.database.getReference("users")
 
     private var _users = MutableLiveData<ArrayList<User>>()
@@ -18,13 +19,24 @@ class FindTeacherViewModel: ViewModel() {
 
     fun getUsers() {
         var newUsers = arrayListOf<User>()
+
         _users.value?.clear()
-        usersDB.get().addOnSuccessListener {
-            it.children.forEach{child ->
-                newUsers.add(User.from(child.value as HashMap<String, String>))
+
+        rolesDB.get().addOnSuccessListener { role ->
+            role.children.forEach{uid ->
+                usersDB.child(uid.key!!).get().addOnSuccessListener { user ->
+                    newUsers.add(User.from(user.value as HashMap<String, String>))
+                    _users.value = newUsers
+                }
             }
-            _users.value = newUsers
-            Log.d(TAG, _users.value.toString())
         }
+
+//        usersDB.get().addOnSuccessListener {
+//            it.children.forEach{child ->
+//                newUsers.add(User.from(child.value as HashMap<String, String>))
+//            }
+//            _users.value = newUsers
+//            Log.d(TAG, _users.value.toString())
+//        }
     }
 }

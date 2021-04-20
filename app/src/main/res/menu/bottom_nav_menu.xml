@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@id/postsFragment"
+        android:id="@id/findTeacherFragment"
         android:icon="@drawable/ic_baseline_person_search_24"
         android:title="Find People"/>
+    <item
+        android:id="@+id/postsFragment"
+        android:icon="@drawable/ic_baseline_add_alert_24"
+        android:title="Posts"/>
     <item
         android:id="@id/userProfileFragment"
         android:icon="@drawable/ic_baseline_person_24"

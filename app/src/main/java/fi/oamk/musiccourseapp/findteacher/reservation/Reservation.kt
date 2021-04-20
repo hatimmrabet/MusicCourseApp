@@ -9,7 +9,7 @@ data class Reservation(val uid: String,val date: String, val start: String, val 
             val end by map
             val studentId by map
 
-            val data = Reservation(uid ,date, start, end, studentId)
+                val data = Reservation(uid ,date, start, end, studentId)
         }.data
     }
 }
