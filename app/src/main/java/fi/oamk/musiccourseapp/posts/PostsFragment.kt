@@ -3,7 +3,6 @@ package fi.oamk.musiccourseapp.posts
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -15,10 +14,10 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import fi.oamk.musiccourseapp.MainActivity
 import fi.oamk.musiccourseapp.R
-import fi.oamk.musiccourseapp.databinding.FragmentBookingBinding
-import fi.oamk.musiccourseapp.databinding.FragmentMessagesBinding
 import fi.oamk.musiccourseapp.databinding.FragmentPostsBinding
+
 
 class PostsFragment : Fragment(), MyAdapter.OnPostListener {
 
@@ -48,7 +47,7 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.value != null)
                 {
-                    val postsFromDatabase = (snapshot.value as HashMap<String,HashMap<String,Any>>)["posts"]
+                    val postsFromDatabase = (snapshot.value as HashMap<String, HashMap<String, Any>>)["posts"]
                     posts.clear()
 
                     postsFromDatabase?.map { (key, value) ->
@@ -59,7 +58,7 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
                 }
             }
             override fun onCancelled(error: DatabaseError) {
-                Log.d("Post",error.toString())
+                Log.d("Post", error.toString())
             }
         }
         database.addValueEventListener(postListener)
@@ -75,8 +74,8 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
     override fun onPostClick(position: Int) {
         val clickedItem : Post = posts[position]
         postsList.adapter?.notifyItemChanged(position)
-        var bundle = bundleOf("postkey" to clickedItem.postkey )
-        findNavController().navigate(R.id.action_postsFragment_to_postInfoFragment,bundle )
+        var bundle = bundleOf("postkey" to clickedItem.postkey)
+        findNavController().navigate(R.id.action_postsFragment_to_postInfoFragment, bundle)
         //Toast.makeText(this.context, "${clickedItem.postkey} clicked", Toast.LENGTH_SHORT).show()
     }
 }
