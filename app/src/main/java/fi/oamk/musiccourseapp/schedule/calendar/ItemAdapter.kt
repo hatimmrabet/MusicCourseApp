@@ -3,6 +3,9 @@ package fi.oamk.musiccourseapp.schedule.calendar
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import fi.oamk.musiccourseapp.databinding.ItemDateBinding
 import fi.oamk.musiccourseapp.schedule.reservation.Date
 

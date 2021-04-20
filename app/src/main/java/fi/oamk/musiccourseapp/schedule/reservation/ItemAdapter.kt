@@ -1,6 +1,7 @@
 package fi.oamk.musiccourseapp.schedule.reservation
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -10,6 +11,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import fi.oamk.musiccourseapp.databinding.ItemReservationBinding
 import fi.oamk.musiccourseapp.findteacher.reservation.Reservation
+import fi.oamk.musiccourseapp.user.User
 
 class ItemAdapter (private val dataset: ArrayList<Reservation>, private val navController: NavController)
     : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
@@ -32,14 +34,26 @@ class ItemAdapter (private val dataset: ArrayList<Reservation>, private val navC
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val reservation = dataset[position]
-        holder.binding.studentTextView.text = "by ${reservation.studentId}"
-        holder.binding.dateTextView.text = reservation.uid
+        holder.binding.dateTextView.text = "Date: " + reservation.date + "; start: " + reservation.start + "; end: " +reservation.end
         holder.binding.acceptButton.setOnClickListener {
             acceptReservation(reservation)
+        }
+
+        // Check if it is teacher
+        usersDB.child(auth.uid).get().addOnSuccessListener {
+            val user = User.from(it.value as HashMap<String, String>)
+            if(user.role == "1")
+                holder.binding.acceptButton.visibility = View.GONE
+        }
+
+        usersDB.child(reservation.studentId).get().addOnSuccessListener {
+            val user = User.from(it.value as HashMap<String, String>)
+            holder.binding.studentTextView.text = "by ${user.fullname}"
         }
     }
 
     private val auth = Firebase.auth.currentUser
+    private val usersDB = Firebase.database.getReference("users")
     private val dateUsersDB = Firebase.database.getReference("dateUsers")
     private val datesDB = Firebase.database.getReference("dates")
     private val reservationUsersDB = Firebase.database.getReference("reservationUsers")

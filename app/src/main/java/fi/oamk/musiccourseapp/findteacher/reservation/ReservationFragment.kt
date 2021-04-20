@@ -99,7 +99,7 @@ class ReservationFragment : Fragment() {
                 binding.date.setText(""+mYear + monthAndDayString)
             },
             year,
-            month,
+            month+1,
             day
         )
         dpd.show()
@@ -107,10 +107,11 @@ class ReservationFragment : Fragment() {
 
     private fun getMonthAndDay(mMonth: Int, mDay: Int): String {
         var result = ""
+        Log.d("ReservationFragment", mMonth.toString())
         if(mMonth < 10){
-            result = result + "0" +mMonth
+            result = result + "0" +mMonth.toString()
         } else {
-            result = result + mMonth
+            result = result + mMonth.toString()
         }
         if(mDay < 10){
             result = result + "0" +mDay
