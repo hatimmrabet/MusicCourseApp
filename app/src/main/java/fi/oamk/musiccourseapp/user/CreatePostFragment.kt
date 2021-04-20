@@ -20,7 +20,6 @@ import fi.oamk.musiccourseapp.posts.Post
 class CreatePostFragment : Fragment() {
     private var _binding: FragmentCreatePostBinding? = null
     private val binding get() = _binding!!
-    private val TAG = "MyActivity"
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
     private lateinit var title : EditText
@@ -123,10 +122,10 @@ class CreatePostFragment : Fragment() {
                     //database.child("posts").child(key).child("instrument").setValue(instrument)
                     //database.child("posts").child(key).child("price").setValue(price)
                     //database.child("posts").child(key).child("date").setValue(date)
-                    user?.let {
+                   /* user?.let {
                         val uid = user.uid
                         database.child("posts").child(key).child("userkey").setValue(uid)
-                    }
+                    }*/
                     if (hour1.isChecked) {
 
                         database.child("hours").child(key1).child("start")

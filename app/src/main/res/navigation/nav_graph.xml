@@ -70,8 +70,8 @@
     <fragment
         android:id="@+id/accountInfoFragment"
         android:name="fi.oamk.musiccourseapp.user.AccountInfoFragment"
-        android:label="fragment_account_info"
-        tools:layout="@layout/fragment_account_info" >
+        android:label="Account info"
+        tools:layout="@layout/Account info" >
         <action
             android:id="@+id/action_accountInfoFragment_to_editAccountFragment"
             app:destination="@id/editAccountFragment" />

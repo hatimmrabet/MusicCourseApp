@@ -23,75 +23,71 @@
         android:gravity="center_horizontal"
         android:text="Account information" android:textSize="28sp" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:text="Your Category"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:gravity="center_horizontal"
+       android:layout_marginTop="20dp"
+       android:orientation="horizontal">
+       <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Full Name:   "
+       android:textStyle="bold"
+       android:textSize="22sp"
+        />
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textSize="20sp"
+           android:id="@+id/name"
+
+           />
+   </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal">
-
-
-        <Switch
-            android:id="@+id/switch1"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="50dp"
-            android:text="Student" />
-
-        <Switch
-            android:id="@+id/switch2"
+            android:text="Email:    "
+            android:textStyle="bold"
+            android:textSize="22sp"
+            />
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="80dp"
-            android:layout_marginTop="50dp"
-            android:checked="true"
-            android:text="Teacher" />
+            android:text=""
+            android:textSize="20sp"
+            android:id="@+id/email"
+            />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Your interests"
-        android:layout_gravity="center_horizontal"
-        tools:ignore="MissingConstraints"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:layout_gravity="center_horizontal"
-    android:orientation="horizontal">
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Guitar" />
-
-    <CheckBox
-        android:id="@+id/checkBox2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-       android:layout_marginLeft="20dp"
-        android:text="Piano" />
-
-    <CheckBox
-        android:id="@+id/checkBox3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-       android:layout_marginLeft="20dp"
-        android:text="Drums" />
-</LinearLayout>
-
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Role:    "
+            android:textStyle="bold"
+            android:textSize="22sp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="22sp"
+            android:id="@+id/role"
+            />
+    </LinearLayout>
     <Button
         android:id="@+id/button2"
         android:layout_gravity="center_horizontal"
@@ -112,14 +108,15 @@
     </Button>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/posts"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="25sp"
         android:text="Your Posts"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:backgroundTint="#2196f3" />
 
 <LinearLayout
     android:layout_width="match_parent"
