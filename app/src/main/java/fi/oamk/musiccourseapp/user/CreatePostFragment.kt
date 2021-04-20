@@ -1,14 +1,13 @@
 package fi.oamk.musiccourseapp.user
 
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.icu.util.Calendar
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -28,7 +27,7 @@ class CreatePostFragment : Fragment() {
     private lateinit var description : EditText
     private lateinit var instrument : EditText
     private lateinit var price : EditText
-    private lateinit var date : EditText
+    private lateinit var datePicker : TextView
     private lateinit var hour1: CheckBox
     private lateinit var hour2: CheckBox
     private lateinit var hour3: CheckBox
@@ -43,18 +42,38 @@ class CreatePostFragment : Fragment() {
     private lateinit var hour12: CheckBox
     private lateinit var submit: Button
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         auth = Firebase.auth
         title = binding.editText
         description= binding.editTextTextPersonName
         instrument= binding.editText1
+        datePicker = binding.datePicker
         price= binding.price
-        date= binding.editTextDate
+
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+        binding.datePicker.setOnClickListener {
+            val tpd = DatePickerDialog(it.context, DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
+                binding.datePicker.setText(""+mDay+"/"+mMonth+"/"+mYear)
+            }, year, month, day)
+            tpd.show()
+        }
+
+
         database = Firebase.database.reference
         hour1 = binding.checkBox5
         hour2 = binding.checkBox6
@@ -69,11 +88,7 @@ class CreatePostFragment : Fragment() {
         hour11 = binding.checkBox16
         hour12 = binding.checkBox17
         submit = binding.button3
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         val submit = binding.button3
 
         submit.setOnClickListener{
@@ -81,7 +96,7 @@ class CreatePostFragment : Fragment() {
             val description= description.text.toString()
             val instrument = instrument.text.toString()
             val price = price.text.toString()
-            val date= date.text.toString()
+            val date= datePicker.text.toString()
             if (title == "" || description == "" || instrument == "" || price == "" || date == ""){
                 Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
             }
