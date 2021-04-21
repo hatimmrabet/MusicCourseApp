@@ -19,6 +19,8 @@ class MyAdapter(private val myDataset: ArrayList<Post>, private val listener: On
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val myView = LayoutInflater.from(parent.context).inflate(R.layout.post_row,parent,false)
+        //Order posts by date
+        myDataset.sortByDescending { it.date }
         return MyViewHolder(myView)
     }
 
