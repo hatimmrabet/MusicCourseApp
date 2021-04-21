@@ -12,7 +12,7 @@ class HoursAdapter (private val hoursList: ArrayList<Hour>): RecyclerView.Adapte
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HoursAdapter.MyViewHolder {
         val myView = LayoutInflater.from(parent.context).inflate(R.layout.post_info_disponibility,parent,false)
         // order list by start hour
-        hoursList.sortBy { it.start.substring(0, 2).toInt() }
+        hoursList.sortBy { it.start }
         return MyViewHolder(myView)
     }
 
