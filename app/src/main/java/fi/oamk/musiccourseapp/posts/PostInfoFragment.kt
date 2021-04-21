@@ -70,40 +70,44 @@ class PostInfoFragment : Fragment() {
                         Picasso.get().load(user.get("picture").toString()).into(binding.postInfoImg)
                     }
                 }
+
+                database.child("hours").child(post.get("postkey").toString()).get().addOnSuccessListener {
+                    if(it.value != null)
+                    {
+                        val hoursdata = (it.value as HashMap<String, HashMap<String, Any>>)
+                        hours.clear()
+
+                        hoursdata?.map { (key, value) ->
+                            val hour = Hour.from(value)
+                            // GET only hours related to the post and not reserved yet
+                            //println("==> ${hour.postkey} ${hour.hourkey} ${hour.reserved}")
+                            if(!hour.reserved && hour.postkey == postkey){
+                                hours.add(hour)
+                            }
+                        }
+                        if(hours.size == 0)
+                        {
+                            binding.noDispo.visibility = VISIBLE
+                            binding.reserveBtn.visibility = INVISIBLE
+                        }
+                        else
+                        {
+                            binding.noDispo.visibility = INVISIBLE
+                            binding.reserveBtn.visibility = VISIBLE
+                        }
+                        rcDispoList.adapter?.notifyDataSetChanged()
+                    }
+                }
+                rcDispoList.adapter = HoursAdapter(hours)
+                //rcDispoList.setLayoutManager(LinearLayoutManager(view.getContext()));
+                rcDispoList.setLayoutManager(GridLayoutManager(view.context, 2))
+
             }
         }
 
         //GET all hours from databse
-        database.child("hours").get().addOnSuccessListener {
-            if(it.value != null)
-            {
-                val hoursdata = (it.value as HashMap<String, HashMap<String, Any>>)
-                hours.clear()
+        //val postInfo = postListner.result?.value as HashMap<String, Any>
 
-                hoursdata?.map { (key, value) ->
-                    val hour = Hour.from(value)
-                    // GET only hours related to the post and not reserved yet
-                    //println("==> ${hour.postkey} ${hour.hourkey} ${hour.reserved}")
-                    if(!hour.reserved && hour.postkey == postkey){
-                        hours.add(hour)
-                    }
-                }
-                if(hours.size == 0)
-                {
-                    binding.noDispo.visibility = VISIBLE
-                    binding.reserveBtn.visibility = INVISIBLE
-                }
-                else
-                {
-                    binding.noDispo.visibility = INVISIBLE
-                    binding.reserveBtn.visibility = VISIBLE
-                }
-                rcDispoList.adapter?.notifyDataSetChanged()
-            }
-        }
-        rcDispoList.adapter = HoursAdapter(hours)
-        //rcDispoList.setLayoutManager(LinearLayoutManager(view.getContext()));
-        rcDispoList.setLayoutManager(GridLayoutManager(view.context, 2))
 
 
         //Reservation Button
@@ -122,7 +126,6 @@ class PostInfoFragment : Fragment() {
 
             if(checkedHours.size != 0)
             {
-                val postInfo = postListner.result?.value as HashMap<String, *>
                 val auth = Firebase.auth.currentUser
                 val dateUsersDB = Firebase.database.getReference("dateUsers")
                 val datesDB = Firebase.database.getReference("dates")
@@ -132,37 +135,44 @@ class PostInfoFragment : Fragment() {
                     var endTime = (hour.start.substring(0, 2).toInt()+1).toString()
                     if (endTime.length == 1) { endTime = "0"+endTime }
                     val end = ( endTime + hour.start.substring(3, 5))
-                    var getDate = postInfo.get("date").toString()
-                    val date = getDate.substring(0, 4)+getDate.substring(5, 7)+getDate.substring(
-                        8,
-                        10
-                    )
-                    val reservation = Reservation(
-                        postInfo.get("userkey").toString(),
-                        date,
-                        start,
-                        end,
-                        auth.uid
-                    )
-                    val key = dateUsersDB.child(reservation.studentId).child(date).push().key
-                    dateUsersDB.child(reservation.studentId).child(date).setValue(true)
-                    dateUsersDB.child(auth.uid).child(date).setValue(true)
-                    datesDB.child(auth.uid).child(date).child(key!!).setValue(
-                        Date(
-                            reservation.start,
-                            reservation.end,
-                            reservation.studentId,
-                            auth.uid
-                        )
-                    )
-                    datesDB.child(reservation.studentId).child(date).child(key!!).setValue(
-                        Date(
-                            reservation.start,
-                            reservation.end,
-                            reservation.studentId,
-                            auth.uid
-                        )
-                    )
+
+                    postListner.addOnSuccessListener {
+                        if(it.value != null)
+                        {
+                            post = it.value as HashMap<String, Any>
+                            var getDate = post.get("date").toString()
+                            val date = getDate.substring(0, 4)+getDate.substring(5, 7)+getDate.substring(
+                                8,
+                                10
+                            )
+                            val reservation = Reservation(
+                                post.get("userkey").toString(),
+                                date,
+                                start,
+                                end,
+                                auth.uid
+                            )
+                            val key = dateUsersDB.child(reservation.studentId).child(date).push().key
+                            dateUsersDB.child(reservation.studentId).child(date).setValue(true)
+                            dateUsersDB.child(auth.uid).child(date).setValue(true)
+                            datesDB.child(auth.uid).child(date).child(key!!).setValue(
+                                Date(
+                                    reservation.start,
+                                    reservation.end,
+                                    reservation.studentId,
+                                    auth.uid
+                                )
+                            )
+                            datesDB.child(reservation.studentId).child(date).child(key!!).setValue(
+                                Date(
+                                    reservation.start,
+                                    reservation.end,
+                                    reservation.studentId,
+                                    auth.uid
+                                )
+                            )
+                        }
+                    }
                 }
                 view.findNavController().navigate(R.id.action_postInfoFragment_to_reservationRecapFragment)
             }
