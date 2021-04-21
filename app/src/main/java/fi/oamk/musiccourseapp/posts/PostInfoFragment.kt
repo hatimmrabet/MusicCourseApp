@@ -71,6 +71,7 @@ class PostInfoFragment : Fragment() {
                     }
                 }
 
+                //GET all hours from databse
                 database.child("hours").child(post.get("postkey").toString()).get().addOnSuccessListener {
                     if(it.value != null)
                     {
@@ -105,11 +106,6 @@ class PostInfoFragment : Fragment() {
             }
         }
 
-        //GET all hours from databse
-        //val postInfo = postListner.result?.value as HashMap<String, Any>
-
-
-
         //Reservation Button
         binding.reserveBtn.setOnClickListener{
             val checkedHours : ArrayList<Hour> = ArrayList()
@@ -119,7 +115,6 @@ class PostInfoFragment : Fragment() {
                     hour.reserved = true
                     database.child("hours").child(hour.hourkey).child("reserved").setValue(true)
                     //database.child("hours").child(hour.hourkey).setValue(hour)
-                    //println("------- ${hour.start} ${hour.postkey}")
                     checkedHours.add(hour)
                 }
             }
