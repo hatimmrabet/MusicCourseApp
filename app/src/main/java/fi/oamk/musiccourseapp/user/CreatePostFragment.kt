@@ -130,7 +130,7 @@ class CreatePostFragment : Fragment() {
 
                         database.child("hours").child(key1).child("start")
                             .setValue(hour1.text.toString())
-                        database.child("hours").child(key1).child("reserved").setValue("false")
+                        database.child("hours").child(key1).child("reserved").setValue(false)
                         database.child("hours").child(key1).child("hourkey").setValue(key1)
                         database.child("hours").child(key1).child("postkey").setValue(key)
                     }
@@ -140,7 +140,7 @@ class CreatePostFragment : Fragment() {
                     if (hour2.isChecked) {
                         database.child("hours").child(key2).child("start")
                             .setValue(hour2.text.toString())
-                        database.child("hours").child(key2).child("reserved").setValue("false")
+                        database.child("hours").child(key2).child("reserved").setValue(false)
                         database.child("hours").child(key2).child("hourkey").setValue(key2)
                         database.child("hours").child(key2).child("postkey").setValue(key)
                     }
@@ -149,7 +149,7 @@ class CreatePostFragment : Fragment() {
                     if (hour3.isChecked) {
                         database.child("hours").child(key3).child("start")
                             .setValue(hour3.text.toString())
-                        database.child("hours").child(key3).child("reserved").setValue("false")
+                        database.child("hours").child(key3).child("reserved").setValue(false)
                         database.child("hours").child(key3).child("hourkey").setValue(key3)
                         database.child("hours").child(key3).child("postkey").setValue(key)
                     }
@@ -158,7 +158,7 @@ class CreatePostFragment : Fragment() {
                     if (hour4.isChecked) {
                         database.child("hours").child(key4).child("start")
                             .setValue(hour4.text.toString())
-                        database.child("hours").child(key4).child("reserved").setValue("false")
+                        database.child("hours").child(key4).child("reserved").setValue(false)
                         database.child("hours").child(key4).child("hourkey").setValue(key4)
                         database.child("hours").child(key4).child("postkey").setValue(key)
                     }
@@ -168,7 +168,7 @@ class CreatePostFragment : Fragment() {
                     if (hour5.isChecked) {
                         database.child("hours").child(key5).child("start")
                             .setValue(hour5.text.toString())
-                        database.child("hours").child(key5).child("reserved").setValue("false")
+                        database.child("hours").child(key5).child("reserved").setValue(false)
                         database.child("hours").child(key5).child("hourkey").setValue(key5)
                         database.child("hours").child(key5).child("postkey").setValue(key)
                     }
@@ -178,7 +178,7 @@ class CreatePostFragment : Fragment() {
                     if (hour6.isChecked) {
                         database.child("hours").child(key6).child("start")
                             .setValue(hour6.text.toString())
-                        database.child("hours").child(key6).child("reserved").setValue("false")
+                        database.child("hours").child(key6).child("reserved").setValue(false)
                         database.child("hours").child(key6).child("hourkey").setValue(key6)
                         database.child("hours").child(key6).child("postkey").setValue(key)
                     }
@@ -188,7 +188,7 @@ class CreatePostFragment : Fragment() {
                     if (hour7.isChecked) {
                         database.child("hours").child(key7).child("start")
                             .setValue(hour7.text.toString())
-                        database.child("hours").child(key7).child("reserved").setValue("false")
+                        database.child("hours").child(key7).child("reserved").setValue(false)
                         database.child("hours").child(key7).child("hourkey").setValue(key7)
                         database.child("hours").child(key7).child("postkey").setValue(key)
                     }
@@ -198,7 +198,7 @@ class CreatePostFragment : Fragment() {
                     if (hour8.isChecked) {
                         database.child("hours").child(key8).child("start")
                             .setValue(hour8.text.toString())
-                        database.child("hours").child(key8).child("reserved").setValue("true")
+                        database.child("hours").child(key8).child("reserved").setValue(false)
                         database.child("hours").child(key8).child("hourkey").setValue(key8)
                         database.child("hours").child(key8).child("postkey").setValue(key)
                     }
@@ -208,7 +208,7 @@ class CreatePostFragment : Fragment() {
                     if (hour9.isChecked) {
                         database.child("hours").child(key9).child("start")
                             .setValue(hour9.text.toString())
-                        database.child("hours").child(key9).child("reserved").setValue("false")
+                        database.child("hours").child(key9).child("reserved").setValue(false)
                         database.child("hours").child(key9).child("hourkey").setValue(key9)
                         database.child("hours").child(key9).child("postkey").setValue(key)
                     }
@@ -218,7 +218,7 @@ class CreatePostFragment : Fragment() {
                     if (hour10.isChecked) {
                         database.child("hours").child(key10).child("start")
                             .setValue(hour10.text.toString())
-                        database.child("hours").child(key10).child("reserved").setValue("true")
+                        database.child("hours").child(key10).child("reserved").setValue(false)
                         database.child("hours").child(key10).child("hourkey").setValue(key10)
                         database.child("hours").child(key10).child("postkey").setValue(key)
                     }
@@ -228,7 +228,7 @@ class CreatePostFragment : Fragment() {
                     if (hour11.isChecked) {
                         database.child("hours").child(key11).child("start")
                             .setValue(hour11.text.toString())
-                        database.child("hours").child(key11).child("reserved").setValue("false")
+                        database.child("hours").child(key11).child("reserved").setValue(false)
                         database.child("hours").child(key11).child("hourkey").setValue(key11)
                         database.child("hours").child(key11).child("postkey").setValue(key)
                     }
@@ -238,7 +238,7 @@ class CreatePostFragment : Fragment() {
                     if (hour12.isChecked) {
                         database.child("hours").child(key12).child("start")
                             .setValue(hour12.text.toString())
-                        database.child("hours").child(key12).child("reserved").setValue("false")
+                        database.child("hours").child(key12).child("reserved").setValue(false)
                         database.child("hours").child(key12).child("hourkey").setValue(key12)
                         database.child("hours").child(key12).child("postkey").setValue(key)
                     }

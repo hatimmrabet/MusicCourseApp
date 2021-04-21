@@ -7,7 +7,6 @@ data class Date(val start: String, val end: String, val studentId: String, val t
             val end by map
             val studentId by map
             val teacherId by map
-
             val data = Date(start, end, studentId, teacherId)
         }.data
     }

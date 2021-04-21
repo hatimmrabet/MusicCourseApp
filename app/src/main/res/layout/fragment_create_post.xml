@@ -29,7 +29,6 @@
             android:layout_height="wrap_content"
             android:text="Post title"
             android:layout_marginLeft="15dp"
-
             android:textSize="22dp"
             android:textAlignment="textStart"/>
         <EditText

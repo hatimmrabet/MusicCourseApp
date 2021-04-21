@@ -20,6 +20,7 @@ class CalendarViewModel: ViewModel() {
 
     private var _dates = MutableLiveData<MutableSet<CalendarDay>>()
     val dates: LiveData<MutableSet<CalendarDay>> get() = _dates
+
     fun getDates() {
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
         dateUsersDB.get().addOnSuccessListener {
@@ -42,11 +43,10 @@ class CalendarViewModel: ViewModel() {
     val events: LiveData<ArrayList<Date>> get() = _events
 
     fun setDate (year: String, month: String, day:String){
-        var myMonth = ""
-        if(month.length == 1)
-            myMonth = "0"+ month
+        var myMonth = if(month.length == 1)
+            "0"+ month
         else {
-            myMonth = month
+            month
         }
 
         val key = year+myMonth+day

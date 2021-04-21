@@ -35,6 +35,7 @@ class ReservationViewModel: ViewModel() {
                 }
 
                 //reservations from teachers posts
+                /*
                 Firebase.database.getReference("allReservations").get().addOnSuccessListener {
                     if(it.value != null)
                     {
@@ -57,6 +58,9 @@ class ReservationViewModel: ViewModel() {
                         }
                     }
                 }
+                 */
+
+
             }
         }
     }
