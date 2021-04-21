@@ -65,13 +65,24 @@ class CreatePostFragment : Fragment() {
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
+
         binding.datePicker.setOnClickListener {
             val tpd = DatePickerDialog(it.context, DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
-                binding.datePicker.setText(""+mDay+"/"+mMonth+"/"+mYear)
+                var dateDay : String = mDay.toString()
+                var dateMonth : String = mMonth.toString()
+                var dateYear : String = mYear.toString()
+                if (dateMonth.toString().length == 1)
+                {
+                    dateMonth="0"+dateMonth
+                }
+                if (dateDay.length == 1)
+                {
+                    dateDay="0"+dateDay
+                }
+                binding.datePicker.text = "$dateYear/$dateMonth/$dateDay"
             }, year, month, day)
             tpd.show()
         }
-
 
         database = Firebase.database.reference
         hour1 = binding.checkBox5
@@ -246,6 +257,7 @@ class CreatePostFragment : Fragment() {
             }
 
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

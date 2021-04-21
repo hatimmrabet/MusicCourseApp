@@ -33,34 +33,6 @@ class ReservationViewModel: ViewModel() {
                     _reservations.value = newReservations
                     Log.d(TAG, newReservations.toString())
                 }
-
-                //reservations from teachers posts
-                /*
-                Firebase.database.getReference("allReservations").get().addOnSuccessListener {
-                    if(it.value != null)
-                    {
-                        Log.d(TAG, it.value.toString())
-                        val UsersReservations = it.value as HashMap<String,HashMap<String,Any>>
-                        UsersReservations.map { (key, userskey) ->
-                            userskey as HashMap<String,HashMap<String,HashMap<String,Any>>>
-                            userskey.map { (key2 , value) ->
-                                if(value.get("teacherkey").toString() == auth.uid) {
-                                    val uid = value.get("teacherkey").toString()
-                                    val date = value.get("date").toString()
-                                    val start = value.get("start").toString()
-                                    var end = (start.substring(0,2).toInt()+1).toString()
-                                    if (end.length == 1) { end = "0"+end }
-                                    end = ( end + start.substring(2,5))
-                                    val res = Reservation(uid,date,start,end,key)
-                                    newReservations.add(res)
-                                }
-                            }
-                        }
-                    }
-                }
-                 */
-
-
             }
         }
     }
