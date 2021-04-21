@@ -1,6 +1,7 @@
 package fi.oamk.musiccourseapp.schedule.calendar
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import fi.oamk.musiccourseapp.databinding.FragmentScheduleCalendarBinding
 
 class ScheduleCalendarFragment : Fragment() {
 
+    private val TAG = "CalendarFragment"
     private var _binding: FragmentScheduleCalendarBinding? = null
     private val binding get() = _binding!!
 
@@ -28,8 +30,7 @@ class ScheduleCalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getDates()
-        viewModel.dates.observe(viewLifecycleOwner){
+        viewModel.dates.observe(viewLifecycleOwner) {
             binding.calendarView.addDecorator(CurrentDayDecorator(activity, it!!))
         }
         binding.calendarView.setOnDateChangedListener { w, date, selected ->

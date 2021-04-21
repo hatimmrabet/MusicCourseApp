@@ -18,26 +18,8 @@ class CalendarViewModel: ViewModel() {
     private val dateUsersDB = Firebase.database.getReference("dateUsers/${auth.uid}")
     private val datesDB = Firebase.database.getReference("dates")
 
-    private var _dates = MutableLiveData<MutableSet<CalendarDay>>()
+    private var _dates = CalendarDayLiveData(dateUsersDB)
     val dates: LiveData<MutableSet<CalendarDay>> get() = _dates
-
-    fun getDates() {
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        dateUsersDB.get().addOnSuccessListener {
-            Log.i(TAG, "Got value ${it.value}")
-            _dates.value?.clear()
-            var newDates = mutableSetOf<CalendarDay>()
-            it.children.forEach { child ->
-                Log.i(TAG, "Got value ${child.key}")
-                val date = LocalDate.parse(child.key.toString(), formatter)
-                newDates.add(CalendarDay.from(date.year, date.monthValue, date.dayOfMonth))
-            }
-            _dates.value = newDates
-            Log.i(TAG, "Got dates ${newDates}")
-        }.addOnFailureListener {
-            Log.e(TAG, "Error getting data", it)
-        }
-    }
 
     private var _events = MutableLiveData<ArrayList<Date>>()
     val events: LiveData<ArrayList<Date>> get() = _events
@@ -48,8 +30,13 @@ class CalendarViewModel: ViewModel() {
         else {
             month
         }
+        var myDay = if(day.length == 1)
+            "0" + day
+        else {
+            day
+        }
 
-        val key = year+myMonth+day
+        val key = year+myMonth+myDay
         Log.d(TAG, "The key is ${key}")
         _events.value?.clear()
         var newEvents= arrayListOf<Date>()
