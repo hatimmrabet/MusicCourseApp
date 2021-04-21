@@ -15,28 +15,6 @@ class ReservationViewModel: ViewModel() {
     val auth = Firebase.auth.currentUser
     val reservationUsersDB = Firebase.database.getReference("reservationUsers/${auth.uid}")
 
-    private var _reservations = MutableLiveData<ArrayList<Reservation>>()
+    private var _reservations = ReservationLiveData(reservationUsersDB)
     val reservations: LiveData<ArrayList<Reservation>> get() = _reservations
-
-    fun getReservations() {
-        var newReservations = arrayListOf<Reservation>()
-        _reservations.value?.clear()
-        reservationUsersDB.get().addOnSuccessListener {
-            Log.d(TAG, it.value.toString())
-            it.children.forEach{reservationUID ->
-                Log.d(TAG, reservationUID.key.toString())
-                //reservations from "search by teacher"
-                val reservationsDB = Firebase.database.getReference("reservations/${reservationUID.key.toString()}")
-                reservationsDB.get().addOnSuccessListener { reservation ->
-                    Log.d(TAG, reservation.value.toString())
-                    newReservations.add(Reservation.from(reservation.value as HashMap<String, String>))
-                    _reservations.value = newReservations
-                    Log.d(TAG, newReservations.toString())
-                }
-            }
-        }
-    }
-
-
-
 }
