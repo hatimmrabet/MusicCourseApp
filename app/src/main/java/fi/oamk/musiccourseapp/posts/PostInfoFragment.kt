@@ -18,6 +18,8 @@ import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import fi.oamk.musiccourseapp.R
 import fi.oamk.musiccourseapp.databinding.FragmentPostInfoBinding
+import fi.oamk.musiccourseapp.findteacher.reservation.Reservation
+import fi.oamk.musiccourseapp.schedule.reservation.Date
 
 
 class PostInfoFragment : Fragment() {
@@ -188,22 +190,27 @@ class PostInfoFragment : Fragment() {
             if(checkedHours.size != 0)
             {
                 val postInfo = postListner.result?.value as HashMap<String, *>
+
+                val auth = Firebase.auth.currentUser
+                val usersDB = Firebase.database.getReference("users")
+                val dateUsersDB = Firebase.database.getReference("dateUsers")
+                val datesDB = Firebase.database.getReference("dates")
+                val reservationUsersDB = Firebase.database.getReference("reservationUsers")
+                val reservationsDB = Firebase.database.getReference("reservations")
+
                 for( hour in checkedHours) {
-                    val reskey = database.child("allReservations").child("${auth.currentUser.uid}")
-                        .push().key
-                    val reservation = reskey?.let { it1 ->
-                        fi.oamk.musiccourseapp.posts.Reservation(
-                            it1,
-                            postInfo.get("userkey").toString(),
-                            hour.postkey,
-                            hour.hourkey,
-                            postInfo.get("date").toString(),
-                            hour.start,
-                            postInfo.get("price").toString()
-                        )
-                    }
-                    database.child("allReservations").child("${auth.currentUser.uid}")
-                        .child("${reskey}").setValue(reservation)
+                    val start = hour.start.substring(0,2)+hour.start.substring(3,5)
+                    var endTime = (hour.start.substring(0,2).toInt()+1).toString()
+                    if (endTime.length == 1) { endTime = "0"+endTime }
+                    val end = ( endTime + hour.start.substring(3,5))
+                    var getDate = postInfo.get("date").toString()
+                    val date = getDate.substring(0,4)+getDate.substring(5,7)+getDate.substring(8,10)
+                    val reservation = Reservation(postInfo.get("userkey").toString(),date,start,end,auth.uid)
+                    val key = dateUsersDB.child(reservation.studentId).child(date).push().key
+                    dateUsersDB.child(reservation.studentId).child(date).setValue(true)
+                    dateUsersDB.child(auth.uid).child(date).setValue(true)
+                    datesDB.child(auth.uid).child(date).child(key!!).setValue(Date(reservation.start, reservation.end, reservation.studentId, auth.uid))
+                    datesDB.child(reservation.studentId).child(date).child(key!!).setValue(Date(reservation.start, reservation.end, reservation.studentId, auth.uid))
                 }
                 view.findNavController().navigate(R.id.action_postInfoFragment_to_reservationRecapFragment)
             }

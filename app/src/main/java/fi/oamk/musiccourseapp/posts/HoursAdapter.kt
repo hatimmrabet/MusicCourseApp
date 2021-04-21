@@ -35,7 +35,6 @@ class HoursAdapter (private val hoursList: ArrayList<Hour>): RecyclerView.Adapte
 
         holder.hour.setOnCheckedChangeListener { buttonView, isChecked ->
             currentItem.checked = isChecked
-            //println("------ ${buttonView.text} ==> ${currentItem.checked}")
         }
 
     }
