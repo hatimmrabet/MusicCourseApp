@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
@@ -75,6 +76,17 @@ class EditAccountFragment : Fragment() {
                 auth.currentUser.updatePassword(binding.password.text.toString())
             }
         }
+
+        binding.name.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
+        binding.email.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
+        binding.password.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
+
     }
 
     private val REQUEST_IMAGE_CAPTURE = 1
@@ -117,6 +129,11 @@ class EditAccountFragment : Fragment() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
         return data
+    }
+
+    fun View.hideKeyboardFrom(){
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
     override fun onDestroyView() {

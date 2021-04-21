@@ -1,5 +1,6 @@
 package fi.oamk.musiccourseapp.user
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import androidx.fragment.app.Fragment;
@@ -68,6 +69,20 @@ class LoginTab : Fragment(){
                 }
             }
         }
+
+        binding.email.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
+
+        binding.password.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
     }
+
+    fun View.hideKeyboardFrom(){
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
+    }
+
 
 }

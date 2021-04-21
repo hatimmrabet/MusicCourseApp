@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -122,6 +123,19 @@ class SignupTab : Fragment() {
             }
 
         }
+
+        binding.name.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
+        binding.email.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
+        binding.password.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
+        binding.confPassword.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
     }
 
     //Image activity variables
@@ -165,6 +179,11 @@ class SignupTab : Fragment() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
         return data
+    }
+
+    fun View.hideKeyboardFrom(){
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
 }

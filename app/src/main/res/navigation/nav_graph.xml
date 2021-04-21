@@ -88,7 +88,7 @@
     <fragment
         android:id="@+id/editAccountFragment"
         android:name="fi.oamk.musiccourseapp.user.EditAccountFragment"
-        android:label="fragment_edit_account"
+        android:label="Edit your account"
         tools:layout="@layout/fragment_edit_account" />
     <fragment
         android:id="@+id/createPostFragment"
@@ -103,8 +103,8 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="fi.oamk.musiccourseapp.user.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_postsFragment"
             app:destination="@id/postsFragment" />
