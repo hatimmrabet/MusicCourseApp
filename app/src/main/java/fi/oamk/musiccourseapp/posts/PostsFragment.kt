@@ -52,7 +52,20 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
 
                     postsFromDatabase?.map { (key, value) ->
                         val post = Post.from(value as HashMap<String, Any>)
-                        posts.add(post)
+                        database.child("hours").get().addOnSuccessListener {
+                            if(it.value != null)
+                            {
+                                val hoursFromDatabase = (it.value as HashMap<String,Any>)
+                                for ((key, value) in hoursFromDatabase) {
+                                    val hour =Hour.from(value as HashMap<String, Any>)
+                                    if(hour.postkey == post.postkey && !hour.reserved)
+                                    {
+                                        posts.add(post)
+                                        break
+                                    }
+                                }
+                            }
+                        }
                     }
                     postsList.adapter?.notifyDataSetChanged()
                 }
