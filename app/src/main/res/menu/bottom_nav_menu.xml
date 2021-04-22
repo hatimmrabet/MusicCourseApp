@@ -6,7 +6,7 @@
         android:title="Find People"/>
     <item
         android:id="@+id/postsFragment"
-        android:icon="@drawable/ic_baseline_add_alert_24"
+        android:icon="@drawable/ic_baseline_library_books_24"
         android:title="Posts"/>
     <item
         android:id="@id/userProfileFragment"

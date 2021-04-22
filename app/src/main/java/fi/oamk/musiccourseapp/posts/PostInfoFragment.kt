@@ -25,7 +25,6 @@ import kotlin.Comparator
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-
 class PostInfoFragment : Fragment() {
 
     private var _binding: FragmentPostInfoBinding? = null
@@ -85,16 +84,6 @@ class PostInfoFragment : Fragment() {
                             if(!hour.reserved && hour.postkey == postkey){
                                 hours.add(hour)
                             }
-                        }
-                        if(hours.size == 0)
-                        {
-                            binding.noDispo.visibility = VISIBLE
-                            binding.reserveBtn.visibility = INVISIBLE
-                        }
-                        else
-                        {
-                            binding.noDispo.visibility = INVISIBLE
-                            binding.reserveBtn.visibility = VISIBLE
                         }
                         rcDispoList.adapter?.notifyDataSetChanged()
                     }
