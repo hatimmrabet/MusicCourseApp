@@ -9,7 +9,6 @@
     <string name="profile_image_desc">image_desc</string>
     <string name="full_name">Full name</string>
     <string name="instrument">Instrument</string>
-    <string name="description">Description</string>
     <string name="monday">Monday</string>
     <string name="reserve">Reserve</string>
     <string name="profile_picture_of_user">Profile picture of user</string>
@@ -19,4 +18,24 @@
     <string name="reservation_successfully_done">Reservation Successfully Done :)</string>
     <string name="see_all_posts">See all posts</string>
     <string name="go_to_your_schedule">Go to your schedule</string>
+    <string name="select">Select</string>
+    <string name="hours_of_disponiblity">Hours of disponiblity:</string>
+    <string name="_08_00">08:00</string>
+    <string name="_09_00">09:00</string>
+    <string name="_10_00">10:00</string>
+    <string name="_11_00">11:00</string>
+    <string name="_12_00">12:00</string>
+    <string name="_13_00">13:00</string>
+    <string name="_14_00">14:00</string>
+    <string name="_15_00">15:00</string>
+    <string name="_16_00">16:00</string>
+    <string name="_17_00">17:00</string>
+    <string name="_18_00">18:00</string>
+    <string name="_19_00">19:00</string>
+    <string name="create_post">Create post</string>
+    <string name="date_of_disponibility">Date of disponibility</string>
+    <string name="price_per_hour">Price per hour</string>
+    <string name="description">Description</string>
+    <string name="your_instrument">Your Instrument</string>
+    <string name="create_post_title">Post title</string>
 </resources>

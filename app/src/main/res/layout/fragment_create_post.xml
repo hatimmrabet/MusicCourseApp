@@ -14,7 +14,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Post title"
+            android:hint="@string/create_post_title"
             android:textSize="22sp"
             android:layout_marginBottom="7dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -30,7 +30,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Your Instruments"
+            android:hint="@string/your_instrument"
             android:textSize="22sp"
             android:layout_marginBottom="7dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="22sp"
-            android:hint="Description"
+            android:hint="@string/description"
             android:layout_marginBottom="7dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             >
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:textSize="22sp"
             app:startIconDrawable="@drawable/ic_baseline_euro_24"
-            android:hint="Price per hour"
+            android:hint="@string/price_per_hour"
             android:layout_marginBottom="7dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             >
@@ -76,28 +76,48 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:textSize="22sp"
-            android:hint="Date of disponibility"
-            android:id="@+id/datePicker"
+            android:hint="@string/date_of_disponibility"
+            android:enabled="false"
+            android:id="@+id/buttonPickDate"
+            app:startIconDrawable="@drawable/ic_baseline_calendar_today_24"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             >
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/displayDate"
                 />
         </com.google.android.material.textfield.TextInputLayout>
+            <Button
+                android:id="@+id/selectButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center_vertical"
+                />
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hours of disponiblity:"
+            android:text="@string/hours_of_disponiblity"
             android:layout_marginTop="20dp"
             android:textSize="22sp"
             />
-        <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+        <TableLayout
             android:id="@+id/simpleTableLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,25 +131,22 @@
                 android:id="@+id/checkBox5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="08:00" />
+                android:text="@string/_08_00" />
             <CheckBox
                 android:id="@+id/checkBox6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="09:00" />
+                android:text="@string/_09_00" />
             <CheckBox
                 android:id="@+id/checkBox7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="10:00" />
+                android:text="@string/_10_00" />
             <CheckBox
                 android:id="@+id/checkBox9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="11:00" />
+                android:text="@string/_11_00" />
         </TableRow>
             <TableRow
                 android:layout_width="match_parent"
@@ -139,25 +156,22 @@
                     android:id="@+id/checkBox10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="12:00" />
+                    android:text="@string/_12_00" />
                 <CheckBox
                     android:id="@+id/checkBox11"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:text="13:00" />
+                    android:text="@string/_13_00" />
                 <CheckBox
                     android:id="@+id/checkBox12"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:text="14:00" />
+                    android:text="@string/_14_00" />
                 <CheckBox
                     android:id="@+id/checkBox13"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:text="15:00" />
+                    android:text="@string/_15_00" />
             </TableRow>
             <TableRow
                 android:layout_width="match_parent"
@@ -167,25 +181,22 @@
                     android:id="@+id/checkBox14"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="16:00" />
+                    android:text="@string/_16_00" />
                 <CheckBox
                     android:id="@+id/checkBox15"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:text="17:00" />
+                    android:text="@string/_17_00" />
                 <CheckBox
                     android:id="@+id/checkBox16"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:text="18:00" />
+                    android:text="@string/_18_00" />
                 <CheckBox
                     android:id="@+id/checkBox17"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:text="19:00" />
+                    android:text="@string/_19_00" />
             </TableRow>
         </TableLayout>
 
@@ -194,9 +205,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Submit"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#2196f3"/>
+        android:text="@string/create_post"
+        android:layout_marginTop="20dp"/>
 
     </LinearLayout>
 </ScrollView>

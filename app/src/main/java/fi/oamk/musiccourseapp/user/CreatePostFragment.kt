@@ -1,7 +1,6 @@
 package fi.oamk.musiccourseapp.user
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -17,6 +19,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import fi.oamk.musiccourseapp.databinding.FragmentCreatePostBinding
 import fi.oamk.musiccourseapp.posts.Post
+import java.util.*
 
 class CreatePostFragment : Fragment() {
     private var _binding: FragmentCreatePostBinding? = null
@@ -59,7 +62,7 @@ class CreatePostFragment : Fragment() {
         title = binding.editText
         description= binding.editTextTextPersonName
         instrument= binding.editText1
-        datePicker = binding.datePicker
+        //datePicker = binding.datePicker
         price= binding.price
 
         val c = Calendar.getInstance()
@@ -67,6 +70,75 @@ class CreatePostFragment : Fragment() {
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
 
+
+        val constraintsBuilder = CalendarConstraints.Builder()
+                                    .setValidator(DateValidatorPointForward.now())
+
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+                .setCalendarConstraints(constraintsBuilder.build())
+                .build()
+
+
+        binding.selectButton.setOnClickListener {
+            datePicker.show(requireFragmentManager(), "tag");
+            datePicker.addOnPositiveButtonClickListener {
+                // Respond to positive button click.
+                //binding.displayDate.hint = datePicker.headerText
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(it)
+                var day : String = calendar.get(Calendar.DAY_OF_MONTH).toString()
+                var month: String = (calendar.get(Calendar.MONTH) + 1).toString()
+                var year: String = calendar.get(Calendar.YEAR).toString()
+                if(day.length == 1) {day="0"+day}
+                if(month.length == 1) {month="0"+month}
+                if(year.length != 4) {year="0"+year}
+
+                binding.displayDate.setText("$year/$month/$day")
+            }
+            datePicker.addOnNegativeButtonClickListener {
+                // Respond to negative button click.
+            }
+            datePicker.addOnCancelListener {
+                // Respond to cancel button click.
+            }
+            datePicker.addOnDismissListener {
+                // Respond to dismiss events.
+            }
+        }
+
+        /*
+        binding.buttonPickDate.setOnClickListener {
+
+            // Create the date picker builder and set the title
+            val builder = MaterialDatePicker.Builder.datePicker()
+                .also {
+                    title.text = "Pick Date"
+                }
+
+
+            // create the date picker
+            val datePicker = builder.build()
+
+            // set listener when date is selected
+            datePicker.addOnPositiveButtonClickListener {
+
+                // Create calendar object and set the date to be that returned from selection
+                val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+                calendar.time = Date(it)
+                binding.textView.text = "${calendar.get(Calendar.DAY_OF_MONTH)}- " +
+                        "${calendar.get(Calendar.MONTH) + 1}-${calendar.get(Calendar.YEAR)}"
+
+            }
+
+            datePicker.show(supportFragmentManager, "MyTAG")
+
+        }
+*/
+        /*
         binding.datePicker.setOnClickListener {
             val tpd = DatePickerDialog(it.context, DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
                 var dateDay : String = mDay.toString()
@@ -84,6 +156,7 @@ class CreatePostFragment : Fragment() {
             }, year, month, day)
             tpd.show()
         }
+        */
 
         database = Firebase.database.reference
         hour1 = binding.checkBox5
@@ -265,3 +338,4 @@ class CreatePostFragment : Fragment() {
         _binding = null
     }
 }
+
