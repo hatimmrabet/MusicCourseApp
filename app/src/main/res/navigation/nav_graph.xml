@@ -93,7 +93,7 @@
     <fragment
         android:id="@+id/createPostFragment"
         android:name="fi.oamk.musiccourseapp.user.CreatePostFragment"
-        android:label="fragment_create_post"
+        android:label="Create new post"
         tools:layout="@layout/fragment_create_post" />
     <fragment
         android:id="@+id/createNoteFragment"
