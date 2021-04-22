@@ -94,7 +94,11 @@
         android:id="@+id/createPostFragment"
         android:name="fi.oamk.musiccourseapp.user.CreatePostFragment"
         android:label="Create new post"
-        tools:layout="@layout/fragment_create_post" />
+        tools:layout="@layout/fragment_create_post" >
+        <action
+            android:id="@+id/action_createPostFragment_to_accountInfoFragment"
+            app:popUpTo="@id/accountInfoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createNoteFragment"
         android:name="fi.oamk.musiccourseapp.messages.note.CreateNoteFragment"
