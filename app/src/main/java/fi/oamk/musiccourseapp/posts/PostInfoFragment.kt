@@ -113,7 +113,7 @@ class PostInfoFragment : Fragment() {
             for (hour in hours) {
                 if (hour.checked) {
                     hour.reserved = true
-                    database.child("hours").child(hour.hourkey).child("reserved").setValue(true)
+                    database.child("hours").child(hour.postkey).child(hour.hourkey).child("reserved").setValue(true)
                     //database.child("hours").child(hour.hourkey).setValue(hour)
                     checkedHours.add(hour)
                 }

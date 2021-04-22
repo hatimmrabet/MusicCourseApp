@@ -26,7 +26,7 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
     private lateinit var posts: ArrayList<Post>
     private lateinit var database: DatabaseReference
     private lateinit var postsList: RecyclerView
-
+    private lateinit var hours: ArrayList<Hour>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,33 +42,63 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
         database = Firebase.database.reference
         postsList = binding.postsList
         posts = arrayListOf<Post>()
+        hours = arrayListOf()
 
         val postListener = object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.value != null)
                 {
                     val postsFromDatabase = (snapshot.value as HashMap<String, HashMap<String, Any>>)["posts"]
+                    val hoursFromDatabase = (snapshot.value as HashMap<String, HashMap<String, Any>>)["hours"]
                     posts.clear()
+                    hours.clear()
 
-                    postsFromDatabase?.map { (key, value) ->
-                        val post = Post.from(value as HashMap<String, Any>)
-                        posts.add(post)
+                    postsFromDatabase?.map { (MapPostKey, MapPostValue) ->
+                        val post = Post.from(MapPostValue as HashMap<String, Any>)
                         /*
-                        database.child("hours").child(post.postkey).get().addOnSuccessListener {
-                            if(it.value != null)
-                            {
-                                val postHours = (it.value as HashMap<String,Any>)
-                                for ((key, value) in postHours) {
+                        database.child("hours").child(key).get().addOnSuccessListener {
+                            if (it.value != null) {
+                                val postHours = (it.value as HashMap<String, Any>)
+                                postHours.map { (key, value) ->
                                     val hour = Hour.from(value as HashMap<String, Any>)
                                     if(!hour.reserved)
                                     {
-                                        posts.add(post)
-                                        break
+                                        hours.add(hour)
+                                    }
+                                }
+                            }
+                        }
+                        */
+                        /*
+                        database.child("hours").child(post.postkey).get().addOnSuccessListener {
+                            if (it.value != null) {
+                                val postHours = (it.value as HashMap<String, Any>)
+                                postHours.map { (key, value) ->
+                                    val hour = Hour.from(value as HashMap<String, Any>)
+                                    if(!hour.reserved)
+                                    {
+                                        hours.add(hour)
                                     }
                                 }
                             }
                         }
                          */
+
+                        val postHoursDB = (hoursFromDatabase?.get(MapPostKey) as HashMap<String, Any>)
+                        postHoursDB.map { (hourKey, hourValue) ->
+                            val hour = Hour.from(hourValue as HashMap<String, Any>)
+                            if (!hour.reserved)
+                            {
+                                hours.add(hour)
+                            }
+                        }
+
+                        if(hours.size > 0)
+                        {
+                            posts.add(post)
+                            hours.clear()
+                        }
+
                     }
                     postsList.adapter?.notifyDataSetChanged()
                 }
@@ -81,7 +111,24 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
         postsList.setLayoutManager(LinearLayoutManager(view.getContext()));
         postsList.adapter = MyAdapter(posts, this)
     }
-
+/*
+    fun countDispoHours(post: Post): Int {
+        database.child("hours").child(post.postkey).get().addOnSuccessListener {
+            if (it.value != null) {
+                val postHours = (it.value as HashMap<String, Any>)
+                postHours.map { (key, value) ->
+                    val hour = Hour.from(value as HashMap<String, Any>)
+                    if(!hour.reserved)
+                    {
+                        hours.add(hour)
+                        val nb = hours.size
+                    }
+                }
+            }
+        }
+        return hours.size
+    }
+*/
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -95,3 +142,5 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
         //Toast.makeText(this.context, "${clickedItem.postkey} clicked", Toast.LENGTH_SHORT).show()
     }
 }
+
+
