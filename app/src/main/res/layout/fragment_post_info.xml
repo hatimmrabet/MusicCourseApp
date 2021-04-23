@@ -113,5 +113,14 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="0dp"/>
 
+        <Button
+            android:id="@+id/login_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/go_to_login"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="0dp"
+            android:visibility="invisible"/>
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

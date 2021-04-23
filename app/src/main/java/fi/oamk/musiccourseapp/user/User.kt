@@ -9,7 +9,6 @@ data class User(val uid: String? ,val credit : String ?, val email : String?, va
             val fullname by map
             val picture by map
             val role by map
-
             val data = User(uid,credit, email, fullname, picture, role)
         }.data
     }
