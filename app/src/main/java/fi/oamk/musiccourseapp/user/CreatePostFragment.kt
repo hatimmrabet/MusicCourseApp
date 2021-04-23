@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
@@ -27,7 +26,7 @@ class CreatePostFragment : Fragment() {
     private lateinit var description : EditText
     private lateinit var instrument : EditText
     private lateinit var price : EditText
-    private lateinit var datePicker : TextInputLayout
+    private lateinit var datePicker : TextView
     private lateinit var hour1: CheckBox
     private lateinit var hour2: CheckBox
     private lateinit var hour3: CheckBox
@@ -80,7 +79,7 @@ class CreatePostFragment : Fragment() {
                 {
                     dateDay="0"+dateDay
                 }
-                binding.datePicker.hint = "$dateYear/$dateMonth/$dateDay"
+                binding.datePicker.text = "$dateYear/$dateMonth/$dateDay"
             }, year, month, day)
             tpd.show()
         }
@@ -107,7 +106,7 @@ class CreatePostFragment : Fragment() {
             val description= description.text.toString()
             val instrument = instrument.text.toString()
             val price = price.text.toString()
-            val date= datePicker.toString()
+            val date= datePicker.text.toString()
             if (title == "" || description == "" || instrument == "" || price == "" || date == ""){
                 Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
             }

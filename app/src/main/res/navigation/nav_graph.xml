@@ -84,6 +84,9 @@
         <action
             android:id="@+id/action_accountInfoFragment_to_postInfoFragment"
             app:destination="@id/postInfoFragment" />
+        <action
+            android:id="@+id/action_accountInfoFragment_to_postInfoFragment2"
+            app:destination="@id/postInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/editAccountFragment"
@@ -94,7 +97,11 @@
         android:id="@+id/createPostFragment"
         android:name="fi.oamk.musiccourseapp.user.CreatePostFragment"
         android:label="Create new post"
-        tools:layout="@layout/fragment_create_post" />
+        tools:layout="@layout/fragment_create_post" >
+        <action
+            android:id="@+id/action_createPostFragment_to_postsFragment"
+            app:destination="@id/postsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createNoteFragment"
         android:name="fi.oamk.musiccourseapp.messages.note.CreateNoteFragment"
