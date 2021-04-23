@@ -39,4 +39,6 @@
     <string name="your_instrument">Your Instrument</string>
     <string name="create_post_title">Post title</string>
     <string name="go_to_login">Go to login</string>
+    <string name="title">Title</string>
+    <string name="_15">15 €</string>
 </resources>

@@ -64,6 +64,7 @@ class PostInfoFragment : Fragment() {
         val postListner = database.child("posts/${postkey}").get().addOnSuccessListener {
             if (it.value != null) {
                 post = Post.from(it.value as HashMap<String, Any>)
+                binding.postInfoTitle.text = post.title
                 binding.postInfoInstrument.text = post.instrument
                 binding.postInfoDesc.text = post.description
                 binding.postInfoDate.text = post.date
