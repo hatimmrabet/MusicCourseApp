@@ -53,7 +53,6 @@ class AccountInfoFragment : Fragment(), MyPostAdapter.OnPostListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
             database.child("users").child("${auth.currentUser.uid}").get().addOnSuccessListener{
                 val profil = it.value as HashMap<String, Any>
                 binding.name.text = profil.get("fullname").toString()
@@ -67,8 +66,11 @@ class AccountInfoFragment : Fragment(), MyPostAdapter.OnPostListener {
                 {
                     binding.role.text = "Teacher"
                 }
-                else
+                else {
                     binding.role.text = "Student"
+                    binding.floatingActionButton2.setVisibility(View.INVISIBLE)
+                    binding.posts.setVisibility(View.INVISIBLE)
+                }
             }
 
         binding.email.text=auth.currentUser.email
@@ -105,7 +107,6 @@ class AccountInfoFragment : Fragment(), MyPostAdapter.OnPostListener {
         database.addValueEventListener(postListener)
         postsList.setLayoutManager(LinearLayoutManager(view.getContext()));
         postsList.adapter = MyPostAdapter(posts, this)
-
 
         binding.floatingActionButton.setOnClickListener{
 
