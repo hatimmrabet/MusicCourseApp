@@ -47,22 +47,27 @@ class EditAccountFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         auth = Firebase.auth
 
+        ref = FirebaseDatabase.getInstance().reference.child("users").child(auth.currentUser.uid)
+
         binding.takePictureButton.setOnClickListener { takePicture() }
         binding.choosePictureButton.setOnClickListener { choosePicture() }
 
+        var url : String = ref.child("picture").toString()
+
         binding.updateButton.setOnClickListener{
-            ref = FirebaseDatabase.getInstance().reference.child("users").child(auth.currentUser.uid)
             val imageData = getImageByteArray()
-            val storageRef = Firebase.storage.reference.child("images/${binding.email.text.toString()}")
-            var uploadTask = storageRef.putBytes(imageData)
-            uploadTask.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    storageRef.downloadUrl.addOnCompleteListener { task ->
-                        val url = task.result.toString()
-                        ref.child("picture").setValue(url)
+            if(imageData != null){
+                val storageRef = Firebase.storage.reference.child("images/${binding.email.text.toString()}")
+                var uploadTask = storageRef.putBytes(imageData as ByteArray)
+                uploadTask.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        storageRef.downloadUrl.addOnCompleteListener { task ->
+                            url = task.result.toString()
+                            ref.child("picture").setValue(url)
+                        }
+                    } else {
+                        Log.w(TAG, "Upload task was not succesful")
                     }
-                } else {
-                    Log.w(TAG, "Upload task was not succesful")
                 }
             }
             if (binding.name.getText().toString() != "") {
@@ -122,13 +127,18 @@ class EditAccountFragment : Fragment() {
         }
     }
 
-    private fun getImageByteArray(): ByteArray {
+    private fun getImageByteArray(): ByteArray? {
         // Extract byteArray from imageView
-        val bitmap = (binding.upload.drawable as BitmapDrawable).bitmap
-        val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val data = baos.toByteArray()
-        return data
+        if(binding.upload.drawable == null){
+            return null
+        }
+        else{
+            val bitmap = (binding.upload.drawable as BitmapDrawable).bitmap
+            val baos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val data = baos.toByteArray()
+            return data
+        }
     }
 
     fun View.hideKeyboardFrom(){
