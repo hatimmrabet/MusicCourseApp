@@ -31,7 +31,7 @@ class PostInfoFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
-    private var post: HashMap<String, Any> = HashMap<String, Any>()
+    private lateinit var post: Post
     private lateinit var rcDispoList : RecyclerView
     private lateinit var hours: ArrayList<Hour>
 
@@ -56,13 +56,14 @@ class PostInfoFragment : Fragment() {
         val postListner = database.child("posts/${postkey}").get().addOnSuccessListener {
             if(it.value != null)
             {
-                post = it.value as HashMap<String, Any>
-                binding.postInfoInstrument.text = post.get("instrument").toString()
-                binding.postInfoDesc.text = post.get("description").toString()
-                binding.postInfoDate.text = post.get("date").toString()
-                binding.postInfoPrice.text = post.get("price").toString() + " €"
+                post = Post.from(it.value as HashMap<String, Any>)
+                binding.postInfoInstrument.text = post.instrument
+                binding.postInfoDesc.text = post.description
+                binding.postInfoDate.text = post.date
+                binding.postInfoPrice.text = "${post.price} €"
 
-                val profileListner = database.child("users/${post.get("userkey").toString()}").get().addOnSuccessListener {
+
+                val profileListner = database.child("users/${post.userkey}").get().addOnSuccessListener {
                     if (it.value != null) {
                         val user = it.value as HashMap<String, Any>
                         binding.postInfoFullname.text = user.get("fullname").toString()
@@ -71,7 +72,7 @@ class PostInfoFragment : Fragment() {
                 }
 
                 //GET all hours from databse
-                database.child("hours").child(post.get("postkey").toString()).get().addOnSuccessListener {
+                database.child("hours").child(post.postkey).get().addOnSuccessListener {
                     if(it.value != null)
                     {
                         val hoursdata = (it.value as HashMap<String, HashMap<String, Any>>)
@@ -123,14 +124,14 @@ class PostInfoFragment : Fragment() {
                     postListner.addOnSuccessListener {
                         if(it.value != null)
                         {
-                            post = it.value as HashMap<String, Any>
-                            var getDate = post.get("date").toString()
+                            post = Post.from(it.value as HashMap<String, Any>)
+                            var getDate = post.date
                             val date = getDate.substring(0, 4)+getDate.substring(5, 7)+getDate.substring(
                                 8,
                                 10
                             )
                             val reservation = Reservation(
-                                post.get("userkey").toString(),
+                                post.userkey,
                                 date,
                                 start,
                                 end,
