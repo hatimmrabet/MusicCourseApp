@@ -95,9 +95,10 @@ class SignupTab : Fragment() {
                     ).addOnCompleteListener { task: Task<AuthResult> ->
                         if (task.isSuccessful) {
                             Log.d(TAG, "Create user : success")
+                            var credit = (10..300).random()
                             var user: User = User(
                                 auth.currentUser.uid,
-                                0.toString(),
+                                credit.toString(),
                                 binding.email.text.toString(),
                                 binding.name.text.toString(),
                                 url,
