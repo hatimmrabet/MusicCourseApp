@@ -63,6 +63,11 @@ class PostInfoFragment : Fragment() {
                 binding.postInfoPrice.text = "${post.price} €"
 
 
+                if(auth.uid == post.userkey)
+                {
+                    binding.reserveBtn.visibility = INVISIBLE
+                }
+
                 val profileListner = database.child("users/${post.userkey}").get().addOnSuccessListener {
                     if (it.value != null) {
                         val user = it.value as HashMap<String, Any>
