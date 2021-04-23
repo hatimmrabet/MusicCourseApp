@@ -24,10 +24,10 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import fi.oamk.musiccourseapp.posts.Hour
-import fi.oamk.musiccourseapp.posts.MyAdapter
+import fi.oamk.musiccourseapp.posts.MyPostAdapter
 import fi.oamk.musiccourseapp.posts.Post
 
-class AccountInfoFragment : Fragment(), MyAdapter.OnPostListener {
+class AccountInfoFragment : Fragment(), MyPostAdapter.OnPostListener {
     private var _binding: FragmentAccountInfoBinding? = null
     private val binding get() = _binding!!
     private lateinit var posts: ArrayList<Post>
@@ -74,43 +74,37 @@ class AccountInfoFragment : Fragment(), MyAdapter.OnPostListener {
         binding.email.text=auth.currentUser.email
 
 
-        val postListener = object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+        val postListener = object: ValueEventListener
+        {
+            override fun onDataChange(snapshot: DataSnapshot)
+            {
                 if(snapshot.value != null)
                 {
                     val postsFromDatabase = (snapshot.value as HashMap<String, HashMap<String, Any>>)["posts"]
-                    val hoursFromDatabase = (snapshot.value as HashMap<String, HashMap<String, Any>>)["hours"]
                     posts.clear()
-                    hours.clear()
 
-                    postsFromDatabase?.map { (MapPostKey, MapPostValue) ->
+
+                    postsFromDatabase?.map {
+                            (MapPostKey, MapPostValue) ->
                         val post = Post.from(MapPostValue as HashMap<String, Any>)
-                        val postHoursDB = (hoursFromDatabase?.get(MapPostKey) as HashMap<String, Any>)
-                        postHoursDB.map { (hourKey, hourValue) ->
-                            val hour = Hour.from(hourValue as HashMap<String, Any>)
-                            if (!hour.reserved)
-                            {
-                                hours.add(hour)
-                            }
-                        }
 
-                        if(hours.size > 0)
+                        if (post.userkey == auth.uid)
                         {
                             posts.add(post)
-                            hours.clear()
                         }
 
                     }
                     postsList.adapter?.notifyDataSetChanged()
                 }
             }
-            override fun onCancelled(error: DatabaseError) {
+            override fun onCancelled(error: DatabaseError)
+            {
                 Log.d("Post", error.toString())
             }
         }
         database.addValueEventListener(postListener)
         postsList.setLayoutManager(LinearLayoutManager(view.getContext()));
-        postsList.adapter = MyAdapter(posts, this)
+        postsList.adapter = MyPostAdapter(posts, this)
 
 
         binding.floatingActionButton.setOnClickListener{
@@ -138,6 +132,6 @@ class AccountInfoFragment : Fragment(), MyAdapter.OnPostListener {
         val clickedItem : Post = posts[position]
         postsList.adapter?.notifyItemChanged(position)
         var bundle = bundleOf("postkey" to clickedItem.postkey)
-        findNavController().navigate(R.id.action_accountInfoFragment_to_postInfoFragment2, bundle)
+        findNavController().navigate(R.id.action_accountInfoFragment_to_postInfoFragment, bundle)
     }
 }
