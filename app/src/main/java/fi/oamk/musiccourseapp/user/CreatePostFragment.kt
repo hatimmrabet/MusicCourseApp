@@ -1,7 +1,6 @@
 package fi.oamk.musiccourseapp.user
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,13 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import fi.oamk.musiccourseapp.R
 import fi.oamk.musiccourseapp.databinding.FragmentCreatePostBinding
 import fi.oamk.musiccourseapp.posts.Post
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class CreatePostFragment : Fragment() {
     private var _binding: FragmentCreatePostBinding? = null
@@ -26,7 +34,6 @@ class CreatePostFragment : Fragment() {
     private lateinit var description : EditText
     private lateinit var instrument : EditText
     private lateinit var price : EditText
-    private lateinit var datePicker : TextView
     private lateinit var hour1: CheckBox
     private lateinit var hour2: CheckBox
     private lateinit var hour3: CheckBox
@@ -39,7 +46,6 @@ class CreatePostFragment : Fragment() {
     private lateinit var hour10: CheckBox
     private lateinit var hour11: CheckBox
     private lateinit var hour12: CheckBox
-    private lateinit var submit: Button
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -48,7 +54,6 @@ class CreatePostFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -58,30 +63,38 @@ class CreatePostFragment : Fragment() {
         title = binding.editText
         description= binding.editTextTextPersonName
         instrument= binding.editText1
-        datePicker = binding.datePicker
         price= binding.price
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+        val formatted = current.format(formatter)
+        binding.displayDate.setText(formatted)
 
-        val c = Calendar.getInstance()
-        val year = c.get(Calendar.YEAR)
-        val month = c.get(Calendar.MONTH)
-        val day = c.get(Calendar.DAY_OF_MONTH)
+        val constraintsBuilder = CalendarConstraints.Builder()
+                                    .setValidator(DateValidatorPointForward.now())
 
-        binding.datePicker.setOnClickListener {
-            val tpd = DatePickerDialog(it.context, DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
-                var dateDay : String = mDay.toString()
-                var dateMonth : String = mMonth.toString()
-                var dateYear : String = mYear.toString()
-                if (dateMonth.toString().length == 1)
-                {
-                    dateMonth="0"+dateMonth
-                }
-                if (dateDay.length == 1)
-                {
-                    dateDay="0"+dateDay
-                }
-                binding.datePicker.text = "$dateYear/$dateMonth/$dateDay"
-            }, year, month, day)
-            tpd.show()
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+                .setCalendarConstraints(constraintsBuilder.build())
+                .build()
+
+
+        binding.selectButton.setOnClickListener {
+            datePicker.show(requireFragmentManager(), "tag");
+            datePicker.addOnPositiveButtonClickListener {
+                // Respond to positive button click.
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(it)
+                var day : String = calendar.get(Calendar.DAY_OF_MONTH).toString()
+                var month: String = (calendar.get(Calendar.MONTH) + 1).toString()
+                var year: String = calendar.get(Calendar.YEAR).toString()
+                if(day.length == 1) {day="0"+day}
+                if(month.length == 1) {month="0"+month}
+                if(year.length != 4) {year="0"+year}
+                binding.displayDate.setText("$year/$month/$day")
+            }
         }
 
         database = Firebase.database.reference
@@ -97,170 +110,127 @@ class CreatePostFragment : Fragment() {
         hour10 = binding.checkBox15
         hour11 = binding.checkBox16
         hour12 = binding.checkBox17
-        submit = binding.button3
 
-        val submit = binding.button3
-
-        submit.setOnClickListener{
+        binding.submit.setOnClickListener{
             val title = title.text.toString()
             val description= description.text.toString()
             val instrument = instrument.text.toString()
             val price = price.text.toString()
-            val date= datePicker.text.toString()
+            val date = binding.displayDate.text.toString()
+
+
             if (title == "" || description == "" || instrument == "" || price == "" || date == ""){
-                Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Missing fields", Toast.LENGTH_SHORT).show()
             }
-            else {
-            val key = database.child("posts").push().key.toString()
-            val key1 = database.child("hours").push().key.toString()
-            val key2 = database.child("hours").push().key.toString()
-            val key3 = database.child("hours").push().key.toString()
-            val key4 = database.child("hours").push().key.toString()
-            val key5 = database.child("hours").push().key.toString()
-            val key6 = database.child("hours").push().key.toString()
-            val key7 = database.child("hours").push().key.toString()
-            val key8 = database.child("hours").push().key.toString()
-            val key9 = database.child("hours").push().key.toString()
-            val key10 = database.child("hours").push().key.toString()
-            val key11 = database.child("hours").push().key.toString()
-            val key12 = database.child("hours").push().key.toString()
-            val user = Firebase.auth.currentUser
+            else if(!hour1.isChecked && !hour2.isChecked && !hour3.isChecked && !hour4.isChecked && !hour5.isChecked && !hour6.isChecked && !hour7.isChecked
+                && !hour8.isChecked && !hour9.isChecked && !hour10.isChecked && !hour11.isChecked && !hour12.isChecked)
+            {
+                Toast.makeText(context, "You should choose at least one hour", Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+                //get new post key
+                val key = database.child("posts").push().key.toString()
+                //create the post
+                val post = Post(key,auth.currentUser.uid, title,instrument,description,price.toDouble(),date)
 
-                    val post = Post(key,auth.currentUser.uid, title,instrument,description,price.toDouble(),date)
-                    database.child("posts").child(post.postkey).setValue(post)
-                    //database.child("posts").child(key).child("postkey").setValue(key)
-                    //database.child("posts").child(key).child("description").setValue(description)
-                    //database.child("posts").child(key).child("instrument").setValue(instrument)
-                    //database.child("posts").child(key).child("price").setValue(price)
-                    //database.child("posts").child(key).child("date").setValue(date)
-                   /* user?.let {
-                        val uid = user.uid
-                        database.child("posts").child(key).child("userkey").setValue(uid)
-                    }*/
-                    if (hour1.isChecked) {
-
-                        database.child("hours").child(key1).child("start")
-                            .setValue(hour1.text.toString())
-                        database.child("hours").child(key1).child("reserved").setValue(false)
-                        database.child("hours").child(key1).child("hourkey").setValue(key1)
-                        database.child("hours").child(key1).child("postkey").setValue(key)
-                    }
-
-
-
-                    if (hour2.isChecked) {
-                        database.child("hours").child(key2).child("start")
-                            .setValue(hour2.text.toString())
-                        database.child("hours").child(key2).child("reserved").setValue(false)
-                        database.child("hours").child(key2).child("hourkey").setValue(key2)
-                        database.child("hours").child(key2).child("postkey").setValue(key)
-                    }
-
-
-                    if (hour3.isChecked) {
-                        database.child("hours").child(key3).child("start")
-                            .setValue(hour3.text.toString())
-                        database.child("hours").child(key3).child("reserved").setValue(false)
-                        database.child("hours").child(key3).child("hourkey").setValue(key3)
-                        database.child("hours").child(key3).child("postkey").setValue(key)
-                    }
-
-
-                    if (hour4.isChecked) {
-                        database.child("hours").child(key4).child("start")
-                            .setValue(hour4.text.toString())
-                        database.child("hours").child(key4).child("reserved").setValue(false)
-                        database.child("hours").child(key4).child("hourkey").setValue(key4)
-                        database.child("hours").child(key4).child("postkey").setValue(key)
-                    }
-
-
-
-                    if (hour5.isChecked) {
-                        database.child("hours").child(key5).child("start")
-                            .setValue(hour5.text.toString())
-                        database.child("hours").child(key5).child("reserved").setValue(false)
-                        database.child("hours").child(key5).child("hourkey").setValue(key5)
-                        database.child("hours").child(key5).child("postkey").setValue(key)
-                    }
-
-
-
-                    if (hour6.isChecked) {
-                        database.child("hours").child(key6).child("start")
-                            .setValue(hour6.text.toString())
-                        database.child("hours").child(key6).child("reserved").setValue(false)
-                        database.child("hours").child(key6).child("hourkey").setValue(key6)
-                        database.child("hours").child(key6).child("postkey").setValue(key)
-                    }
-
-
-
-                    if (hour7.isChecked) {
-                        database.child("hours").child(key7).child("start")
-                            .setValue(hour7.text.toString())
-                        database.child("hours").child(key7).child("reserved").setValue(false)
-                        database.child("hours").child(key7).child("hourkey").setValue(key7)
-                        database.child("hours").child(key7).child("postkey").setValue(key)
-                    }
-
-
-
-                    if (hour8.isChecked) {
-                        database.child("hours").child(key8).child("start")
-                            .setValue(hour8.text.toString())
-                        database.child("hours").child(key8).child("reserved").setValue(false)
-                        database.child("hours").child(key8).child("hourkey").setValue(key8)
-                        database.child("hours").child(key8).child("postkey").setValue(key)
-                    }
-
-
-
-                    if (hour9.isChecked) {
-                        database.child("hours").child(key9).child("start")
-                            .setValue(hour9.text.toString())
-                        database.child("hours").child(key9).child("reserved").setValue(false)
-                        database.child("hours").child(key9).child("hourkey").setValue(key9)
-                        database.child("hours").child(key9).child("postkey").setValue(key)
-                    }
-
-
-
-                    if (hour10.isChecked) {
-                        database.child("hours").child(key10).child("start")
-                            .setValue(hour10.text.toString())
-                        database.child("hours").child(key10).child("reserved").setValue(false)
-                        database.child("hours").child(key10).child("hourkey").setValue(key10)
-                        database.child("hours").child(key10).child("postkey").setValue(key)
-                    }
-
-
-
-                    if (hour11.isChecked) {
-                        database.child("hours").child(key11).child("start")
-                            .setValue(hour11.text.toString())
-                        database.child("hours").child(key11).child("reserved").setValue(false)
-                        database.child("hours").child(key11).child("hourkey").setValue(key11)
-                        database.child("hours").child(key11).child("postkey").setValue(key)
-                    }
-
-
-
-                    if (hour12.isChecked) {
-                        database.child("hours").child(key12).child("start")
-                            .setValue(hour12.text.toString())
-                        database.child("hours").child(key12).child("reserved").setValue(false)
-                        database.child("hours").child(key12).child("hourkey").setValue(key12)
-                        database.child("hours").child(key12).child("postkey").setValue(key)
-                    }
+                if (hour1.isChecked) {
+                    val key1 = database.child("hours").child(key).push().key.toString()
+                    database.child("hours").child(key).child(key1).child("start").setValue(hour1.text.toString())
+                    database.child("hours").child(key).child(key1).child("reserved").setValue(false)
+                    database.child("hours").child(key).child(key1).child("hourkey").setValue(key1)
+                    database.child("hours").child(key).child(key1).child("postkey").setValue(key)
                 }
+                if (hour2.isChecked) {
+                    val key2 = database.child("hours").child(key).push().key.toString()
+                    database.child("hours").child(key).child(key2).child("start").setValue(hour2.text.toString())
+                    database.child("hours").child(key).child(key2).child("reserved").setValue(false)
+                    database.child("hours").child(key).child(key2).child("hourkey").setValue(key2)
+                    database.child("hours").child(key).child(key2).child("postkey").setValue(key)
+                }
+                if (hour3.isChecked) {
+                    val key3 = database.child("hours").child(key).push().key.toString()
+                    database.child("hours").child(key).child(key3).child("start").setValue(hour3.text.toString())
+                    database.child("hours").child(key).child(key3).child("reserved").setValue(false)
+                    database.child("hours").child(key).child(key3).child("hourkey").setValue(key3)
+                    database.child("hours").child(key).child(key3).child("postkey").setValue(key)
+                }
+                if (hour4.isChecked) {
+                    val key4 = database.child("hours").child(key).push().key.toString()
+                    database.child("hours").child(key).child(key4).child("start").setValue(hour4.text.toString())
+                    database.child("hours").child(key).child(key4).child("reserved").setValue(false)
+                    database.child("hours").child(key).child(key4).child("hourkey").setValue(key4)
+                    database.child("hours").child(key).child(key4).child("postkey").setValue(key)
+                }
+                if (hour5.isChecked) {
+                    val key5 = database.child("hours").child(key).push().key.toString()
+                    database.child("hours").child(key).child(key5).child("start").setValue(hour5.text.toString())
+                    database.child("hours").child(key).child(key5).child("reserved").setValue(false)
+                    database.child("hours").child(key).child(key5).child("hourkey").setValue(key5)
+                    database.child("hours").child(key).child(key5).child("postkey").setValue(key)
+                }
+                if (hour6.isChecked) {
+                    val key6 = database.child("hours").child(key).push().key.toString()
+                    database.child("hours").child(key).child(key6).child("start").setValue(hour6.text.toString())
+                    database.child("hours").child(key).child(key6).child("reserved").setValue(false)
+                    database.child("hours").child(key).child(key6).child("hourkey").setValue(key6)
+                    database.child("hours").child(key).child(key6).child("postkey").setValue(key)
+                }
+                if (hour7.isChecked) {
+                    val key7 = database.child("hours").child(key).push().key.toString()
+                    database.child("hours").child(key).child(key7).child("start").setValue(hour7.text.toString())
+                    database.child("hours").child(key).child(key7).child("reserved").setValue(false)
+                    database.child("hours").child(key).child(key7).child("hourkey").setValue(key7)
+                    database.child("hours").child(key).child(key7).child("postkey").setValue(key)
+                }
+                if (hour8.isChecked) {
+                    val key8 = database.child("hours").child(key).push().key.toString()
+                    database.child("hours").child(key).child(key8).child("start").setValue(hour8.text.toString())
+                    database.child("hours").child(key).child(key8).child("reserved").setValue(false)
+                    database.child("hours").child(key).child(key8).child("hourkey").setValue(key8)
+                    database.child("hours").child(key).child(key8).child("postkey").setValue(key)
+                }
+                if (hour9.isChecked) {
+                    val key9 = database.child("hours").child(key).push().key.toString()
+                    database.child("hours").child(key).child(key9).child("start").setValue(hour9.text.toString())
+                    database.child("hours").child(key).child(key9).child("reserved").setValue(false)
+                    database.child("hours").child(key).child(key9).child("hourkey").setValue(key9)
+                    database.child("hours").child(key).child(key9).child("postkey").setValue(key)
+                }
+                if (hour10.isChecked) {
+                    val key10 = database.child("hours").child(key).push().key.toString()
+                    database.child("hours").child(key).child(key10).child("start").setValue(hour10.text.toString())
+                    database.child("hours").child(key).child(key10).child("reserved").setValue(false)
+                    database.child("hours").child(key).child(key10).child("hourkey").setValue(key10)
+                    database.child("hours").child(key).child(key10).child("postkey").setValue(key)
+                }
+                if (hour11.isChecked) {
+                    val key11 = database.child("hours").child(key).push().key.toString()
+                    database.child("hours").child(key).child(key11).child("start").setValue(hour11.text.toString())
+                    database.child("hours").child(key).child(key11).child("reserved").setValue(false)
+                    database.child("hours").child(key).child(key11).child("hourkey").setValue(key11)
+                    database.child("hours").child(key).child(key11).child("postkey").setValue(key)
+                }
+                if (hour12.isChecked) {
+                    val key12 = database.child("hours").child(key).push().key.toString()
+                    database.child("hours").child(key).child(key12).child("start").setValue(hour12.text.toString())
+                    database.child("hours").child(key).child(key12).child("reserved").setValue(false)
+                    database.child("hours").child(key).child(key12).child("hourkey").setValue(key12)
+                    database.child("hours").child(key).child(key12).child("postkey").setValue(key)
+                }
+
+                //create post at last to avoid data change problem in all posts fragments
+                database.child("posts").child(post.postkey).setValue(post)
+
+                Toast.makeText(context, "Post successfully created", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_createPostFragment_to_accountInfoFragment)
             }
-
+        }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+

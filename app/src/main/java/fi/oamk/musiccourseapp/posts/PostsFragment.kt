@@ -58,8 +58,7 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
                         val postHoursDB = (hoursFromDatabase?.get(MapPostKey) as HashMap<String, Any>)
                         postHoursDB.map { (hourKey, hourValue) ->
                             val hour = Hour.from(hourValue as HashMap<String, Any>)
-                            if (!hour.reserved)
-                            {
+                            if (!hour.reserved) {
                                 hours.add(hour)
                             }
                         }

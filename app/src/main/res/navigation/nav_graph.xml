@@ -84,9 +84,6 @@
         <action
             android:id="@+id/action_accountInfoFragment_to_postInfoFragment"
             app:destination="@id/postInfoFragment" />
-        <action
-            android:id="@+id/action_accountInfoFragment_to_postInfoFragment2"
-            app:destination="@id/postInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/editAccountFragment"
@@ -99,8 +96,8 @@
         android:label="Create new post"
         tools:layout="@layout/fragment_create_post" >
         <action
-            android:id="@+id/action_createPostFragment_to_postsFragment"
-            app:destination="@id/postsFragment" />
+            android:id="@+id/action_createPostFragment_to_accountInfoFragment"
+            app:popUpTo="@id/accountInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/createNoteFragment"
