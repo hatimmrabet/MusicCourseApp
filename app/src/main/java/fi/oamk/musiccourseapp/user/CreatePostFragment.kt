@@ -129,9 +129,10 @@ class CreatePostFragment : Fragment() {
             }
             else
             {
+                //get new post key
                 val key = database.child("posts").push().key.toString()
+                //create the post
                 val post = Post(key,auth.currentUser.uid, title,instrument,description,price.toDouble(),date)
-                database.child("posts").child(post.postkey).setValue(post)
 
                 if (hour1.isChecked) {
                     val key1 = database.child("hours").child(key).push().key.toString()
@@ -217,6 +218,10 @@ class CreatePostFragment : Fragment() {
                     database.child("hours").child(key).child(key12).child("hourkey").setValue(key12)
                     database.child("hours").child(key).child(key12).child("postkey").setValue(key)
                 }
+
+                //create post at last to avoid data change problem in all posts fragments
+                database.child("posts").child(post.postkey).setValue(post)
+
                 Toast.makeText(context, "Post successfully created", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_createPostFragment_to_accountInfoFragment)
             }
