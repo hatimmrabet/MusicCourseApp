@@ -49,6 +49,8 @@ class SignupTab : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        var url : String = "https://firebasestorage.googleapis.com/v0/b/music-course-app-78f79.appspot.com/o/unknown-person-icon-27.jpg?alt=media&token=e83ec35f-2cb6-4347-af85-2c8ae32814db"
+
         // Images buttons click listeners
         binding.takePictureButton.setOnClickListener { takePicture() }
         binding.choosePictureButton.setOnClickListener { choosePicture() }
@@ -73,51 +75,53 @@ class SignupTab : Fragment() {
                         switch = 1
                     }
                     val imageData = getImageByteArray()
-                    val storageRef =
-                        Firebase.storage.reference.child("images/${binding.email.text.toString()}")
-                    var uploadTask = storageRef.putBytes(imageData)
-                    uploadTask.addOnCompleteListener { task ->
-                        if(task.isSuccessful) {
-                            storageRef.downloadUrl.addOnCompleteListener { task ->
-                                val url = task.result.toString()
-                                auth.createUserWithEmailAndPassword(
-                                    binding.email.text.toString(),
-                                    binding.password.text.toString()
-                                ).addOnCompleteListener { task: Task<AuthResult> ->
-                                    if (task.isSuccessful) {
-                                        Log.d(TAG, "Create user : success")
-                                        var user: User = User(
-                                            auth.currentUser.uid,
-                                            0.toString(),
-                                            binding.email.text.toString(),
-                                            binding.name.text.toString(),
-                                            url,
-                                            switch.toString()
-                                        )
-                                        database.child("users").child(auth.currentUser.uid)
-                                            .setValue(user)
-                                        if (switch == 2) {
-                                            database.child("roles").child("teacher")
-                                                .child(auth.currentUser.uid).setValue(true)
-                                            database.child("roles").child("student")
-                                                .child(auth.currentUser.uid).setValue(true)
-                                        } else if (switch == 1) {
-                                            database.child("roles").child("student")
-                                                .child(auth.currentUser.uid).setValue(true)
-                                        } else {
-                                            database.child("roles").child("teacher")
-                                                .child(auth.currentUser.uid).setValue(true)
-                                        }
-                                    } else {
-                                        Log.w(TAG, "Create user : failure", task.exception)
-                                    }
+                    if(imageData != null){
+                        val storageRef =
+                            Firebase.storage.reference.child("images/${binding.email.text.toString()}")
+                        var uploadTask = storageRef.putBytes(imageData as ByteArray)
+                        uploadTask.addOnCompleteListener { task ->
+                            if(task.isSuccessful) {
+                                storageRef.downloadUrl.addOnCompleteListener { task ->
+                                    url = task.result.toString()
                                 }
-                                findNavController().navigate(R.id.action_loginFragment_to_postsFragment)
+                            }else {
+                                Log.w(TAG, "Upload task was not succesful")
                             }
-                        }else {
-                            Log.w(TAG, "Upload task was not succesful")
                         }
                     }
+                    auth.createUserWithEmailAndPassword(
+                        binding.email.text.toString(),
+                        binding.password.text.toString()
+                    ).addOnCompleteListener { task: Task<AuthResult> ->
+                        if (task.isSuccessful) {
+                            Log.d(TAG, "Create user : success")
+                            var user: User = User(
+                                auth.currentUser.uid,
+                                0.toString(),
+                                binding.email.text.toString(),
+                                binding.name.text.toString(),
+                                url,
+                                switch.toString()
+                            )
+                            database.child("users").child(auth.currentUser.uid)
+                                .setValue(user)
+                            if (switch == 2) {
+                                database.child("roles").child("teacher")
+                                    .child(auth.currentUser.uid).setValue(true)
+                                database.child("roles").child("student")
+                                    .child(auth.currentUser.uid).setValue(true)
+                            } else if (switch == 1) {
+                                database.child("roles").child("student")
+                                    .child(auth.currentUser.uid).setValue(true)
+                            } else {
+                                database.child("roles").child("teacher")
+                                    .child(auth.currentUser.uid).setValue(true)
+                            }
+                        } else {
+                            Log.w(TAG, "Create user : failure", task.exception)
+                        }
+                    }
+                    findNavController().navigate(R.id.action_loginFragment_to_postsFragment)
                 }
 
             }
@@ -172,13 +176,18 @@ class SignupTab : Fragment() {
         }
     }
 
-    private fun getImageByteArray(): ByteArray {
+    private fun getImageByteArray(): ByteArray? {
         // Extract byteArray from imageView
-        val bitmap = (binding.upload.drawable as BitmapDrawable).bitmap
-        val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val data = baos.toByteArray()
-        return data
+        if(binding.upload.drawable == null){
+            return null
+        }
+        else{
+            val bitmap = (binding.upload.drawable as BitmapDrawable).bitmap
+            val baos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val data = baos.toByteArray()
+            return data
+        }
     }
 
     fun View.hideKeyboardFrom(){
