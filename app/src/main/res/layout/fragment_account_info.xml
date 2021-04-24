@@ -31,7 +31,9 @@
                 android:layout_marginStart="30dp"
                 android:text="@string/full_name_2"
                 android:textSize="22sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                />
 
             <TextView
                 android:id="@+id/name"
@@ -53,7 +55,9 @@
                 android:layout_marginStart="30dp"
                 android:text="@string/email"
                 android:textSize="22sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                />
 
             <TextView
                 android:id="@+id/email"
@@ -76,7 +80,9 @@
                 android:layout_marginStart="30dp"
                 android:text="@string/role"
                 android:textSize="22sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                />
 
             <TextView
                 android:id="@+id/role"
@@ -99,7 +105,9 @@
                 android:layout_marginStart="30dp"
                 android:text="@string/credit"
                 android:textSize="22sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                />
 
             <TextView
                 android:id="@+id/credit"
@@ -107,8 +115,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text=""
+                android:textStyle="bold"
                 android:textColor="@android:color/holo_green_light"
                 android:textSize="22sp" />
+
         </LinearLayout>
 
         <LinearLayout
