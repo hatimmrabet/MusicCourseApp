@@ -31,7 +31,7 @@ class PostInfoFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var post: Post
     private lateinit var user: User
-    private lateinit var loggedUser: User
+    private var loggedUser: User? = null
     private lateinit var rcDispoList: RecyclerView
     private lateinit var hours: ArrayList<Hour>
 
@@ -61,7 +61,7 @@ class PostInfoFragment : Fragment() {
             binding.loginBtn.visibility = VISIBLE
         }
 
-        val postListner = database.child("posts/${postkey}").get().addOnSuccessListener {
+        database.child("posts/${postkey}").get().addOnSuccessListener {
             if (it.value != null) {
                 post = Post.from(it.value as HashMap<String, Any>)
                 binding.postInfoTitle.text = post.title
@@ -70,7 +70,7 @@ class PostInfoFragment : Fragment() {
                 binding.postInfoDate.text = post.date
                 binding.postInfoPrice.text = "${post.price} €"
 
-                if (loggedUser.role == "0") {
+                if (loggedUser?.role == "0") {
                     binding.reserveBtn.visibility = INVISIBLE
                 }
 
@@ -122,7 +122,7 @@ class PostInfoFragment : Fragment() {
                 }
             }
 
-            if (loggedUser.credit?.toDouble()!! >= checkedHours.size * post.price) {
+            if (loggedUser!!.credit?.toDouble()!! >= checkedHours.size * post.price) {
 
                 for (hour in checkedHours) {
                     database.child("hours").child(hour.postkey).child(hour.hourkey).child("reserved").setValue(true)
@@ -160,8 +160,8 @@ class PostInfoFragment : Fragment() {
                     }
 
                     //Money transaction
-                    val newCreditLoggedUser = loggedUser.credit?.toDouble()!! - checkedHours.size * post.price
-                    database.child("users/${loggedUser.uid}").child("credit").setValue(newCreditLoggedUser.toString())
+                    val newCreditLoggedUser = loggedUser!!.credit?.toDouble()!! - checkedHours.size * post.price
+                    database.child("users/${loggedUser!!.uid}").child("credit").setValue(newCreditLoggedUser.toString())
                     var newCreditTeacher = user.credit?.toDouble()?.plus(checkedHours.size * post.price)
                     if (newCreditTeacher != null) {
                         newCreditTeacher *= 0.9
