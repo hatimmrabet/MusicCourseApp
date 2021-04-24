@@ -21,11 +21,13 @@ android:layout_height="match_parent">
         android:inputType="textPersonName"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:drawableLeft="@drawable/ic_baseline_person_pin_24"
+        android:drawablePadding="10dp"
         ></EditText>
 
     <EditText
@@ -38,12 +40,14 @@ android:layout_height="match_parent">
         android:hint="Email address"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingBottom="20dp"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name">
+        app:layout_constraintTop_toBottomOf="@id/name"
+        android:drawableLeft="@drawable/ic_baseline_email_24"
+        android:drawablePadding="10dp">
     </EditText>
 
     <EditText
@@ -56,13 +60,26 @@ android:layout_height="match_parent">
         android:hint="Password"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingBottom="20dp"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/email">
+        app:layout_constraintTop_toBottomOf="@id/email"
+        android:drawableLeft="@drawable/ic_baseline_lock_24"
+        android:drawablePadding="10dp">
     </EditText>
+
+    <ImageView
+        android:id="@+id/show_pass_btn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_baseline_remove_red_eye_24"
+        app:layout_constraintEnd_toEndOf="@+id/password"
+        app:layout_constraintTop_toTopOf="@+id/password"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"/>
 
     <EditText
         android:id="@+id/conf_password"
@@ -74,47 +91,54 @@ android:layout_height="match_parent">
         android:hint="Password confirmation"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingBottom="20dp"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/password">
+        app:layout_constraintTop_toBottomOf="@id/password"
+        android:drawableLeft="@drawable/ic_baseline_check_circle_24"
+        android:drawablePadding="10dp">
     </EditText>
 
-    <Switch
-        android:id="@+id/teacher_switch"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent=".8"
-        app:layout_constraintVertical_bias="0.05"
-        app:layout_constraintHorizontal_bias=".5"
-        android:hint="Teacher"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ImageView
+        android:id="@+id/show_pass_btn2"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_baseline_remove_red_eye_24"
+        app:layout_constraintEnd_toEndOf="@+id/conf_password"
+        app:layout_constraintTop_toTopOf="@+id/conf_password"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"/>
+
+    <LinearLayout
+        android:id="@+id/switches"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/conf_password">
-    </Switch>
+        app:layout_constraintTop_toBottomOf="@+id/conf_password"
+        android:layout_marginTop="20dp">
 
     <Switch
-        android:id="@+id/student_switch"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent=".8"
-        app:layout_constraintVertical_bias="0.05"
-        app:layout_constraintHorizontal_bias=".5"
-        android:hint="Student"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/teacher_switch">
+        android:id="@+id/switch_button"
+        android:layout_height="match_parent"
+        android:layout_width="150dp"
+        android:hint="Teacher">
     </Switch>
+
+    <TextView
+        android:id="@+id/student_switch_text"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:hint="Student"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="50dp">
+    </TextView>
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/upload"
@@ -129,7 +153,7 @@ android:layout_height="match_parent">
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/student_switch">
+        app:layout_constraintTop_toBottomOf="@id/switches">
     </ImageView>
     <LinearLayout
         android:id="@+id/picture_options"
@@ -145,14 +169,16 @@ android:layout_height="match_parent">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Take Picture"
-            android:layout_marginEnd="16dp"/>
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="#506AD4"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/choose_picture_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Choose Picture"
-            android:layout_marginStart="16dp"/>
+            android:layout_marginStart="16dp"
+            android:backgroundTint="#506AD4"/>
     </LinearLayout>
 
     <TextView
@@ -178,7 +204,7 @@ android:layout_height="match_parent">
         android:text="Signup"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:backgroundTint="#F2CC39"
+        android:backgroundTint="#506AD4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

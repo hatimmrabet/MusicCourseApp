@@ -5,11 +5,14 @@ import android.content.Context
 import android.graphics.Color
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.graphics.red
@@ -42,6 +45,27 @@ class LoginTab : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         database = Firebase.database.reference
         auth = Firebase.auth
+
+        var visible = 1
+
+        binding.showPassBtn.setOnClickListener{
+            if(visible == 1){
+                binding.password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                visible = 0
+            }
+            else{
+                binding.password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                visible = 1
+            }
+
+        }
+
+        binding.forgotPassword.setOnClickListener{
+            val text = "Follow the email to change your password"
+            val duration = Toast.LENGTH_SHORT
+            val toast = Toast.makeText(this.context, text, duration)
+            toast.show()
+        }
 
         binding.loginButton.setOnClickListener{
             database.child("users").get().addOnSuccessListener {

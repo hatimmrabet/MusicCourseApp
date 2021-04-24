@@ -9,6 +9,8 @@ import android.graphics.drawable.BitmapDrawable
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.provider.MediaStore
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,20 +60,44 @@ class SignupTab : Fragment() {
         database = Firebase.database.reference
         auth = Firebase.auth
 
+        var visible = 1
+        var visiblec = 1
+
+        binding.showPassBtn.setOnClickListener{
+            if(visible == 1){
+                binding.password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                visible = 0
+            }
+            else{
+                binding.password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                visible = 1
+            }
+
+        }
+
+        binding.showPassBtn2.setOnClickListener{
+            if(visiblec == 1){
+                binding.confPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                visiblec = 0
+            }
+            else{
+                binding.confPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                visiblec = 1
+            }
+
+        }
+
         binding.signupButton.setOnClickListener {
             database.child("users").get().addOnSuccessListener {
                 var switch = 0
-                if (binding.email.text == null || binding.name.text == null || binding.password.text == null || (!binding.studentSwitch.isChecked && !binding.teacherSwitch.isChecked)) {
+                if (binding.email.text == null || binding.name.text == null || binding.password.text == null) {
                     binding.textError.text = "Missing one or more informations"
                     binding.textError.setTextColor(Color.RED)
                 } else if (binding.confPassword.text.toString() != binding.password.text.toString()) {
                     binding.textError.text = "Passwords are not matching"
                     binding.textError.setTextColor(Color.RED)
-                } else if (binding.teacherSwitch.isChecked && binding.studentSwitch.isChecked) {
-                    binding.textError.text = "Select only one role"
-                    binding.textError.setTextColor(Color.RED)
                 } else {
-                    if (binding.studentSwitch.isChecked) {
+                    if (binding.switchButton.isChecked) {
                         switch = 1
                     }
                     val imageData = getImageByteArray()
@@ -106,12 +132,7 @@ class SignupTab : Fragment() {
                             )
                             database.child("users").child(auth.currentUser.uid)
                                 .setValue(user)
-                            if (switch == 2) {
-                                database.child("roles").child("teacher")
-                                    .child(auth.currentUser.uid).setValue(true)
-                                database.child("roles").child("student")
-                                    .child(auth.currentUser.uid).setValue(true)
-                            } else if (switch == 1) {
+                            if (switch == 1) {
                                 database.child("roles").child("student")
                                     .child(auth.currentUser.uid).setValue(true)
                             } else {
