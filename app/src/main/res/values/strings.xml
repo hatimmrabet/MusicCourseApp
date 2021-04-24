@@ -41,4 +41,12 @@
     <string name="go_to_login">Go to login</string>
     <string name="title">Title</string>
     <string name="_15">15 €</string>
+    <string name="editaccount">editAccount</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="full_name_2">Full name:</string>
+    <string name="email">Email:</string>
+    <string name="role">Role:</string>
+    <string name="go_to_schedule">Go to Schedule</string>
+    <string name="log_out">Log out</string>
+    <string name="your_posts">Your Posts</string>
 </resources>
