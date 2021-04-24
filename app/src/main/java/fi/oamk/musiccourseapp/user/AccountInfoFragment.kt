@@ -23,6 +23,7 @@ import fi.oamk.musiccourseapp.posts.Hour
 import fi.oamk.musiccourseapp.posts.MyPostAdapter
 import fi.oamk.musiccourseapp.posts.Post
 
+
 class AccountInfoFragment : Fragment(), MyPostAdapter.OnPostListener {
     private var _binding: FragmentAccountInfoBinding? = null
     private val binding get() = _binding!!
@@ -76,10 +77,12 @@ class AccountInfoFragment : Fragment(), MyPostAdapter.OnPostListener {
         postsList = binding.postsLists
         posts = arrayListOf<Post>()
         hours = arrayListOf()
+        postsList.setNestedScrollingEnabled(false);
 
         database.child("users").child("${auth.currentUser.uid}").get().addOnSuccessListener {
             val profil = it.value as HashMap<String, Any>
             binding.name.text = profil.get("fullname").toString()
+            binding.credit.text = profil.get("credit").toString()+" €"
             if (it.value != null) {
                 val user = it.value as HashMap<String, Any>
                 Picasso.get().load(user.get("picture").toString()).into(binding.image)
