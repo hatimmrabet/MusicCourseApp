@@ -20,7 +20,6 @@ import com.squareup.picasso.Picasso
 import fi.oamk.musiccourseapp.R
 import fi.oamk.musiccourseapp.databinding.FragmentAccountInfoBinding
 import fi.oamk.musiccourseapp.posts.Hour
-import fi.oamk.musiccourseapp.posts.MyPostAdapter
 import fi.oamk.musiccourseapp.posts.Post
 
 
@@ -32,7 +31,6 @@ class AccountInfoFragment : Fragment(), MyPostAdapter.OnPostListener {
     private lateinit var hours: ArrayList<Hour>
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
-    private lateinit var loggedUser: User
     private lateinit var myMenu: Menu
 
 
@@ -82,7 +80,7 @@ class AccountInfoFragment : Fragment(), MyPostAdapter.OnPostListener {
         database.child("users").child("${auth.currentUser.uid}").get().addOnSuccessListener {
             val profil = it.value as HashMap<String, Any>
             binding.name.text = profil.get("fullname").toString()
-            binding.credit.text = profil.get("credit").toString()+" €"
+            binding.credit.text = profil.get("credit").toString() + " €"
             if (it.value != null) {
                 val user = it.value as HashMap<String, Any>
                 Picasso.get().load(user.get("picture").toString()).into(binding.image)
@@ -127,6 +125,7 @@ class AccountInfoFragment : Fragment(), MyPostAdapter.OnPostListener {
         }
         database.addValueEventListener(postListener)
         postsList.setLayoutManager(LinearLayoutManager(view.getContext()));
+        //postsList.layoutManager = GridLayoutManager(view.context, 2)
         postsList.adapter = MyPostAdapter(posts, this)
 
 
@@ -140,13 +139,6 @@ class AccountInfoFragment : Fragment(), MyPostAdapter.OnPostListener {
         }
     }
 
-    private fun getLoggedUser(userId: String) {
-        database.child("users/$userId").get().addOnSuccessListener {
-            if (it.value != null) {
-                loggedUser = User.from(it.value as HashMap<String, String>)
-            }
-        }
-    }
 
     override fun onPostClick(position: Int) {
         val clickedItem: Post = posts[position]

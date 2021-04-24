@@ -161,7 +161,7 @@
             android:id="@+id/posts_lists"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/postinfo_row" />
+            tools:listitem="@layout/postinfo_row"/>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

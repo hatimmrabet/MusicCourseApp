@@ -1,4 +1,4 @@
-package fi.oamk.musiccourseapp.posts
+package fi.oamk.musiccourseapp.user
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -12,13 +12,14 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import fi.oamk.musiccourseapp.R
+import fi.oamk.musiccourseapp.posts.Post
 
 class MyPostAdapter(private val myDataset: ArrayList<Post>, private val listener: OnPostListener): RecyclerView.Adapter<MyPostAdapter.MyViewHolder>() {
 
     private lateinit var database: DatabaseReference
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val myView = LayoutInflater.from(parent.context).inflate(R.layout.post_row,parent,false)
+        val myView = LayoutInflater.from(parent.context).inflate(R.layout.postinfo_row,parent,false)
         //Order posts by date
         myDataset.sortByDescending { it.date }
         return MyViewHolder(myView)
@@ -30,9 +31,7 @@ class MyPostAdapter(private val myDataset: ArrayList<Post>, private val listener
         val instrument: TextView = itemView.findViewById(R.id.post_instrument)
         val description: TextView = itemView.findViewById(R.id.post_desc)
         val price: TextView = itemView.findViewById(R.id.post_price)
-        val author: TextView = itemView.findViewById(R.id.post_author)
         val time: TextView = itemView.findViewById(R.id.post_time)
-        val image: ImageView = itemView.findViewById(R.id.post_img)
 
         init {
             itemView.setOnClickListener(this)
@@ -60,16 +59,6 @@ class MyPostAdapter(private val myDataset: ArrayList<Post>, private val listener
         holder.description.text = post.description
         holder.price.text = post.price.toString() + " €"
         holder.time.text = "on "+post.date
-
-        // Get Fullname of the Teacher and his picture
-        database.child("users").child(post.userkey).get().addOnSuccessListener {
-            if(it.value != null)
-            {
-                val user = it.value as HashMap<String,Any>
-                holder.author.text = "by "+user.get("fullname")
-                Picasso.get().load(user.get("picture").toString()).into(holder.image)
-            }
-        }
     }
 
     override fun getItemCount() = myDataset.size
