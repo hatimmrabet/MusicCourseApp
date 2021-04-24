@@ -73,7 +73,7 @@ class LoginTab : Fragment(){
                 var enteredEmail = binding.email.text.toString()
                 var enteredPassword = binding.password.text.toString()
 
-                if(enteredPassword == null || enteredEmail == null){
+                if(enteredPassword == "" || enteredEmail == ""){
                     binding.textError.text = "Give email and password"
                     binding.textError.setTextColor(Color.RED)
                 }
