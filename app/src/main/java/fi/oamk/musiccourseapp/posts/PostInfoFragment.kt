@@ -70,12 +70,11 @@ class PostInfoFragment : Fragment() {
                 binding.postInfoDate.text = post.date
                 binding.postInfoPrice.text = "${post.price} €"
 
-                if (auth.uid == post.userkey) {
+                if (loggedUser.role == "0") {
                     binding.reserveBtn.visibility = INVISIBLE
                 }
 
-                val profileListner =
-                    database.child("users/${post.userkey}").get().addOnSuccessListener {
+                database.child("users/${post.userkey}").get().addOnSuccessListener {
                         if (it.value != null) {
                             user = User.from(it.value as HashMap<String, String>)
                             binding.postInfoFullname.text = user.fullname
