@@ -7,6 +7,8 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -53,6 +55,19 @@ class EditAccountFragment : Fragment() {
         binding.choosePictureButton.setOnClickListener { choosePicture() }
 
         var url : String = ref.child("picture").toString()
+
+        var visible = 1
+
+        binding.showPassBtn.setOnClickListener{
+            if(visible == 1){
+                binding.password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                visible = 0
+            }
+            else{
+                binding.password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                visible = 1
+            }
+        }
 
         binding.updateButton.setOnClickListener{
             val imageData = getImageByteArray()

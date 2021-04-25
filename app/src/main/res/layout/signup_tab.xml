@@ -170,7 +170,7 @@ android:layout_height="match_parent">
             android:layout_height="wrap_content"
             android:text="Take Picture"
             android:layout_marginEnd="16dp"
-            android:backgroundTint="#506AD4"/>
+            android:backgroundTint="@color/black"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/choose_picture_button"
@@ -178,7 +178,7 @@ android:layout_height="match_parent">
             android:layout_height="wrap_content"
             android:text="Choose Picture"
             android:layout_marginStart="16dp"
-            android:backgroundTint="#506AD4"/>
+            android:backgroundTint="@color/black"/>
     </LinearLayout>
 
     <TextView
