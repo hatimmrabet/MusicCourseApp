@@ -53,8 +53,7 @@ class PostInfoFragment : Fragment() {
         rcDispoList.isNestedScrollingEnabled = false
         hours = ArrayList<Hour>()
 
-        if (auth.currentUser != null)
-        {
+        if (auth.currentUser != null) {
             getLoggedUser(auth.currentUser.uid)
         } else {
             binding.reserveBtn.visibility = INVISIBLE
@@ -75,12 +74,12 @@ class PostInfoFragment : Fragment() {
                 }
 
                 database.child("users/${post.userkey}").get().addOnSuccessListener {
-                        if (it.value != null) {
-                            user = User.from(it.value as HashMap<String, String>)
-                            binding.postInfoFullname.text = user.fullname
-                            Picasso.get().load(user.picture).into(binding.postInfoImg)
-                        }
+                    if (it.value != null) {
+                        user = User.from(it.value as HashMap<String, String>)
+                        binding.postInfoFullname.text = user.fullname
+                        Picasso.get().load(user.picture).into(binding.postInfoImg)
                     }
+                }
 
                 //GET all hours from databse
                 database.child("hours").child(post.postkey).get().addOnSuccessListener {
@@ -144,19 +143,19 @@ class PostInfoFragment : Fragment() {
                         var getDate = post.date
                         val date = getDate.substring(0, 4) + getDate.substring(5, 7) + getDate.substring(8, 10)
                         val reservation = Reservation(post.userkey, date, start, end, auth.uid)
-                        val key = dateUsersDB.child(reservation.studentId).child(date).push().key
 
-                        dateUsersDB.child(reservation.studentId).child(date).setValue(true)
+                        val key = dateUsersDB.child(auth.uid).child(date).push().key
+                        dateUsersDB.child(reservation.uid).child(date).setValue(true)
 
                         dateUsersDB.child(auth.uid).child(date).setValue(true)
 
                         datesDB.child(auth.uid).child(date).child(key!!).setValue(
-                            Date(reservation.start, reservation.end, reservation.studentId, auth.uid)
+                            Date(reservation.start, reservation.end,reservation.studentId,post.userkey)
                         )
-                        datesDB.child(reservation.studentId).child(date).child(key)
-                            .setValue(
-                                Date(reservation.start, reservation.end, reservation.studentId, auth.uid)
-                            )
+
+                        datesDB.child(post.userkey).child(date).child(key).setValue(
+                            Date(reservation.start, reservation.end,reservation.studentId,post.userkey)
+                        )
                     }
 
                     //Money transaction
