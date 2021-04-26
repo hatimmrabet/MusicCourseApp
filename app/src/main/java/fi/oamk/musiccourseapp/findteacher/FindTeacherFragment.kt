@@ -45,7 +45,7 @@ class FindTeacherFragment : Fragment() {
         recyclerView = binding.recyclerView
         chooseLayout()
         viewModel.users.observe(viewLifecycleOwner){
-            binding.recyclerView.adapter = ItemAdapter(it, findNavController())
+            recyclerView.adapter = ItemAdapter(it, findNavController())
         }
 
     }
