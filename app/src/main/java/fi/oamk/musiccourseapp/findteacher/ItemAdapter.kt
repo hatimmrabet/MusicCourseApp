@@ -1,6 +1,8 @@
 package fi.oamk.musiccourseapp.findteacher
 
 import android.view.LayoutInflater
+import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +19,7 @@ class ItemAdapter(private val dataset: ArrayList<User>, private val navControlle
     : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
     private val TAG = "ChatFragmentItemAdapter"
-
+    private val auth = Firebase.auth
     class ItemViewHolder(val binding: ItemUserBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemAdapter.ItemViewHolder {
@@ -39,6 +41,12 @@ class ItemAdapter(private val dataset: ArrayList<User>, private val navControlle
             it.priceTextView.text = user.email
         }
         holder.binding.cardView.setOnClickListener { goToInfo(user.uid!!, user.fullname!!) }
+
+        if(auth.currentUser == null)
+        {
+            holder.binding.messageButton.visibility = GONE
+        }
+
         holder.binding.messageButton.setOnClickListener { startConversation(user.uid!!, user.fullname!!) }
 
         val storage = Firebase.storage

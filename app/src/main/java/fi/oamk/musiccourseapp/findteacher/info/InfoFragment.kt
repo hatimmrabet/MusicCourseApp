@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import fi.oamk.musiccourseapp.R
 import fi.oamk.musiccourseapp.databinding.FragmentInfoBinding
 import fi.oamk.musiccourseapp.user.User
 
@@ -18,6 +20,7 @@ class InfoFragment : Fragment() {
 
     private var _binding: FragmentInfoBinding? = null
     private val binding get() = _binding!!
+    private val auth = Firebase.auth
 
     val args: InfoFragmentArgs by navArgs()
 
@@ -33,7 +36,18 @@ class InfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         populateUI()
-        binding.reserveBtn.setOnClickListener{ goToReservation()}
+
+        if(auth.currentUser == null)
+        {
+            binding.reserveBtn.text = "Login"
+            binding.reserveBtn.setOnClickListener{
+                findNavController().navigate(R.id.action_infoFragment_to_loginFragment)
+            }
+        }
+        else
+        {
+            binding.reserveBtn.setOnClickListener{ goToReservation()}
+        }
     }
 
     private fun goToReservation() {
