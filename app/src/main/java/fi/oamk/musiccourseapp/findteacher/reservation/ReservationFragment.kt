@@ -88,6 +88,7 @@ class ReservationFragment : Fragment() {
             }
 
         }, hour, minute, true)
+
         tpd.show()
     }
 
@@ -99,9 +100,10 @@ class ReservationFragment : Fragment() {
                 binding.date.setText(""+mYear + monthAndDayString)
             },
             year,
-            month+1,
+            month,
             day
         )
+        dpd.datePicker.minDate = (System.currentTimeMillis())
         dpd.show()
     }
 
