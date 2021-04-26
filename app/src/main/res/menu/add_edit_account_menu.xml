@@ -12,4 +12,9 @@
         android:icon="@drawable/ic_baseline_edit_24"
         app:showAsAction="always" />
 
+    <item android:id="@+id/log_out"
+        android:title="Log Out"
+        android:icon="@drawable/ic_baseline_logout_24"
+        app:showAsAction="always" />
+
 </menu>

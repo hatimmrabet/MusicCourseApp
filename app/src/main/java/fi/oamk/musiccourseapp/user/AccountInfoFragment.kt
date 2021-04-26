@@ -3,6 +3,7 @@ package fi.oamk.musiccourseapp.user
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -61,6 +62,11 @@ class AccountInfoFragment : Fragment(), MyPostAdapter.OnPostListener {
             }
             R.id.edit_account -> {
                 findNavController().navigate(R.id.action_accountInfoFragment_to_editAccountFragment)
+                return true
+            }
+            R.id.log_out -> {
+                FirebaseAuth.getInstance().signOut()
+                findNavController().navigate(R.id.action_accountInfoFragment_to_loginFragment)
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -127,16 +133,6 @@ class AccountInfoFragment : Fragment(), MyPostAdapter.OnPostListener {
         postsList.setLayoutManager(LinearLayoutManager(view.getContext()));
         //postsList.layoutManager = GridLayoutManager(view.context, 2)
         postsList.adapter = MyPostAdapter(posts, this)
-
-
-        binding.button2.setOnClickListener {
-            findNavController().navigate(R.id.action_accountInfoFragment_to_scheduleFragment)
-        }
-
-        binding.logoutButton.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            findNavController().navigate(R.id.action_accountInfoFragment_to_postsFragment)
-        }
     }
 
 
