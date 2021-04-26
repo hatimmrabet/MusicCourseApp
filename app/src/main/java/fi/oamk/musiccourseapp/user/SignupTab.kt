@@ -9,10 +9,13 @@ import android.graphics.drawable.BitmapDrawable
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.provider.MediaStore
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -48,6 +51,8 @@ class SignupTab : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        var url : String = "https://firebasestorage.googleapis.com/v0/b/music-course-app-78f79.appspot.com/o/unknown-person-icon-27.jpg?alt=media&token=e83ec35f-2cb6-4347-af85-2c8ae32814db"
+
         // Images buttons click listeners
         binding.takePictureButton.setOnClickListener { takePicture() }
         binding.choosePictureButton.setOnClickListener { choosePicture() }
@@ -55,72 +60,107 @@ class SignupTab : Fragment() {
         database = Firebase.database.reference
         auth = Firebase.auth
 
+        var visible = 1
+        var visiblec = 1
+
+        binding.showPassBtn.setOnClickListener{
+            if(visible == 1){
+                binding.password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                visible = 0
+            }
+            else{
+                binding.password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                visible = 1
+            }
+
+        }
+
+        binding.showPassBtn2.setOnClickListener{
+            if(visiblec == 1){
+                binding.confPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                visiblec = 0
+            }
+            else{
+                binding.confPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                visiblec = 1
+            }
+
+        }
+
         binding.signupButton.setOnClickListener {
             database.child("users").get().addOnSuccessListener {
                 var switch = 0
-                if (binding.email.text == null || binding.name.text == null || binding.password.text == null || (!binding.studentSwitch.isChecked && !binding.teacherSwitch.isChecked)) {
+                if (binding.email.text == null || binding.name.text == null || binding.password.text == null) {
                     binding.textError.text = "Missing one or more informations"
                     binding.textError.setTextColor(Color.RED)
                 } else if (binding.confPassword.text.toString() != binding.password.text.toString()) {
                     binding.textError.text = "Passwords are not matching"
                     binding.textError.setTextColor(Color.RED)
-                } else if (binding.teacherSwitch.isChecked && binding.studentSwitch.isChecked) {
-                    binding.textError.text = "Select only one role"
-                    binding.textError.setTextColor(Color.RED)
                 } else {
-                    if (binding.studentSwitch.isChecked) {
+                    if (binding.switchButton.isChecked) {
                         switch = 1
                     }
                     val imageData = getImageByteArray()
-                    val storageRef =
-                        Firebase.storage.reference.child("images/${binding.email.text.toString()}")
-                    var uploadTask = storageRef.putBytes(imageData)
-                    uploadTask.addOnCompleteListener { task ->
-                        if(task.isSuccessful) {
-                            storageRef.downloadUrl.addOnCompleteListener { task ->
-                                val url = task.result.toString()
-                                auth.createUserWithEmailAndPassword(
-                                    binding.email.text.toString(),
-                                    binding.password.text.toString()
-                                ).addOnCompleteListener { task: Task<AuthResult> ->
-                                    if (task.isSuccessful) {
-                                        Log.d(TAG, "Create user : success")
-                                        var user: User = User(
-                                            auth.currentUser.uid,
-                                            0.toString(),
-                                            binding.email.text.toString(),
-                                            binding.name.text.toString(),
-                                            url,
-                                            switch.toString()
-                                        )
-                                        database.child("users").child(auth.currentUser.uid)
-                                            .setValue(user)
-                                        if (switch == 2) {
-                                            database.child("roles").child("teacher")
-                                                .child(auth.currentUser.uid).setValue(true)
-                                            database.child("roles").child("student")
-                                                .child(auth.currentUser.uid).setValue(true)
-                                        } else if (switch == 1) {
-                                            database.child("roles").child("student")
-                                                .child(auth.currentUser.uid).setValue(true)
-                                        } else {
-                                            database.child("roles").child("teacher")
-                                                .child(auth.currentUser.uid).setValue(true)
-                                        }
-                                    } else {
-                                        Log.w(TAG, "Create user : failure", task.exception)
-                                    }
+                    if(imageData != null){
+                        val storageRef =
+                            Firebase.storage.reference.child("images/${binding.email.text.toString()}")
+                        var uploadTask = storageRef.putBytes(imageData as ByteArray)
+                        uploadTask.addOnCompleteListener { task ->
+                            if(task.isSuccessful) {
+                                storageRef.downloadUrl.addOnCompleteListener { task ->
+                                    url = task.result.toString()
                                 }
-                                findNavController().navigate(R.id.action_loginFragment_to_postsFragment)
+                            }else {
+                                Log.w(TAG, "Upload task was not succesful")
                             }
-                        }else {
-                            Log.w(TAG, "Upload task was not succesful")
                         }
                     }
+                    auth.createUserWithEmailAndPassword(
+                        binding.email.text.toString(),
+                        binding.password.text.toString()
+                    ).addOnCompleteListener { task: Task<AuthResult> ->
+                        if (task.isSuccessful) {
+                            Log.d(TAG, "Create user : success")
+                            var credit = (10..300).random()
+                            var user: User = User(
+                                auth.currentUser.uid,
+                                credit.toString(),
+                                binding.email.text.toString(),
+                                binding.name.text.toString(),
+                                url,
+                                switch.toString()
+                            )
+                            database.child("users").child(auth.currentUser.uid)
+                                .setValue(user)
+                            if (switch == 1) {
+                                database.child("roles").child("student")
+                                    .child(auth.currentUser.uid).setValue(true)
+                            } else {
+                                database.child("roles").child("teacher")
+                                    .child(auth.currentUser.uid).setValue(true)
+                            }
+                        } else {
+                            Log.w(TAG, "Create user : failure", task.exception)
+                        }
+                    }
+                    findNavController().navigate(R.id.action_loginFragment_to_postsFragment)
                 }
 
             }
 
+        }
+
+        binding.name.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
+        binding.email.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
+        binding.password.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
+        binding.confPassword.setOnClickListener{
+            it.hideKeyboardFrom()
         }
     }
 
@@ -158,13 +198,23 @@ class SignupTab : Fragment() {
         }
     }
 
-    private fun getImageByteArray(): ByteArray {
+    private fun getImageByteArray(): ByteArray? {
         // Extract byteArray from imageView
-        val bitmap = (binding.upload.drawable as BitmapDrawable).bitmap
-        val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val data = baos.toByteArray()
-        return data
+        if(binding.upload.drawable == null){
+            return null
+        }
+        else{
+            val bitmap = (binding.upload.drawable as BitmapDrawable).bitmap
+            val baos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val data = baos.toByteArray()
+            return data
+        }
+    }
+
+    fun View.hideKeyboardFrom(){
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
 }

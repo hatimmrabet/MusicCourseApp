@@ -30,6 +30,7 @@ class ScheduleCalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.recyclerView.isNestedScrollingEnabled = false
         viewModel.dates.observe(viewLifecycleOwner) {
             binding.calendarView.addDecorator(CurrentDayDecorator(activity, it!!))
         }
@@ -41,7 +42,7 @@ class ScheduleCalendarFragment : Fragment() {
             if(it.size > 0){
                 binding.textView.text = ""
             } else {
-                binding.textView.text = "There are no Events for selected date"
+                binding.textView.text = "There are no Events for selected date "
             }
             binding.recyclerView.adapter = ItemAdapter(it)
         }

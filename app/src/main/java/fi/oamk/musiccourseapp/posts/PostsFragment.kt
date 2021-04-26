@@ -18,7 +18,6 @@ import fi.oamk.musiccourseapp.MainActivity
 import fi.oamk.musiccourseapp.R
 import fi.oamk.musiccourseapp.databinding.FragmentPostsBinding
 
-
 class PostsFragment : Fragment(), MyAdapter.OnPostListener {
 
     private var _binding: FragmentPostsBinding? = null
@@ -26,7 +25,7 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
     private lateinit var posts: ArrayList<Post>
     private lateinit var database: DatabaseReference
     private lateinit var postsList: RecyclerView
-
+    private lateinit var hours: ArrayList<Hour>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,30 +41,34 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
         database = Firebase.database.reference
         postsList = binding.postsList
         posts = arrayListOf<Post>()
+        hours = arrayListOf()
 
         val postListener = object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.value != null)
                 {
                     val postsFromDatabase = (snapshot.value as HashMap<String, HashMap<String, Any>>)["posts"]
+                    val hoursFromDatabase = (snapshot.value as HashMap<String, HashMap<String, Any>>)["hours"]
                     posts.clear()
+                    hours.clear()
 
-                    postsFromDatabase?.map { (key, value) ->
-                        val post = Post.from(value as HashMap<String, Any>)
-                        database.child("hours").get().addOnSuccessListener {
-                            if(it.value != null)
-                            {
-                                val hoursFromDatabase = (it.value as HashMap<String,Any>)
-                                for ((key, value) in hoursFromDatabase) {
-                                    val hour =Hour.from(value as HashMap<String, Any>)
-                                    if(hour.postkey == post.postkey && !hour.reserved)
-                                    {
-                                        posts.add(post)
-                                        break
-                                    }
-                                }
+                    postsFromDatabase?.map { (MapPostKey, MapPostValue) ->
+                        val post = Post.from(MapPostValue as HashMap<String, Any>)
+
+                        val postHoursDB = (hoursFromDatabase?.get(MapPostKey) as HashMap<String, Any>)
+                        postHoursDB.map { (hourKey, hourValue) ->
+                            val hour = Hour.from(hourValue as HashMap<String, Any>)
+                            if (!hour.reserved) {
+                                hours.add(hour)
                             }
                         }
+
+                        if(hours.size > 0)
+                        {
+                            posts.add(post)
+                            hours.clear()
+                        }
+
                     }
                     postsList.adapter?.notifyDataSetChanged()
                 }
@@ -92,3 +95,5 @@ class PostsFragment : Fragment(), MyAdapter.OnPostListener {
         //Toast.makeText(this.context, "${clickedItem.postkey} clicked", Toast.LENGTH_SHORT).show()
     }
 }
+
+

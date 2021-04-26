@@ -9,45 +9,76 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import fi.oamk.musiccourseapp.schedule.reservation.Date
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import fi.oamk.musiccourseapp.user.User
 
-class CalendarViewModel: ViewModel() {
+class CalendarViewModel : ViewModel() {
     private val TAG = "CalendarViewModel"
     private val auth = Firebase.auth.currentUser
     private val dateUsersDB = Firebase.database.getReference("dateUsers/${auth.uid}")
     private val datesDB = Firebase.database.getReference("dates")
-
+    private val usersDB = Firebase.database.getReference("users")
     private var _dates = CalendarDayLiveData(dateUsersDB)
+    private var user : User? = null
     val dates: LiveData<MutableSet<CalendarDay>> get() = _dates
 
-    private var _events = MutableLiveData<ArrayList<Date>>()
-    val events: LiveData<ArrayList<Date>> get() = _events
+    private var _events = MutableLiveData<ArrayList<ReservationData>>()
+    val events: LiveData<ArrayList<ReservationData>> get() = _events
 
-    fun setDate (year: String, month: String, day:String){
-        var myMonth = if(month.length == 1)
-            "0"+ month
+    fun setDate(year: String, month: String, day: String) {
+        var myMonth = if (month.length == 1)
+            "0" + month
         else {
             month
         }
-        var myDay = if(day.length == 1)
+        var myDay = if (day.length == 1)
             "0" + day
         else {
             day
         }
 
-        val key = year+myMonth+myDay
+        val key = year + myMonth + myDay
         Log.d(TAG, "The key is ${key}")
+
         _events.value?.clear()
-        var newEvents= arrayListOf<Date>()
-        datesDB.child(auth.uid).child(key).get().addOnSuccessListener {
+        var newEvents = arrayListOf<ReservationData>()
+
+        datesDB.child(auth.uid).child(key).get().addOnSuccessListener { it ->
             Log.d(TAG, it.value.toString())
-            it.children.forEach{child ->
-                newEvents.add(Date.from(child.value as HashMap<String, String>))
+
+            it.children.forEach { child ->
+                val date = Date.from(child.value as HashMap<String, String>)
+
+                if(auth.uid == date.studentId) {
+                    usersDB.child(date.teacherId).get().addOnSuccessListener { it2 ->
+                        val user = User.from(it2.value as HashMap<String, String>)
+                        val resDetail = ReservationData(key, date.start, date.end, user.fullname, user.email)
+                        Log.d(TAG, "The resDetail is ${resDetail.toString()}")
+
+                        newEvents.add(resDetail)
+                        Log.d(TAG, "The newEvents is ${newEvents.toString()}")
+
+                        _events.value = newEvents
+                        Log.d(TAG, "The events are ${_events.value.toString()}")
+                    }
+                }
+                else if(auth.uid == date.teacherId)
+                {
+                    usersDB.child(date.studentId).get().addOnSuccessListener { it2 ->
+                        val user = User.from(it2.value as HashMap<String, String>)
+                        val resDetail = ReservationData(key, date.start, date.end, user.fullname, user.email)
+                        Log.d(TAG, "The resDetail is ${resDetail.toString()}")
+
+                        newEvents.add(resDetail)
+                        Log.d(TAG, "The newEvents is ${newEvents.toString()}")
+
+                        _events.value = newEvents
+                        Log.d(TAG, "The events are ${_events.value.toString()}")
+                    }
+                }
             }
-            _events.value = newEvents
-            Log.d(TAG, "The events are ${_events.value.toString()}")
         }
+        _events.value = newEvents
+        Log.d(TAG, "The events are ${_events.value.toString()}")
 
     }
 

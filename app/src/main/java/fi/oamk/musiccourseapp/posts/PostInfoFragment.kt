@@ -3,16 +3,17 @@ package fi.oamk.musiccourseapp.posts
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.*
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
@@ -20,11 +21,7 @@ import fi.oamk.musiccourseapp.R
 import fi.oamk.musiccourseapp.databinding.FragmentPostInfoBinding
 import fi.oamk.musiccourseapp.findteacher.reservation.Reservation
 import fi.oamk.musiccourseapp.schedule.reservation.Date
-import java.util.*
-import kotlin.Comparator
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-
+import fi.oamk.musiccourseapp.user.User
 
 class PostInfoFragment : Fragment() {
 
@@ -32,8 +29,10 @@ class PostInfoFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
-    private var post: HashMap<String, Any> = HashMap<String, Any>()
-    private lateinit var rcDispoList : RecyclerView
+    private lateinit var post: Post
+    private lateinit var user: User
+    private var loggedUser: User? = null
+    private lateinit var rcDispoList: RecyclerView
     private lateinit var hours: ArrayList<Hour>
 
     override fun onCreateView(
@@ -54,117 +53,137 @@ class PostInfoFragment : Fragment() {
         rcDispoList.isNestedScrollingEnabled = false
         hours = ArrayList<Hour>()
 
-        val postListner = database.child("posts/${postkey}").get().addOnSuccessListener {
-            if(it.value != null)
-            {
-                post = it.value as HashMap<String, Any>
-                binding.postInfoInstrument.text = post.get("instrument").toString()
-                binding.postInfoDesc.text = post.get("description").toString()
-                binding.postInfoDate.text = post.get("date").toString()
-                binding.postInfoPrice.text = post.get("price").toString() + " €"
-
-                val profileListner = database.child("users/${post.get("userkey").toString()}").get().addOnSuccessListener {
-                    if (it.value != null) {
-                        val user = it.value as HashMap<String, Any>
-                        binding.postInfoFullname.text = user.get("fullname").toString()
-                        Picasso.get().load(user.get("picture").toString()).into(binding.postInfoImg)
-                    }
-                }
-            }
+        if (auth.currentUser != null) {
+            getLoggedUser(auth.currentUser.uid)
+        } else {
+            binding.reserveBtn.visibility = INVISIBLE
+            binding.loginBtn.visibility = VISIBLE
         }
 
-        //GET all hours from databse
-        database.child("hours").get().addOnSuccessListener {
-            if(it.value != null)
-            {
-                val hoursdata = (it.value as HashMap<String, HashMap<String, Any>>)
-                hours.clear()
+        database.child("posts/${postkey}").get().addOnSuccessListener {
+            if (it.value != null) {
+                post = Post.from(it.value as HashMap<String, Any>)
+                binding.postInfoTitle.text = post.title
+                binding.postInfoInstrument.text = post.instrument
+                binding.postInfoDesc.text = post.description
+                binding.postInfoDate.text = post.date
+                binding.postInfoPrice.text = "${post.price} €"
 
-                hoursdata?.map { (key, value) ->
-                    val hour = Hour.from(value)
-                    // GET only hours related to the post and not reserved yet
-                    //println("==> ${hour.postkey} ${hour.hourkey} ${hour.reserved}")
-                    if(!hour.reserved && hour.postkey == postkey){
-                        hours.add(hour)
-                    }
-                }
-                if(hours.size == 0)
-                {
-                    binding.noDispo.visibility = VISIBLE
+                if (loggedUser?.role == "0") {
                     binding.reserveBtn.visibility = INVISIBLE
                 }
-                else
-                {
-                    binding.noDispo.visibility = INVISIBLE
-                    binding.reserveBtn.visibility = VISIBLE
+
+                database.child("users/${post.userkey}").get().addOnSuccessListener {
+                    if (it.value != null) {
+                        user = User.from(it.value as HashMap<String, String>)
+                        binding.postInfoFullname.text = user.fullname
+                        Picasso.get().load(user.picture).into(binding.postInfoImg)
+                    }
                 }
-                rcDispoList.adapter?.notifyDataSetChanged()
+
+                //GET all hours from databse
+                database.child("hours").child(post.postkey).get().addOnSuccessListener {
+                    if (it.value != null) {
+                        val hoursdata = (it.value as HashMap<String, HashMap<String, Any>>)
+                        hours.clear()
+
+                        hoursdata.map { (key, value) ->
+                            val hour = Hour.from(value)
+                            // GET only hours related to the post and not reserved yet
+                            //println("==> ${hour.postkey} ${hour.hourkey} ${hour.reserved}")
+                            if (!hour.reserved && hour.postkey == postkey) {
+                                hours.add(hour)
+                            }
+                        }
+                        rcDispoList.adapter?.notifyDataSetChanged()
+                    }
+                }
+                rcDispoList.adapter = HoursAdapter(hours)
+                //rcDispoList.setLayoutManager(LinearLayoutManager(view.getContext()));
+                rcDispoList.layoutManager = GridLayoutManager(view.context, 2)
+
             }
         }
-        rcDispoList.adapter = HoursAdapter(hours)
-        //rcDispoList.setLayoutManager(LinearLayoutManager(view.getContext()));
-        rcDispoList.setLayoutManager(GridLayoutManager(view.context, 2))
 
+        //login button
+        binding.loginBtn.setOnClickListener {
+            view.findNavController().navigate(R.id.action_postInfoFragment_to_loginFragment)
+        }
 
         //Reservation Button
-        binding.reserveBtn.setOnClickListener{
-            val checkedHours : ArrayList<Hour> = ArrayList()
+        binding.reserveBtn.setOnClickListener {
+            val checkedHours: ArrayList<Hour> = ArrayList()
 
             for (hour in hours) {
                 if (hour.checked) {
                     hour.reserved = true
-                    database.child("hours").child(hour.hourkey).child("reserved").setValue(true)
-                    //database.child("hours").child(hour.hourkey).setValue(hour)
-                    //println("------- ${hour.start} ${hour.postkey}")
                     checkedHours.add(hour)
                 }
             }
 
-            if(checkedHours.size != 0)
-            {
-                val postInfo = postListner.result?.value as HashMap<String, *>
-                val auth = Firebase.auth.currentUser
-                val dateUsersDB = Firebase.database.getReference("dateUsers")
-                val datesDB = Firebase.database.getReference("dates")
+            if (loggedUser!!.credit?.toDouble()!! >= checkedHours.size * post.price) {
 
-                for( hour in checkedHours) {
-                    val start = hour.start.substring(0, 2)+hour.start.substring(3, 5)
-                    var endTime = (hour.start.substring(0, 2).toInt()+1).toString()
-                    if (endTime.length == 1) { endTime = "0"+endTime }
-                    val end = ( endTime + hour.start.substring(3, 5))
-                    var getDate = postInfo.get("date").toString()
-                    val date = getDate.substring(0, 4)+getDate.substring(5, 7)+getDate.substring(
-                        8,
-                        10
-                    )
-                    val reservation = Reservation(
-                        postInfo.get("userkey").toString(),
-                        date,
-                        start,
-                        end,
-                        auth.uid
-                    )
-                    val key = dateUsersDB.child(reservation.studentId).child(date).push().key
-                    dateUsersDB.child(reservation.studentId).child(date).setValue(true)
-                    dateUsersDB.child(auth.uid).child(date).setValue(true)
-                    datesDB.child(auth.uid).child(date).child(key!!).setValue(
-                        Date(
-                            reservation.start,
-                            reservation.end,
-                            reservation.studentId,
-                            auth.uid
-                        )
-                    )
-                    datesDB.child(reservation.studentId).child(date).child(key!!).setValue(
-                        Date(
-                            reservation.start,
-                            reservation.end,
-                            reservation.studentId,
-                            auth.uid
-                        )
-                    )
+                for (hour in checkedHours) {
+                    database.child("hours").child(hour.postkey).child(hour.hourkey).child("reserved").setValue(true)
                 }
-                view.findNavController().navigate(R.id.action_postInfoFragment_to_reservationRecapFragment)
+
+                if (checkedHours.size != 0) {
+                    val auth = Firebase.auth.currentUser
+                    val dateUsersDB = Firebase.database.getReference("dateUsers")
+                    val datesDB = Firebase.database.getReference("dates")
+
+                    for (hour in checkedHours) {
+                        val start = hour.start.substring(0, 2) + hour.start.substring(3, 5)
+                        var endTime = (hour.start.substring(0, 2).toInt() + 1).toString()
+                        if (endTime.length == 1) {
+                            endTime = "0" + endTime
+                        }
+                        val end = (endTime + hour.start.substring(3, 5))
+
+                        var getDate = post.date
+                        val date = getDate.substring(0, 4) + getDate.substring(5, 7) + getDate.substring(8, 10)
+                        val reservation = Reservation(post.userkey, date, start, end, auth.uid)
+
+                        val key = dateUsersDB.child(auth.uid).child(date).push().key
+                        dateUsersDB.child(reservation.uid).child(date).setValue(true)
+
+                        dateUsersDB.child(auth.uid).child(date).setValue(true)
+
+                        datesDB.child(auth.uid).child(date).child(key!!).setValue(
+                            Date(reservation.start, reservation.end,reservation.studentId,post.userkey)
+                        )
+
+                        datesDB.child(post.userkey).child(date).child(key).setValue(
+                            Date(reservation.start, reservation.end,reservation.studentId,post.userkey)
+                        )
+                    }
+
+                    //Money transaction
+                    val newCreditLoggedUser = loggedUser!!.credit?.toDouble()!! - checkedHours.size * post.price
+                    database.child("users/${loggedUser!!.uid}").child("credit").setValue(newCreditLoggedUser.toString())
+                    var newCreditTeacher = user.credit?.toDouble()?.plus(checkedHours.size * post.price)
+                    if (newCreditTeacher != null) {
+                        newCreditTeacher *= 0.9
+                    }
+                    database.child("users/${user.uid}").child("credit").setValue(newCreditTeacher.toString())
+
+                    view.findNavController().navigate(R.id.action_postInfoFragment_to_reservationRecapFragment)
+                }
+            } else {
+                Toast.makeText(
+                    context,
+                    "You don't have enough credit for this operation",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+        }
+    }
+
+    private fun getLoggedUser(userId: String) {
+        database.child("users/$userId").get().addOnSuccessListener {
+            if (it.value != null) {
+                loggedUser = User.from(it.value as HashMap<String, String>)
             }
         }
     }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/findTeacherFragment">
+    app:startDestination="@id/postsFragment">
 
     <fragment
         android:id="@+id/postsFragment"
@@ -58,6 +58,9 @@
         <action
             android:id="@+id/action_postInfoFragment_to_reservationRecapFragment"
             app:destination="@id/reservationRecapFragment" />
+        <action
+            android:id="@+id/action_postInfoFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/bookingFragment"
@@ -88,13 +91,17 @@
     <fragment
         android:id="@+id/editAccountFragment"
         android:name="fi.oamk.musiccourseapp.user.EditAccountFragment"
-        android:label="fragment_edit_account"
+        android:label="Edit your account"
         tools:layout="@layout/fragment_edit_account" />
     <fragment
         android:id="@+id/createPostFragment"
         android:name="fi.oamk.musiccourseapp.user.CreatePostFragment"
-        android:label="fragment_create_post"
-        tools:layout="@layout/fragment_create_post" />
+        android:label="Create new post"
+        tools:layout="@layout/fragment_create_post" >
+        <action
+            android:id="@+id/action_createPostFragment_to_accountInfoFragment"
+            app:popUpTo="@id/accountInfoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createNoteFragment"
         android:name="fi.oamk.musiccourseapp.messages.note.CreateNoteFragment"
@@ -103,8 +110,8 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="fi.oamk.musiccourseapp.user.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_postsFragment"
             app:destination="@id/postsFragment" />

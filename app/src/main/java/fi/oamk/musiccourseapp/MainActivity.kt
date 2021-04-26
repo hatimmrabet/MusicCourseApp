@@ -12,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -54,5 +55,10 @@ class MainActivity : AppCompatActivity() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
 //        bottomNav.menu.getItem(3).isVisible = false
         bottomNav.setupWithNavController(navController)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        FirebaseAuth.getInstance().signOut()
     }
 }

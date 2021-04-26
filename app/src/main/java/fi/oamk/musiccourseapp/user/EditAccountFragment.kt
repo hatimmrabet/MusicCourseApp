@@ -7,11 +7,14 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
@@ -46,22 +49,40 @@ class EditAccountFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         auth = Firebase.auth
 
+        ref = FirebaseDatabase.getInstance().reference.child("users").child(auth.currentUser.uid)
+
         binding.takePictureButton.setOnClickListener { takePicture() }
         binding.choosePictureButton.setOnClickListener { choosePicture() }
 
+        var url : String = ref.child("picture").toString()
+
+        var visible = 1
+
+        binding.showPassBtn.setOnClickListener{
+            if(visible == 1){
+                binding.password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                visible = 0
+            }
+            else{
+                binding.password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                visible = 1
+            }
+        }
+
         binding.updateButton.setOnClickListener{
-            ref = FirebaseDatabase.getInstance().reference.child("users").child(auth.currentUser.uid)
             val imageData = getImageByteArray()
-            val storageRef = Firebase.storage.reference.child("images/${binding.email.text.toString()}")
-            var uploadTask = storageRef.putBytes(imageData)
-            uploadTask.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    storageRef.downloadUrl.addOnCompleteListener { task ->
-                        val url = task.result.toString()
-                        ref.child("picture").setValue(url)
+            if(imageData != null){
+                val storageRef = Firebase.storage.reference.child("images/${binding.email.text.toString()}")
+                var uploadTask = storageRef.putBytes(imageData as ByteArray)
+                uploadTask.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        storageRef.downloadUrl.addOnCompleteListener { task ->
+                            url = task.result.toString()
+                            ref.child("picture").setValue(url)
+                        }
+                    } else {
+                        Log.w(TAG, "Upload task was not succesful")
                     }
-                } else {
-                    Log.w(TAG, "Upload task was not succesful")
                 }
             }
             if (binding.name.getText().toString() != "") {
@@ -75,6 +96,17 @@ class EditAccountFragment : Fragment() {
                 auth.currentUser.updatePassword(binding.password.text.toString())
             }
         }
+
+        binding.name.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
+        binding.email.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
+        binding.password.setOnClickListener{
+            it.hideKeyboardFrom()
+        }
+
     }
 
     private val REQUEST_IMAGE_CAPTURE = 1
@@ -110,13 +142,23 @@ class EditAccountFragment : Fragment() {
         }
     }
 
-    private fun getImageByteArray(): ByteArray {
+    private fun getImageByteArray(): ByteArray? {
         // Extract byteArray from imageView
-        val bitmap = (binding.upload.drawable as BitmapDrawable).bitmap
-        val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val data = baos.toByteArray()
-        return data
+        if(binding.upload.drawable == null){
+            return null
+        }
+        else{
+            val bitmap = (binding.upload.drawable as BitmapDrawable).bitmap
+            val baos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val data = baos.toByteArray()
+            return data
+        }
+    }
+
+    fun View.hideKeyboardFrom(){
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
     override fun onDestroyView() {
