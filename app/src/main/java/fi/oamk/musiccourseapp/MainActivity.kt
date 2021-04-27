@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController)
         setupBottomNavMenu(navController)
 
-
         val viewModel: ActivityViewModel by viewModels()
         viewModel.user.observe(this) { user ->
             if(user == null) {
