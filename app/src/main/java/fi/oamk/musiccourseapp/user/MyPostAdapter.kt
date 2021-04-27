@@ -58,7 +58,7 @@ class MyPostAdapter(private val myDataset: ArrayList<Post>, private val listener
         holder.instrument.text = post.instrument
         holder.description.text = post.description
         holder.price.text = post.price.toString() + " €"
-        holder.time.text = "on "+post.date
+        holder.time.text = post.date
     }
 
     override fun getItemCount() = myDataset.size
