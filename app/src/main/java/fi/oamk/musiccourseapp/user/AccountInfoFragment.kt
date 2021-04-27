@@ -86,7 +86,7 @@ class AccountInfoFragment : Fragment(), MyPostAdapter.OnPostListener {
         database.child("users").child("${auth.currentUser.uid}").get().addOnSuccessListener {
             val profil = it.value as HashMap<String, Any>
             binding.name.text = profil.get("fullname").toString()
-            binding.credit.text = profil.get("credit").toString() + " €"
+            binding.credit.text = String.format("%.2f",profil.get("credit").toString().toDouble()) + " €"
             if (it.value != null) {
                 val user = it.value as HashMap<String, Any>
                 Picasso.get().load(user.get("picture").toString()).into(binding.image)
