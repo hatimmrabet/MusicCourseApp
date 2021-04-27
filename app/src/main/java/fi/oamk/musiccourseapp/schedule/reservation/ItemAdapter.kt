@@ -3,11 +3,13 @@ package fi.oamk.musiccourseapp.schedule.reservation
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import fi.oamk.musiccourseapp.R
@@ -19,10 +21,17 @@ class ItemAdapter(private val dataset: ArrayList<Reservation>, private val navCo
     : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
     private val TAG = "ScheduleReservationFragmentItemAdapter"
+    private lateinit var database: DatabaseReference
+    private var student : User ? = null
+    private lateinit var teacher : User
+
 
     class ItemViewHolder(val binding: ItemReservationBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+        database = Firebase.database.reference
+        getTeacher(auth.uid)
+
         return ItemViewHolder(
             ItemReservationBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -36,6 +45,8 @@ class ItemAdapter(private val dataset: ArrayList<Reservation>, private val navCo
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val reservation = dataset[position]
+        getStudent(reservation.studentId)
+
         holder.binding.dateTextView.text = "Date: " + reservation.date + "; start: " + reservation.start + "; end: " +reservation.end
         holder.binding.acceptButton.setOnClickListener {
             acceptReservation(reservation)
@@ -93,7 +104,39 @@ class ItemAdapter(private val dataset: ArrayList<Reservation>, private val navCo
         reservationUsersDB.child(reservation.studentId).child(resKey).setValue(null)
         reservationUsersDB.child(auth.uid).child(resKey).setValue(null)
         reservationsDB.child(resKey).setValue(null)
+
+        //payement
+        payement(reservation)
+
         navController.navigate(R.id.action_scheduleFragment_self)
+    }
+
+    fun payement(reservation: Reservation){
+        //Money transaction
+        val start = reservation.start
+        val end = reservation.end
+        val price = 30
+        val hours = Math.abs((end.toDouble() - start.toDouble()) / 100)
+        
+        val newCreditStudent = student!!.credit?.toDouble()!! - hours * price
+
+        database.child("users/${student!!.uid}").child("credit").setValue(newCreditStudent.toString())
+        val teacherPrice = hours * price * 0.9
+        var newCreditTeacher = teacher!!.credit?.toDouble()?.plus(teacherPrice)
+        database.child("users/${teacher!!.uid}").child("credit").setValue(newCreditTeacher.toString())
+
+    }
+
+    private fun getStudent(uid: String) {
+        database.child("users/$uid").get().addOnSuccessListener {
+            student = User.from(it.value as HashMap<String, String>)
+        }
+    }
+
+    private fun getTeacher(uid: String) {
+        database.child("users/$uid").get().addOnSuccessListener {
+            teacher = User.from(it.value as HashMap<String, String>)
+        }
     }
 
     fun deleteReservation(reservation: Reservation) {
@@ -116,4 +159,6 @@ class ItemAdapter(private val dataset: ArrayList<Reservation>, private val navCo
         reservationsDB.child(resKey).setValue(null)
         navController.navigate(R.id.action_scheduleFragment_self)
     }
+
+
 }

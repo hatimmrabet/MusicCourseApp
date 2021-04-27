@@ -4,11 +4,11 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -57,34 +57,23 @@ class ReservationFragment : Fragment() {
         val hour = c.get(Calendar.HOUR_OF_DAY)
         val minute = c.get(Calendar.MINUTE)
 
-        binding.date.setOnClickListener{ chooseDate(year, month, day) }
-        binding.start.setOnClickListener{ chooseStart(hour, minute) }
+        binding.date.setOnClickListener { chooseDate(year, month, day) }
+        binding.start.setOnClickListener { chooseStart(hour, minute) }
         binding.end.setOnClickListener { chooseEnd(hour, minute) }
         binding.reservationButton.setOnClickListener {
-
-            //Money transaction
+            //Money condition
             val start = binding.start.text.toString()
             val end = binding.end.text.toString()
             val price = 30
-            val hours = abs((end.toDouble()-start.toDouble())/100)
+            val hours = abs((end.toDouble() - start.toDouble()) / 100)
             val newCreditLoggedUser = loggedUser!!.credit?.toDouble()!! - hours * price
 
             if (newCreditLoggedUser >= 0) {
-
                 confirmReservation()
-
-                database.child("users/${loggedUser!!.uid}").child("credit").setValue(newCreditLoggedUser.toString())
-                var newCreditTeacher = teacher.credit?.toDouble()?.plus(hours * price)
-                if (newCreditTeacher != null) {
-                    newCreditTeacher *= 0.9
-                }
-                database.child("users/${teacher.uid}").child("credit").setValue(newCreditTeacher.toString())
-            }else
-            {
+            } else {
                 Toast.makeText(context, "You don't have enough money for this operation", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 
 
@@ -98,14 +87,11 @@ class ReservationFragment : Fragment() {
         val end = binding.end.text.toString()
         val studentId = auth.uid
 
-        if(date.isEmpty() || start.isEmpty() || end.isEmpty())
-        {
+        if (date.isEmpty() || start.isEmpty() || end.isEmpty()) {
             Toast.makeText(context, "please fill in all the input fields", Toast.LENGTH_SHORT).show()
-        }
-        else
-        {
+        } else {
             val key = reservationsDB.push().key
-            val reservation = Reservation(key!! ,date, start, end, studentId)
+            val reservation = Reservation(key!!, date, start, end, studentId)
             reservationUsersDB.child(auth.uid).child(key!!).setValue(true)
             reservationUsersDB.child(args.uid).child(key!!).setValue(true)
             reservationsDB.child(key!!).setValue(reservation)
@@ -116,10 +102,10 @@ class ReservationFragment : Fragment() {
 
     private fun chooseStart(hour: Int, minute: Int) {
         val tpd = TimePickerDialog(requireContext(), TimePickerDialog.OnTimeSetListener { timePicker, mHour, mMinute ->
-            if(mMinute < 10){
-                binding.start.setText(""+mHour+""+"0"+mMinute)
+            if (mMinute < 10) {
+                binding.start.setText("" + mHour + "" + "0" + mMinute)
             } else {
-                binding.start.setText(""+mHour+""+mMinute)
+                binding.start.setText("" + mHour + "" + mMinute)
             }
         }, hour, minute, true)
         tpd.show()
@@ -127,12 +113,12 @@ class ReservationFragment : Fragment() {
 
     private fun chooseEnd(hour: Int, minute: Int) {
         val tpd = TimePickerDialog(requireContext(), TimePickerDialog.OnTimeSetListener { timePicker, mHour, mMinute ->
-            if(mMinute < 10){
-                binding.end.setText(""+mHour+""+"0"+mMinute)
+            if (mMinute < 10) {
+                binding.end.setText("" + mHour + "" + "0" + mMinute)
             } else {
-                binding.end.setText(""+mHour+""+mMinute)
+                binding.end.setText("" + mHour + "" + mMinute)
             }
-            
+
         }, hour, minute, true)
 
         tpd.show()
@@ -143,7 +129,7 @@ class ReservationFragment : Fragment() {
             requireContext(),
             DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
                 val monthAndDayString = getMonthAndDay(mMonth, mDay)
-                binding.date.setText(""+mYear + monthAndDayString)
+                binding.date.setText("" + mYear + monthAndDayString)
             },
             year,
             month,
@@ -156,13 +142,13 @@ class ReservationFragment : Fragment() {
     private fun getMonthAndDay(mMonth: Int, mDay: Int): String {
         var result = ""
         Log.d("ReservationFragment", mMonth.toString())
-        if(mMonth < 10){
-            result = result + "0" +mMonth.toString()
+        if (mMonth < 10) {
+            result = result + "0" + mMonth.toString()
         } else {
             result = result + mMonth.toString()
         }
-        if(mDay < 10){
-            result = result + "0" +mDay
+        if (mDay < 10) {
+            result = result + "0" + mDay
         } else {
             result = result + mDay
         }
