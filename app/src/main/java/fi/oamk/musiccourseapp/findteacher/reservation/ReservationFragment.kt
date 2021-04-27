@@ -83,14 +83,22 @@ class ReservationFragment : Fragment() {
         val reservationsDB = Firebase.database.getReference("reservations")
 
         val date = binding.date.text.toString()
-        val start = binding.start.text.toString()
-        val end = binding.end.text.toString()
+        var start = binding.start.text.toString()
+        var end = binding.end.text.toString()
         val studentId = auth.uid
 
         if (date.isEmpty() || start.isEmpty() || end.isEmpty()) {
             Toast.makeText(context, "please fill in all the input fields", Toast.LENGTH_SHORT).show()
         } else {
             val key = reservationsDB.push().key
+            if(start.length < 4)
+            {
+                start = "0"+start
+            }
+            if (end.length < 4)
+            {
+                end = "0"+end
+            }
             val reservation = Reservation(key!!, date, start, end, studentId)
             reservationUsersDB.child(auth.uid).child(key!!).setValue(true)
             reservationUsersDB.child(args.uid).child(key!!).setValue(true)
@@ -103,9 +111,23 @@ class ReservationFragment : Fragment() {
     private fun chooseStart(hour: Int, minute: Int) {
         val tpd = TimePickerDialog(requireContext(), TimePickerDialog.OnTimeSetListener { timePicker, mHour, mMinute ->
             if (mMinute < 10) {
-                binding.start.setText("" + mHour + "" + "0" + mMinute)
+                if (mHour < 10)
+                {
+                    binding.start.setText("0" + mHour + "0" + mMinute)
+                }
+                else
+                {
+                    binding.start.setText("" + mHour + "0" + mMinute)
+                }
             } else {
-                binding.start.setText("" + mHour + "" + mMinute)
+                if(mHour < 10)
+                {
+                    binding.start.setText("0" + mHour + "" + mMinute)
+                }
+                else
+                {
+                    binding.start.setText("" + mHour + "" + mMinute)
+                }
             }
         }, hour, minute, true)
         tpd.show()
@@ -114,11 +136,24 @@ class ReservationFragment : Fragment() {
     private fun chooseEnd(hour: Int, minute: Int) {
         val tpd = TimePickerDialog(requireContext(), TimePickerDialog.OnTimeSetListener { timePicker, mHour, mMinute ->
             if (mMinute < 10) {
-                binding.end.setText("" + mHour + "" + "0" + mMinute)
+                if (mHour < 10)
+                {
+                    binding.end.setText("0" + mHour + "0" + mMinute)
+                }
+                else
+                {
+                    binding.end.setText("" + mHour + "0" + mMinute)
+                }
             } else {
-                binding.end.setText("" + mHour + "" + mMinute)
+                if(mHour < 10)
+                {
+                    binding.end.setText("0" + mHour + "" + mMinute)
+                }
+                else
+                {
+                    binding.end.setText("" + mHour + "" + mMinute)
+                }
             }
-
         }, hour, minute, true)
 
         tpd.show()
@@ -128,7 +163,7 @@ class ReservationFragment : Fragment() {
         val dpd = DatePickerDialog(
             requireContext(),
             DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
-                val monthAndDayString = getMonthAndDay(mMonth, mDay)
+                val monthAndDayString = getMonthAndDay(mMonth+1, mDay)
                 binding.date.setText("" + mYear + monthAndDayString)
             },
             year,
