@@ -133,7 +133,7 @@ class ReservationFragment : Fragment() {
             } else {
                 binding.end.setText(""+mHour+""+mMinute)
             }
-
+            
         }, hour, minute, true)
 
         tpd.show()
