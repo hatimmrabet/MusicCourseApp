@@ -1,17 +1,16 @@
 package fi.oamk.musiccourseapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,18 +20,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        setupActionBarWithNavController(navController)
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.findTeacherFragment, R.id.postsFragment, R.id.scheduleFragment, R.id.chatsFragment, R.id.accountInfoFragment,
+            R.id.loginFragment)
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
         setupBottomNavMenu(navController)
 
         val viewModel: ActivityViewModel by viewModels()
         viewModel.user.observe(this) { user ->
-            if(user == null) {
+            if (user == null) {
                 bottomNav.menu.getItem(3).isVisible = false
                 bottomNav.menu.getItem(4).isVisible = false
-            }else {
+            } else {
                 bottomNav.menu.getItem(3).isVisible = true
                 bottomNav.menu.getItem(4).isVisible = true
             }

@@ -71,7 +71,7 @@
         android:id="@+id/accountInfoFragment"
         android:name="fi.oamk.musiccourseapp.user.AccountInfoFragment"
         android:label="Account info"
-        tools:layout="@layout/Account info" >
+        tools:layout="@layout/fragment_account_info" >
         <action
             android:id="@+id/action_accountInfoFragment_to_editAccountFragment"
             app:destination="@id/editAccountFragment" />
@@ -122,7 +122,7 @@
     <fragment
         android:id="@+id/chatsFragment"
         android:name="fi.oamk.musiccourseapp.messages.chat.ChatsFragment"
-        android:label="fragment_chats"
+        android:label="Messages"
         tools:layout="@layout/fragment_chats" >
         <action
             android:id="@+id/action_chatsFragment_to_messagesFragment"
