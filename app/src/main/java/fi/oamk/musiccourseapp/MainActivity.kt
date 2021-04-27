@@ -27,9 +27,6 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController)
         setupBottomNavMenu(navController)
 
-        // Write a message to the database
-        val database = Firebase.database
-        val myRef = database.getReference("message")
 
         val viewModel: ActivityViewModel by viewModels()
         viewModel.user.observe(this) { user ->

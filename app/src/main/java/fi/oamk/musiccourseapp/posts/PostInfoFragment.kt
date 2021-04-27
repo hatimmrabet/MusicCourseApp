@@ -3,7 +3,7 @@ package fi.oamk.musiccourseapp.posts
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.INVISIBLE
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
@@ -56,7 +56,7 @@ class PostInfoFragment : Fragment() {
         if (auth.currentUser != null) {
             getLoggedUser(auth.currentUser.uid)
         } else {
-            binding.reserveBtn.visibility = INVISIBLE
+            binding.reserveBtn.visibility = GONE
             binding.loginBtn.visibility = VISIBLE
         }
 
@@ -70,7 +70,7 @@ class PostInfoFragment : Fragment() {
                 binding.postInfoPrice.text = "${post.price} €"
 
                 if (loggedUser?.role == "0") {
-                    binding.reserveBtn.visibility = INVISIBLE
+                    binding.reserveBtn.visibility = GONE
                 }
 
                 database.child("users/${post.userkey}").get().addOnSuccessListener {
@@ -150,11 +150,11 @@ class PostInfoFragment : Fragment() {
                         dateUsersDB.child(auth.uid).child(date).setValue(true)
 
                         datesDB.child(auth.uid).child(date).child(key!!).setValue(
-                            Date(reservation.start, reservation.end,reservation.studentId,post.userkey)
+                            Date(reservation.start, reservation.end, reservation.studentId, post.userkey)
                         )
 
                         datesDB.child(post.userkey).child(date).child(key).setValue(
-                            Date(reservation.start, reservation.end,reservation.studentId,post.userkey)
+                            Date(reservation.start, reservation.end, reservation.studentId, post.userkey)
                         )
                     }
 
