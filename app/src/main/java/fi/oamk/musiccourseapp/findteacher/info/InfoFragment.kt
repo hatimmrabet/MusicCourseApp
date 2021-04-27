@@ -1,10 +1,11 @@
 package fi.oamk.musiccourseapp.findteacher.info
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -37,16 +38,20 @@ class InfoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         populateUI()
 
-        if(auth.currentUser == null)
-        {
+        if (auth.currentUser == null) {
             binding.reserveBtn.text = "Login"
-            binding.reserveBtn.setOnClickListener{
+            binding.reserveBtn.setOnClickListener {
                 findNavController().navigate(R.id.action_infoFragment_to_loginFragment)
             }
-        }
-        else
-        {
-            binding.reserveBtn.setOnClickListener{ goToReservation()}
+        } else {
+            val userDB = Firebase.database.getReference("users/${auth.currentUser.uid}")
+            userDB.get().addOnSuccessListener {
+                val user = User.from(it.value as HashMap<String, String>)
+                if (user.role == "0") {
+                    binding.reserveBtn.visibility = GONE
+                }
+            }
+            binding.reserveBtn.setOnClickListener { goToReservation() }
         }
     }
 
