@@ -3,17 +3,19 @@ package fi.oamk.musiccourseapp.schedule.reservation
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import fi.oamk.musiccourseapp.R
 import fi.oamk.musiccourseapp.databinding.ItemReservationBinding
 import fi.oamk.musiccourseapp.findteacher.reservation.Reservation
 import fi.oamk.musiccourseapp.user.User
 
-class ItemAdapter (private val dataset: ArrayList<Reservation>, private val navController: NavController)
+class ItemAdapter(private val dataset: ArrayList<Reservation>, private val navController: NavController)
     : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
     private val TAG = "ScheduleReservationFragmentItemAdapter"
@@ -37,6 +39,10 @@ class ItemAdapter (private val dataset: ArrayList<Reservation>, private val navC
         holder.binding.dateTextView.text = "Date: " + reservation.date + "; start: " + reservation.start + "; end: " +reservation.end
         holder.binding.acceptButton.setOnClickListener {
             acceptReservation(reservation)
+        }
+
+        holder.binding.deleteButton.setOnClickListener {
+            deleteReservation(reservation)
         }
 
         // Check if it is teacher
@@ -65,13 +71,49 @@ class ItemAdapter (private val dataset: ArrayList<Reservation>, private val navC
         val key = dateUsersDB.child(reservation.studentId).child(dateKey).push().key
         dateUsersDB.child(reservation.studentId).child(dateKey).setValue(true)
         dateUsersDB.child(auth.uid).child(dateKey).setValue(true)
-        datesDB.child(auth.uid).child(dateKey).child(key!!).setValue(Date(reservation.start, reservation.end, reservation.studentId, auth.uid))
-        datesDB.child(reservation.studentId).child(dateKey).child(key!!).setValue(Date(reservation.start, reservation.end, reservation.studentId, auth.uid))
+        datesDB.child(auth.uid).child(dateKey).child(key!!).setValue(
+            Date(
+                reservation.start,
+                reservation.end,
+                reservation.studentId,
+                auth.uid
+            )
+        )
+        datesDB.child(reservation.studentId).child(dateKey).child(key!!).setValue(
+            Date(
+                reservation.start,
+                reservation.end,
+                reservation.studentId,
+                auth.uid
+            )
+        )
 
         // Remove Reservation
         val resKey = reservation.uid
         reservationUsersDB.child(reservation.studentId).child(resKey).setValue(null)
         reservationUsersDB.child(auth.uid).child(resKey).setValue(null)
         reservationsDB.child(resKey).setValue(null)
+        navController.navigate(R.id.action_scheduleFragment_self)
+    }
+
+    fun deleteReservation(reservation: Reservation) {
+        // Remove Reservation
+        val resKey = reservation.uid
+        //reservationUsersDB.child(reservation.studentId).child(resKey).setValue(null)
+        //reservationUsersDB.child(auth.uid).child(resKey).setValue(null)
+        reservationUsersDB.get().addOnSuccessListener {
+            val resUsers = (it.value as HashMap<String, Any> )
+            resUsers.map { it ->
+                val resUsersData = (it.value as HashMap<String, Any>)
+                resUsersData.map { it2 ->
+                    if(it2.key == resKey)
+                    {
+                        reservationUsersDB.child(it.key).child(resKey).setValue(null)
+                    }
+                }
+            }
+        }
+        reservationsDB.child(resKey).setValue(null)
+        navController.navigate(R.id.action_scheduleFragment_self)
     }
 }

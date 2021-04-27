@@ -62,7 +62,6 @@ class ReservationFragment : Fragment() {
         binding.end.setOnClickListener { chooseEnd(hour, minute) }
         binding.reservationButton.setOnClickListener {
 
-
             //Money transaction
             val start = binding.start.text.toString()
             val end = binding.end.text.toString()

@@ -31,7 +31,11 @@
         android:id="@+id/scheduleFragment"
         android:name="fi.oamk.musiccourseapp.schedule.ScheduleFragment"
         android:label="Schedule"
-        tools:layout="@layout/fragment_schedule" />
+        tools:layout="@layout/fragment_schedule" >
+        <action
+            android:id="@+id/action_scheduleFragment_self"
+            app:destination="@id/scheduleFragment" />
+    </fragment>
     <fragment
         android:id="@+id/messagesFragment"
         android:name="fi.oamk.musiccourseapp.messages.message.MessagesFragment"
