@@ -47,7 +47,13 @@ class ItemAdapter(private val dataset: ArrayList<Reservation>, private val navCo
         val reservation = dataset[position]
         getStudent(reservation.studentId)
 
-        holder.binding.dateTextView.text = "Date: " + reservation.date + "; start: " + reservation.start + "; end: " +reservation.end
+        val start = reservation.start.substring(0,2)+":"+reservation.start.substring(2,4)
+        val end = reservation.end.substring(0,2)+":"+reservation.end.substring(2,4)
+        val date = reservation.date.substring(0,4)+"/"+reservation.date.substring(4,6)+"/"+reservation.date.substring(6,8)
+
+        holder.binding.date.text = date
+        holder.binding.hour.text = "From "+ start + " to " + end
+
         holder.binding.acceptButton.setOnClickListener {
             acceptReservation(reservation)
         }
@@ -65,7 +71,8 @@ class ItemAdapter(private val dataset: ArrayList<Reservation>, private val navCo
 
         usersDB.child(reservation.studentId).get().addOnSuccessListener {
             val user = User.from(it.value as HashMap<String, String>)
-            holder.binding.studentTextView.text = "by ${user.fullname}"
+            holder.binding.name.text = user.fullname
+            holder.binding.email.text = user.email
         }
     }
 
