@@ -1,118 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".findteacher.info.InfoFragment">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/image_view"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="71dp"
-        android:layout_marginBottom="500dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:srcCompat="@tools:sample/avatars"
-        android:elevation="1dp"
-        android:contentDescription="@string/profile_picture_of_user"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp">
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="411dp"
-        android:layout_height="190dp"
-        android:layout_marginBottom="41dp"
-        app:layout_constraintBottom_toTopOf="@+id/post_info_img"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            tools:srcCompat="@tools:sample/avatars"
+            android:contentDescription="@string/profile_picture_of_user"
+            />
 
-    <ScrollView
-        android:layout_width="411dp"
-        android:layout_height="494dp"
-        android:layout_marginTop="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/post_info_img"
-        android:padding="25dp">
+        <TextView
+            android:id="@+id/fullnameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/full_name"
+            android:textSize="20sp"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
+        <TextView
+            android:id="@+id/instrumentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/instrument"
+            android:gravity="center_horizontal"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            >
 
             <TextView
-                android:id="@+id/fullname_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/full_name"
-                android:textSize="20sp"
-                android:gravity="center_horizontal"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
-
-            <TextView
-                android:id="@+id/instrument_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/instrument"
-                android:gravity="center_horizontal"/>
-
-            <TextView
-                android:id="@+id/description_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/description"
-                android:layout_marginVertical="10dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginVertical="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/post_price"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:layout_marginRight="10dp"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/price_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="15 €"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/holo_green_light"/>
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/reserve_btn"
+                android:id="@+id/post_price_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/reserve"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"/>
+                android:text="@string/post_price"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginEnd="10dp"
+                android:textSize="16sp" />
 
-
+            <TextView
+                android:id="@+id/post_info_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_30"
+                android:textStyle="bold"
+                android:textColor="@android:color/holo_green_light"/>
         </LinearLayout>
-    </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/reserve_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reserve"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"/>
+
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

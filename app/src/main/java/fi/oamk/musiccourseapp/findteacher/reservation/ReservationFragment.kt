@@ -8,17 +8,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.navArgs
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import fi.oamk.musiccourseapp.databinding.FragmentReservationBinding
+import fi.oamk.musiccourseapp.user.User
 import java.util.*
 
 class ReservationFragment : Fragment() {
 
     private var _binding: FragmentReservationBinding? = null
     private val binding get() = _binding!!
+    private lateinit var database: DatabaseReference
+    private var loggedUser: User? = null
+    private lateinit var auth: FirebaseAuth
+    private lateinit var user: User
 
     val args: ReservationFragmentArgs by navArgs()
 
@@ -33,6 +41,11 @@ class ReservationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        database = Firebase.database.reference
+        auth = Firebase.auth
+        if (auth.currentUser != null) {
+            getLoggedUser(auth.currentUser.uid)
+        }
 
         //Calendar
         val c = Calendar.getInstance()
@@ -45,7 +58,22 @@ class ReservationFragment : Fragment() {
         binding.date.setOnClickListener{ chooseDate(year, month, day) }
         binding.start.setOnClickListener{ chooseStart(hour, minute) }
         binding.end.setOnClickListener { chooseEnd(hour, minute) }
-        binding.reservationButton.setOnClickListener { confirmReservation() }
+        binding.reservationButton.setOnClickListener {
+
+            confirmReservation()
+
+            //Money transaction
+            /*
+            val newCreditLoggedUser = loggedUser!!.credit?.toDouble()!! - checkedHours.size * post.price
+            database.child("users/${loggedUser!!.uid}").child("credit").setValue(newCreditLoggedUser.toString())
+            var newCreditTeacher = user.credit?.toDouble()?.plus(checkedHours.size * post.price)
+            if (newCreditTeacher != null) {
+                newCreditTeacher *= 0.9
+            }
+            database.child("users/${user.uid}").child("credit").setValue(newCreditTeacher.toString())
+            */
+        }
+
     }
 
     private fun confirmReservation() {
@@ -58,14 +86,20 @@ class ReservationFragment : Fragment() {
         val end = binding.end.text.toString()
         val studentId = auth.uid
 
-
-        val key = reservationsDB.push().key
-        val reservation = Reservation(key!! ,date, start, end, studentId)
-        reservationUsersDB.child(auth.uid).child(key!!).setValue(true)
-        reservationUsersDB.child(args.uid).child(key!!).setValue(true)
-        reservationsDB.child(key!!).setValue(reservation)
-
-        Log.d("ReservationFragment", reservation.toString())
+        if(date.isEmpty() || start.isEmpty() || end.isEmpty())
+        {
+            Toast.makeText(context, "please fill in all the input fields", Toast.LENGTH_SHORT).show()
+        }
+        else
+        {
+            val key = reservationsDB.push().key
+            val reservation = Reservation(key!! ,date, start, end, studentId)
+            reservationUsersDB.child(auth.uid).child(key!!).setValue(true)
+            reservationUsersDB.child(args.uid).child(key!!).setValue(true)
+            reservationsDB.child(key!!).setValue(reservation)
+            Toast.makeText(context, "Your reservation is successfully done", Toast.LENGTH_SHORT).show()
+            Log.d("ReservationFragment", reservation.toString())
+        }
     }
 
     private fun chooseStart(hour: Int, minute: Int) {
@@ -121,6 +155,14 @@ class ReservationFragment : Fragment() {
             result = result + mDay
         }
         return result
+    }
+
+    private fun getLoggedUser(userId: String) {
+        database.child("users/$userId").get().addOnSuccessListener {
+            if (it.value != null) {
+                loggedUser = User.from(it.value as HashMap<String, String>)
+            }
+        }
     }
 
     override fun onDestroyView() {
