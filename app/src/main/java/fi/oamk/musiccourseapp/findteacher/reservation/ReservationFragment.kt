@@ -17,6 +17,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import fi.oamk.musiccourseapp.databinding.FragmentReservationBinding
 import fi.oamk.musiccourseapp.user.User
+import java.lang.Math.abs
 import java.util.*
 
 class ReservationFragment : Fragment() {
@@ -26,7 +27,7 @@ class ReservationFragment : Fragment() {
     private lateinit var database: DatabaseReference
     private var loggedUser: User? = null
     private lateinit var auth: FirebaseAuth
-    private lateinit var user: User
+    private lateinit var teacher: User
 
     val args: ReservationFragmentArgs by navArgs()
 
@@ -43,6 +44,7 @@ class ReservationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         database = Firebase.database.reference
         auth = Firebase.auth
+        getTeacher(args.uid)
         if (auth.currentUser != null) {
             getLoggedUser(auth.currentUser.uid)
         }
@@ -60,21 +62,32 @@ class ReservationFragment : Fragment() {
         binding.end.setOnClickListener { chooseEnd(hour, minute) }
         binding.reservationButton.setOnClickListener {
 
-            confirmReservation()
 
             //Money transaction
-            /*
-            val newCreditLoggedUser = loggedUser!!.credit?.toDouble()!! - checkedHours.size * post.price
-            database.child("users/${loggedUser!!.uid}").child("credit").setValue(newCreditLoggedUser.toString())
-            var newCreditTeacher = user.credit?.toDouble()?.plus(checkedHours.size * post.price)
-            if (newCreditTeacher != null) {
-                newCreditTeacher *= 0.9
+            val start = binding.start.text.toString()
+            val end = binding.end.text.toString()
+            val price = 30
+            val hours = abs((end.toDouble()-start.toDouble())/100)
+            val newCreditLoggedUser = loggedUser!!.credit?.toDouble()!! - hours * price
+
+            if (newCreditLoggedUser >= 0) {
+
+                confirmReservation()
+
+                database.child("users/${loggedUser!!.uid}").child("credit").setValue(newCreditLoggedUser.toString())
+                var newCreditTeacher = teacher.credit?.toDouble()?.plus(hours * price)
+                if (newCreditTeacher != null) {
+                    newCreditTeacher *= 0.9
+                }
+                database.child("users/${teacher.uid}").child("credit").setValue(newCreditTeacher.toString())
+            }else
+            {
+                Toast.makeText(context, "You don't have enough money for this operation", Toast.LENGTH_SHORT).show()
             }
-            database.child("users/${user.uid}").child("credit").setValue(newCreditTeacher.toString())
-            */
         }
 
     }
+
 
     private fun confirmReservation() {
         val auth = Firebase.auth.currentUser
@@ -161,6 +174,14 @@ class ReservationFragment : Fragment() {
         database.child("users/$userId").get().addOnSuccessListener {
             if (it.value != null) {
                 loggedUser = User.from(it.value as HashMap<String, String>)
+            }
+        }
+    }
+
+    private fun getTeacher(uid: String) {
+        database.child("users/$uid").get().addOnSuccessListener {
+            if (it.value != null) {
+                teacher = User.from(it.value as HashMap<String, String>)
             }
         }
     }
