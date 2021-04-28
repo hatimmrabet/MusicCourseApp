@@ -101,9 +101,8 @@ class AccountInfoFragment : Fragment(), MyPostAdapter.OnPostListener {
                 myMenu.findItem(R.id.add_new_post).isEnabled = false
 
             }
+            binding.email.text = profil.get("email").toString()
         }
-
-        binding.email.text = auth.currentUser.email
 
 
         val postListener = object : ValueEventListener {
